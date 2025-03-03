@@ -1,7 +1,15 @@
 import React from "react";
-import { Paper, Typography, Button, Box } from "@mui/material";
+import { Paper, Typography, Button, Box, useTheme } from "@mui/material";
 
-const InfoCard = ({ bgColor, title, description, btn, Svg }) => {
+const InfoCard = ({ title, description, Svg }) => {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+
+  const bgColor = isDark ? "#1E293B" : "#E3F2FD"; // Dark Blue for dark mode, Soft Blue for light mode
+  const textColor = isDark ? "#E0E7FF" : "#222"; // Light text in dark mode, dark text in light mode
+  const descColor = isDark ? "#A5B4FC" : "#555"; // Softer text for readability
+  const btnColor = isDark ? "#60A5FA" : "#1E40AF"; // Adjusted button colors
+
   return (
     <Paper
       sx={{
@@ -12,17 +20,14 @@ const InfoCard = ({ bgColor, title, description, btn, Svg }) => {
         textAlign: "center",
       }}
     >
-      <Typography
-        variant="h6"
-        sx={{ fontWeight: "bold", color: "#222", mb: 1 }}
-      >
+      <Typography variant="h6" sx={{ fontWeight: "bold", color: textColor, mb: 1 }}>
         {title}
       </Typography>
-      <Typography sx={{ color: "#555", mb: 2 }}>{description}</Typography>
+      <Typography sx={{ color: descColor, mb: 2 }}>{description}</Typography>
       <Button
         variant="contained"
         sx={{
-          bgcolor: btn,
+          bgcolor: btnColor,
           px: 3,
           py: 2,
           color: "white",

@@ -13,8 +13,10 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 import NavDrawer from "./drawer";
-import DensityMediumIcon from "@mui/icons-material/DensityMedium";
+
 const navItems = [
   { text: "Cars for Sale" },
   { text: "New Arrivals" },
@@ -24,11 +26,7 @@ const navItems = [
   { text: "About Us" },
 ];
 
-{
-  /* Desktop Nav Links */
-}
-
-const Navbar = () => {
+const Navbar = ({ toggleDarkMode, darkMode }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -41,7 +39,7 @@ const Navbar = () => {
       <AppBar
         position="static"
         sx={{
-          backgroundColor: "white",
+          backgroundColor: darkMode ? "#121212" : "white",
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
           padding: "0 16px",
         }}
@@ -50,14 +48,14 @@ const Navbar = () => {
           {/* Menu Button (Mobile) */}
           {isMobile && !searchOpen && (
             <IconButton
-              sx={{ color: "black", mr: 2 }}
+              sx={{ color: darkMode ? "white" : "black", mr: 2 }}
               onClick={() => setDrawerOpen(true)}
             >
               <MenuIcon />
             </IconButton>
           )}
 
-          {/* Logo (Hidden when search is open) */}
+          {/* Logo */}
           {!searchOpen && (
             <Typography
               variant="h6"
@@ -65,7 +63,7 @@ const Navbar = () => {
                 width: 180,
                 display: "flex",
                 fontWeight: "bold",
-                color: "black",
+                color: darkMode ? "white" : "black",
                 fontFamily: "'Permanent Marker', cursive",
                 overflow: "hidden",
               }}
@@ -94,13 +92,20 @@ const Navbar = () => {
                     display: "flex",
                     alignItems: "center",
                     width: "100%",
-                    bgcolor: "#f0f0f0",
+                    bgcolor: darkMode ? "#333" : "#f0f0f0",
                     px: 2,
                     borderRadius: 2,
                   }}
                 >
-                  <InputBase placeholder="Search..." fullWidth />
-                  <IconButton onClick={() => setSearchOpen(false)}>
+                  <InputBase
+                    placeholder="Search..."
+                    fullWidth
+                    sx={{ color: darkMode ? "white" : "black" }}
+                  />
+                  <IconButton
+                    onClick={() => setSearchOpen(false)}
+                    sx={{ color: darkMode ? "white" : "black" }}
+                  >
                     <CloseIcon />
                   </IconButton>
                 </Box>
@@ -109,31 +114,43 @@ const Navbar = () => {
               <InputBase
                 placeholder="Search..."
                 sx={{
-                  bgcolor: "#f0f0f0",
+                  bgcolor: darkMode ? "#333" : "#f0f0f0",
                   px: 2,
                   borderRadius: 2,
                   width: isTablet ? 250 : 550,
+                  color: darkMode ? "white" : "black",
                 }}
               />
             )}
           </Box>
+
+          {/* Desktop Navigation */}
           {!isMobile && (
             <Box sx={{ display: "flex", gap: 3 }}>
               {navItems.map((item) => (
                 <Typography
                   key={item.text}
                   variant="body1"
-                  sx={{ color: "black" }}
+                  sx={{ color: darkMode ? "white" : "black" }}
                 >
                   {item.text}
                 </Typography>
               ))}
             </Box>
           )}
+
+          {/* Dark Mode Toggle */}
+          <IconButton
+            sx={{ color: darkMode ? "white" : "black" }}
+            onClick={toggleDarkMode}
+          >
+            {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+          </IconButton>
+
           {/* Search Icon (Mobile) */}
           {isMobile && !searchOpen && (
             <IconButton
-              sx={{ color: "black", transition: "transform 0.3s ease" }}
+              sx={{ color: darkMode ? "white" : "black" }}
               onClick={() => setSearchOpen(true)}
             >
               <SearchIcon />
