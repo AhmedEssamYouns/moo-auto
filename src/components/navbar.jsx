@@ -9,6 +9,8 @@ import {
   Slide,
   useTheme,
   useMediaQuery,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
@@ -16,7 +18,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import NavDrawer from "./drawer";
-
+import { useLanguage } from "../contexts/LanguageContext";
 const navItems = [
   { text: "Cars for Sale" },
   { text: "New Arrivals" },
@@ -26,18 +28,20 @@ const navItems = [
   { text: "About Us" },
 ];
 
-const Navbar = ({ toggleDarkMode, darkMode }) => {
+const Navbar =  ({ darkMode, toggleDarkMode}) => {
+  
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const { language, setLanguage, t } = useLanguage(); 
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
-  const isTablet = useMediaQuery("(max-width: 1424px)");
+  const isTablet = useMediaQuery("(max-width: 1500px)");
 
   return (
     <>
       <AppBar
-        position="static"
+        position="sticky"
         sx={{
           backgroundColor: darkMode ? "#121212" : "white",
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
@@ -60,12 +64,12 @@ const Navbar = ({ toggleDarkMode, darkMode }) => {
             <Typography
               variant="h6"
               sx={{
-                width: 180,
-                display: "flex",
+                width: 150,
                 fontWeight: "bold",
                 color: darkMode ? "white" : "black",
                 fontFamily: "'Permanent Marker', cursive",
-                overflow: "hidden",
+                whiteSpace: "nowrap", // Prevent text from wrapping
+                overflow: "hidden", // Ensure it doesn't resize weirdly
               }}
             >
               AL Muslmi
@@ -140,12 +144,14 @@ const Navbar = ({ toggleDarkMode, darkMode }) => {
           )}
 
           {/* Dark Mode Toggle */}
-          <IconButton
-            sx={{ color: darkMode ? "white" : "black" }}
-            onClick={toggleDarkMode}
-          >
-            {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
-          </IconButton>
+          {!searchOpen && !isMobile && (
+            <IconButton
+              sx={{ color: darkMode ? "white" : "black" }}
+              onClick={toggleDarkMode}
+            >
+              {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
+          )}
 
           {/* Search Icon (Mobile) */}
           {isMobile && !searchOpen && (
@@ -156,11 +162,38 @@ const Navbar = ({ toggleDarkMode, darkMode }) => {
               <SearchIcon />
             </IconButton>
           )}
+
+          {/* Language Selector */}
+          {!searchOpen && (
+            <Select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              sx={{
+                mx: 1,
+                bgcolor: darkMode ? "#333" : "#f0f0f0",
+                color: darkMode ? "white" : "black",
+                borderRadius: 1,
+                fontSize: "0.85rem",
+                minWidth: 90,
+                height: 32,
+                "& .MuiSelect-select": {
+                  padding: "4px 8px",
+                },
+                "& .MuiSelect-icon": {
+                  fontSize: "1rem",
+                  color: darkMode ? "white" : "black",
+                },
+              }}
+            >
+              <MenuItem value="en">English</MenuItem>
+              <MenuItem value="ar">العربية</MenuItem>
+            </Select>
+          )}
         </Toolbar>
       </AppBar>
 
       {/* Drawer Component */}
-      <NavDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <NavDrawer open={drawerOpen} darkMode={darkMode} toggleDarkMode={toggleDarkMode} onClose={() => setDrawerOpen(false)} />
     </>
   );
 };
