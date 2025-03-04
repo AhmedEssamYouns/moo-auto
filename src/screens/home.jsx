@@ -20,8 +20,10 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import TuneIcon from "@mui/icons-material/Tune";
 import InfoCard from "../components/infoCard";
 import BestSelling from "../components/products";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const HomeScreen = () => {
+  const { t, language } = useLanguage();
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState("");
   const theme = useTheme();
@@ -38,7 +40,6 @@ const HomeScreen = () => {
   };
 
   const handleCloseBottomSheet = () => setOpenBottomSheet(false);
-
   const handleCloseMenu = () => {
     setAnchorEl(null);
     setSelectedFilter("");
@@ -78,7 +79,7 @@ const HomeScreen = () => {
             }}
           >
             <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-              Filters
+              {t("filters")}
             </Typography>
             <IconButton
               onClick={(e) => {
@@ -96,15 +97,16 @@ const HomeScreen = () => {
           variant="subtitle1"
           sx={{ color: theme.palette.text.secondary, mb: 1 }}
         >
-          Find cars for sale and for rent near you
+          {t("findCarsNearYou")}
         </Typography>
 
         {/* Big Bold Header */}
         <Typography
           variant="h3"
+          fontFamily={language === "ar" ? "'Marhey', sans-serif" : "'Permanent Marker', cursive"}
           sx={{ fontWeight: "bold", color: theme.palette.text.primary, mb: 3 }}
         >
-          Find Your Dream Car
+          {t("findYourDreamCar")}
         </Typography>
 
         <Drawer
@@ -114,17 +116,17 @@ const HomeScreen = () => {
           PaperProps={{ sx: { borderRadius: "20px 20px 0 0", p: 2 } }}
         >
           <Typography variant="h6" sx={{ textAlign: "center", mb: 2 }}>
-            Filter Options
+            {t("filterOptions")}
           </Typography>
-          <MenuItem onClick={handleCloseBottomSheet}>Option 1</MenuItem>
-          <MenuItem onClick={handleCloseBottomSheet}>Option 2</MenuItem>
-          <MenuItem onClick={handleCloseBottomSheet}>Option 3</MenuItem>
+          <MenuItem onClick={handleCloseBottomSheet}>{t("option1")}</MenuItem>
+          <MenuItem onClick={handleCloseBottomSheet}>{t("option2")}</MenuItem>
+          <MenuItem onClick={handleCloseBottomSheet}>{t("option3")}</MenuItem>
           <Button
             onClick={handleCloseBottomSheet}
             fullWidth
             variant="contained"
           >
-            Apply Filters
+            {t("applyFilters")}
           </Button>
         </Drawer>
 
@@ -159,22 +161,22 @@ const HomeScreen = () => {
             >
               <FilterItem
                 icon={<DirectionsCarIcon />}
-                text="Used Cars"
+                text={t("usedCars")}
                 onClick={handleOpenMenu}
               />
               <FilterItem
                 icon={<CategoryIcon />}
-                text="Any Make"
+                text={t("anyMake")}
                 onClick={handleOpenMenu}
               />
               <FilterItem
                 icon={<LocalOfferIcon />}
-                text="Any Brand"
+                text={t("anyBrand")}
                 onClick={handleOpenMenu}
               />
               <FilterItem
                 icon={<AttachMoneyIcon />}
-                text="All Prices"
+                text={t("allPrices")}
                 onClick={handleOpenMenu}
               />
             </Box>
@@ -192,7 +194,7 @@ const HomeScreen = () => {
                   bgcolor: theme.palette.mode === "dark" ? "#555" : "#333",
                 },
               }}
-              onClick={(e) => handleOpenMenu(e, "Filters")}
+              onClick={(e) => handleOpenMenu(e, t("filters"))}
             >
               <TuneIcon sx={{ fontSize: 28 }} />
             </IconButton>
@@ -200,13 +202,22 @@ const HomeScreen = () => {
         )}
 
         {/* Car SVG */}
-        <Box sx={{ width: "80%", maxWidth: 500 }}>
-          <CarSVG
-            width="100%"
-            height="auto"
-            fill={theme.palette.text.primary}
-          />
-        </Box>
+        <Box
+  sx={{
+    width: "80%",
+    maxWidth: 500,
+    opacity: 0,
+    transform: "translateX(100%)",
+    animation: "slideIn 0.8s ease-out forwards",
+    "@keyframes slideIn": {
+      "0%": { opacity: 0, transform: "translateX(100%)" },
+      "100%": { opacity: 1, transform: "translateX(0)" },
+    },
+  }}
+>
+  <CarSVG width="100%" height="auto" fill={theme.palette.text.primary} />
+</Box>
+
 
         {/* Menu for Filter Options */}
         <Menu
@@ -215,43 +226,57 @@ const HomeScreen = () => {
           onClose={handleCloseMenu}
         >
           <MenuItem onClick={handleCloseMenu}>
-            Option 1 for {selectedFilter}
+            {t("option1")} {selectedFilter}
           </MenuItem>
           <MenuItem onClick={handleCloseMenu}>
-            Option 2 for {selectedFilter}
+            {t("option2")} {selectedFilter}
           </MenuItem>
           <MenuItem onClick={handleCloseMenu}>
-            Option 3 for {selectedFilter}
+            {t("option3")} {selectedFilter}
           </MenuItem>
         </Menu>
       </Box>
 
       <Box
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 2,
+        alignItems: "center",
+        justifyContent: "center",
+        mt: 4,
+        width: "100%",
+        mx: "auto",
+        textAlign: "center",
+      }}
+    >
+      <InfoCard
+        bgColor={theme.palette.mode === "dark" ? "#1E293B" : "#E3F2FD"}
+        title={t("lookingForCar")}
+        description={t("lookingForCarDesc")}
+        btn={theme.palette.mode === "dark" ? "#60A5FA" : "#1E40AF"}
         sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 2,
-          alignItems: "center",
-          justifyContent: "center",
-          mt: 4,
-          width: "100%",
-          mx: "auto",
-          textAlign: "center",
+          animation: "slideInLeft 1s ease-out",
+          "@keyframes slideInLeft": {
+            "0%": { transform: "translateX(-100%)", opacity: 0 },
+            "100%": { transform: "translateX(0)", opacity: 1 },
+          },
         }}
-      >
-        <InfoCard
-          bgColor={theme.palette.mode === "dark" ? "#1E293B" : "#E3F2FD"}
-          title="Are you looking for a car?"
-          description="We are committed to providing our customers with exceptional service."
-          btn={theme.palette.mode === "dark" ? "#60A5FA" : "#1E40AF"}
-        />
-        <InfoCard
-          bgColor={theme.palette.mode === "dark" ? "#3F1D38" : "#FEE2E2"}
-          title="Are you looking to sell a car?"
-          description="We are committed to providing our customers with exceptional service."
-          btn={theme.palette.mode === "dark" ? "#EC4899" : "#9B1C1C"}
-        />
-      </Box>
+      />
+      <InfoCard
+        bgColor={theme.palette.mode === "dark" ? "#3F1D38" : "#FEE2E2"}
+        title={t("lookingToSellCar")}
+        description={t("lookingToSellCarDesc")}
+        btn={theme.palette.mode === "dark" ? "#EC4899" : "#9B1C1C"}
+        sx={{
+          animation: "slideInRight 1s ease-out",
+          "@keyframes slideInRight": {
+            "0%": { transform: "translateX(-100%)", opacity: 0 },
+            "100%": { transform: "translateX(0)", opacity: 1 },
+          },
+        }}
+      />
+    </Box>
 
       <BestSelling />
     </Box>
@@ -273,15 +298,7 @@ const FilterItem = ({ icon, text, onClick }) => {
       onClick={(e) => onClick(e, text)}
     >
       {icon}
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: 500,
-          color: theme.palette.text.primary,
-        }}
-      >
-        {text}
-      </Typography>
+      <Typography sx={{ fontSize: 14, fontWeight: 500 }}>{text}</Typography>
     </Box>
   );
 };

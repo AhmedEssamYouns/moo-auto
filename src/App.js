@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { Container } from "@mui/material";
 import ThemeProviderWrapper from "./contexts/ThemeProviderWrapper";
@@ -9,20 +9,28 @@ import AppRoutes from "./routes/stack";
 import { LanguageProvider } from "./contexts/LanguageContext";
 
 const App = () => {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    document.fonts.ready.then(() => setFontsLoaded(true));
+  }, []);
+
+  if (!fontsLoaded) return null; // Wait until fonts are fully loaded
+
   return (
     <LanguageProvider>
-    <ThemeProviderWrapper>
-      {(darkMode, setDarkMode) => (
-        <BrowserRouter>
-          <ScrollToTop />
-          <ScrollToTopButton darkMode={darkMode} />
-          <Navbar darkMode={darkMode} toggleDarkMode={() => setDarkMode((prev) => !prev)} />
-          <Container sx={{ mt: 4 }}>
-            <AppRoutes />
-          </Container>
-        </BrowserRouter>
-      )}
-    </ThemeProviderWrapper>
+      <ThemeProviderWrapper>
+        {(darkMode, setDarkMode) => (
+          <BrowserRouter>
+            <ScrollToTop />
+            <ScrollToTopButton darkMode={darkMode} />
+            <Navbar darkMode={darkMode} toggleDarkMode={() => setDarkMode((prev) => !prev)} />
+            <Container sx={{ mt: 4 }}>
+              <AppRoutes />
+            </Container>
+          </BrowserRouter>
+        )}
+      </ThemeProviderWrapper>
     </LanguageProvider>
   );
 };

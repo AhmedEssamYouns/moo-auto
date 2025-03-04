@@ -15,7 +15,8 @@ import {
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import SpeedIcon from "@mui/icons-material/Speed";
+import { useLanguage } from "../contexts/LanguageContext";
+import { FuelType, TransmissionType } from "../types/e-nums";
 
 const cars = [
   {
@@ -25,8 +26,8 @@ const cars = [
     img: "https://hips.hearstapps.com/hmg-prod/images/2025-bmw-x3-m50-165-673658ffda8c2.jpg?crop=0.814xw:0.916xh;0.0849xw,0.0841xh&resize=768:*",
     price: "45,000",
     mileage: "10,000 Miles",
-    fuel: "Electric",
-    transmission: "Automatic",
+    fuel: FuelType.ELECTRIC,
+    transmission: TransmissionType.AUTOMATIC,
   },
   {
     id: 2,
@@ -35,18 +36,8 @@ const cars = [
     img: "https://hips.hearstapps.com/hmg-prod/images/2025-bmw-x3-m50-165-673658ffda8c2.jpg?crop=0.814xw:0.916xh;0.0849xw,0.0841xh&resize=768:*",
     price: "65,000",
     mileage: "5,000 Miles",
-    fuel: "Diesel",
-    transmission: "Automatic",
-  },
-  {
-    id: 3,
-    name: "BMW X5",
-    model: "2022",
-    img: "https://hips.hearstapps.com/hmg-prod/images/2025-bmw-x3-m50-165-673658ffda8c2.jpg?crop=0.814xw:0.916xh;0.0849xw,0.0841xh&resize=768:*",
-    price: "65,000",
-    mileage: "5,000 Miles",
-    fuel: "Diesel",
-    transmission: "Automatic",
+    fuel: FuelType.DIESEL,
+    transmission: TransmissionType.AUTOMATIC,
   },
 ];
 
@@ -54,6 +45,8 @@ const BestSelling = () => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
   const isTablet = useMediaQuery("(max-width: 1500px)");
+  const { t } = useLanguage(); // Get translation function
+
   return (
     <Box sx={{ p: 4 }}>
       <Typography
@@ -65,7 +58,7 @@ const BestSelling = () => {
           color: isDarkMode ? "white" : "black",
         }}
       >
-        Best Selling Cars
+        {t("bestSellingCars")}
       </Typography>
       <Grid
         container
@@ -103,7 +96,7 @@ const BestSelling = () => {
                   }}
                 />
                 <Chip
-                  label="Great Price"
+                  label={t("greatPrice")}
                   sx={{
                     position: "absolute",
                     top: 10,
@@ -144,19 +137,8 @@ const BestSelling = () => {
                   }}
                 >
                   <Chip
-                    icon={<SpeedIcon fontSize="small" />}
-                    label={car.mileage}
-                    size="small"
-                    sx={{
-                      bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
-                      color: isDarkMode ? "white" : "black",
-                      px: 0.5, // Less padding
-                      minWidth: "auto", // Avoid extra width
-                    }}
-                  />
-                  <Chip
                     icon={<LocalGasStationIcon fontSize="small" />}
-                    label={car.fuel}
+                    label={t(`fuel.${car.fuel}`)}
                     size="small"
                     sx={{
                       bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
@@ -167,7 +149,7 @@ const BestSelling = () => {
                   />
                   <Chip
                     icon={<DirectionsCarIcon fontSize="small" />}
-                    label={car.transmission}
+                    label={t(`transmission.${car.transmission}`)}
                     size="small"
                     sx={{
                       bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
@@ -197,7 +179,7 @@ const BestSelling = () => {
                       textTransform: "none",
                     }}
                   >
-                    View Details →
+                    {t("viewDetails")} →
                   </Button>
                 </Box>
               </CardContent>

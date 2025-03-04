@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Drawer,
   List,
@@ -19,18 +19,20 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { useTheme } from "@mui/material/styles";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
+  const { t } = useLanguage(); // Get translations
 
   const navItems = [
-    { text: "Cars for Sale", icon: <DirectionsCarIcon /> },
-    { text: "New Arrivals", icon: <FiberNewIcon /> },
-    { text: "Offers & Discounts", icon: <LocalOfferIcon /> },
-    { text: "Request a Car", icon: <CarRentalIcon /> },
-    { text: "Financing", icon: <AccountBalanceIcon /> },
-    { text: "About Us", icon: <InfoOutlinedIcon /> },
+    { text: t("carsForSale"), icon: <DirectionsCarIcon /> },
+    { text: t("newArrivals"), icon: <FiberNewIcon /> },
+    { text: t("offersDiscounts"), icon: <LocalOfferIcon /> },
+    { text: t("requestCar"), icon: <CarRentalIcon /> },
+    { text: t("financing"), icon: <AccountBalanceIcon /> },
+    { text: t("aboutUs"), icon: <InfoOutlinedIcon /> },
   ];
 
   return (
@@ -57,10 +59,10 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
             fontFamily: "'Permanent Marker', cursive",
           }}
         >
-          AL Muslmi Group
+          Al Muslmi
         </Typography>
       </Box>
-      <Divider sx={{ backgroundColor: isDarkMode ? "gray" : "black" }} />
+      <Divider sx={{ backgroundColor: 'gray'}} />
 
       {/* Drawer Items */}
       <List>
@@ -69,7 +71,10 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
             <IconButton sx={{ color: isDarkMode ? "white" : "black", mr: 2 }}>
               {item.icon}
             </IconButton>
-            <ListItemText primary={item.text} sx={{ color: isDarkMode ? "white" : "black" }} />
+            <ListItemText
+              primary={item.text}
+              sx={{ color: isDarkMode ? "white" : "black" }}
+            />
           </ListItem>
         ))}
       </List>
@@ -81,7 +86,12 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
         <IconButton sx={{ color: isDarkMode ? "white" : "black", mr: 2 }}>
           {isDarkMode ? <DarkModeIcon /> : <LightModeIcon />}
         </IconButton>
-        <ListItemText primary="Dark Mode" sx={{ color: isDarkMode ? "white" : "black" }} />
+        <ListItemText
+          primary={
+            theme.palette.mode === "dark" ? t("lightMode") : t("darkMode")
+          }
+          sx={{ color: isDarkMode ? "white" : "black" }}
+        />
         <Switch checked={darkMode} onChange={toggleDarkMode} />
       </ListItem>
     </Drawer>

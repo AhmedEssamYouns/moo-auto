@@ -1,9 +1,11 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
+import { useLanguage } from "./LanguageContext";
 
 const ThemeProviderWrapper = ({ children }) => {
   const storedMode = localStorage.getItem("darkMode") === "true";
   const [darkMode, setDarkMode] = useState(storedMode);
+  const { language } = useLanguage(); // Get the selected language from context
 
   useEffect(() => {
     localStorage.setItem("darkMode", darkMode);
@@ -23,13 +25,19 @@ const ThemeProviderWrapper = ({ children }) => {
           },
         },
         typography: {
-          fontFamily: "'Ubuntu', sans-serif",
+          fontFamily: "'Ubuntu', 'IBM Plex Sans Arabic', sans-serif",
           h1: { fontFamily: "'Permanent Marker', cursive" },
           h2: { fontFamily: "'Permanent Marker', cursive" },
-          h3: { fontFamily: "'Permanent Marker', cursive" },
+          h3: {
+            fontFamily: language === "ar"
+              ? "'Ubuntu', sans-serif"
+              : "'Permanent Marker', cursive",
+          },
+          body1: { fontFamily: "'IBM Plex Sans Arabic', sans-serif" },
+          body2: { fontFamily: "'IBM Plex Sans Arabic', sans-serif" },
         },
       }),
-    [darkMode]
+    [darkMode, language]
   );
 
   return (

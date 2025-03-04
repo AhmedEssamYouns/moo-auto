@@ -1,6 +1,43 @@
 {
-    "welcome": "مرحبًا بك في المسلمى",
-    "darkMode": "الوضع الداكن",
-    "language": "اللغة"
+  "appName": "AL Muslmi",
+  "searchPlaceholder": "Search...",
+  "carsForSale": "Cars for Sale",
+  "newArrivals": "New Arrivals",
+  "offersDiscounts": "Offers & Discounts",
+  "requestCar": "Request a Car",
+  "financing": "Financing",
+  "aboutUs": "About Us",
+  "english": "English",
+  "arabic": "العربية",
+  "darkMode": "Dark Mode",
+  "lightMode": "Light Mode",
+  "filters": "Filters",
+  "findCarsNearYou": "Find cars for sale and for rent near you",
+  "findYourDreamCar": "Find Your Dream Car",
+  "filterOptions": "Filter Options",
+  "option1": "Option 1",
+  "option2": "Option 2",
+  "option3": "Option 3",
+  "applyFilters": "Apply Filters",
+  "usedCars": "Used Cars",
+  "anyMake": "Any Make",
+  "anyBrand": "Any Brand",
+  "allPrices": "All Prices",
+  "lookingForCar": "Are you looking for a car?",
+  "lookingForCarDesc": "We are committed to providing our customers with exceptional service.",
+  "lookingToSellCar": "Are you looking to sell a car?",
+  "lookingToSellCarDesc": "We are committed to providing our customers with exceptional service.",
+  "getStarted": "Get Started",
+  "bestSellingCars": "Best Selling Cars",
+  "greatPrice": "Great Price",
+  "viewDetails": "View Details",
+  "fuel": {
+    "electric": "Electric",
+    "diesel": "Diesel",
+    "petrol": "Petrol"
+  },
+  "transmission": {
+    "automatic": "Automatic",
+    "manual": "Manual"
   }
-  
+}

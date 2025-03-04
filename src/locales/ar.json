@@ -1,6 +1,43 @@
 {
-    "welcome": "Welcome to AL Muslmi",
-    "darkMode": "Dark Mode",
-    "language": "Language"
+  "appName": "المسلمي",
+  "searchPlaceholder": "دور على عربية...",
+  "carsForSale": "العربيات المتاحة",
+  "newArrivals": "أحدث العربيات",
+  "offersDiscounts": "عروض وتخفيضات",
+  "requestCar": "اطلب عربية",
+  "financing": "خدمات التقسيط",
+  "aboutUs": "معلومات عنا",
+  "english": "English",
+  "arabic": "العربية",
+  "darkMode": "الوضع الليلي",
+  "lightMode": "الوضع العادي",
+  "filters": "التصفية",
+  "findCarsNearYou": "دور على عربية للبيع أو للإيجار قريبة منك",
+  "findYourDreamCar": "دور على عربيتك المفضلة",
+  "filterOptions": "خيارات التصفية",
+  "option1": "الخيار الأول",
+  "option2": "الخيار الثاني",
+  "option3": "الخيار الثالث",
+  "applyFilters": "طبق التصفية",
+  "usedCars": "عربيات مستعملة",
+  "anyMake": "أي نوع",
+  "anyBrand": "أي ماركة",
+  "allPrices": "كل الأسعار",
+  "lookingForCar": "عايز تشتري عربية؟",
+  "lookingForCarDesc": "احنا هنا عشان نساعدك تلاقي العربية اللي تناسبك!",
+  "lookingToSellCar": "عايز تبيع عربيتك؟",
+  "lookingToSellCarDesc": "هنساعدك تبيعها بسرعة وبأحسن سعر!",
+  "getStarted": "ابدأ الآن",
+  "bestSellingCars": "أفضل السيارات مبيعًا",
+  "greatPrice": "سعر رائع",
+  "viewDetails": "عرض التفاصيل",
+  "fuel": {
+    "electric": "كهربائي",
+    "diesel": "ديزل",
+    "petrol": "بنزين"
+  },
+  "transmission": {
+    "automatic": "أوتوماتيكي",
+    "manual": "يدوي"
   }
-  
+}
