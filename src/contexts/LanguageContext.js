@@ -7,14 +7,19 @@ const LanguageContext = createContext();
 const translations = { en, ar };
 
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState(null);
+  const [language, setLanguageState] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedLanguage = localStorage.getItem("language") || "en";
-    setLanguage(storedLanguage);
+    setLanguageState(storedLanguage);
     setLoading(false);
   }, []);
+
+  const setLanguage = (lang) => {
+    localStorage.setItem("language", lang);
+    setLanguageState(lang);
+  };
 
   const t = (key) => translations[language]?.[key] || key;
 
