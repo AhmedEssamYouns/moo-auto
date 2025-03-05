@@ -71,7 +71,7 @@ const ProductCard = ({ car }) => {
         <Box sx={{ display: "flex", gap: 0.5, mt: 1, mb: 2 }}>
           <Chip
             icon={<LocalGasStationIcon fontSize="small" />}
-            label={t(`fuel.${car.fuel}`)}
+            label={t(`${car.fuel}`)}
             size="small"
             sx={{
               bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
@@ -82,7 +82,7 @@ const ProductCard = ({ car }) => {
           />
           <Chip
             icon={<DirectionsCarIcon fontSize="small" />}
-            label={t(`transmission.${car.transmission}`)}
+            label={t(`${car.transmission}`)}
             size="small"
             sx={{
               bgcolor: isDarkMode ? "#424242" : "#E0E0E0",

@@ -8,6 +8,7 @@ import ScrollToTopButton from "./components/scrollToTopBtn";
 import AppRoutes from "./routes/stack";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import LottieComponent from "./components/loader";
+import Footer from "./components/fotter";
 
 const App = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -37,7 +38,7 @@ const App = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  height: "100vh", // Adjust this value as needed
+                  height: "100vh",// Adjust this value as needed
                   width: "100%", // Make sure it spans full width
                 }}
               >
@@ -51,6 +52,7 @@ const App = () => {
                 <Container sx={{ mt: 4 }}>
                   <AppRoutes />
                 </Container>
+                <Footer darkMode={darkMode} />
               </>
             )}
           </BrowserRouter>
