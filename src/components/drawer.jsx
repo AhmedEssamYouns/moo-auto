@@ -28,12 +28,20 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
   const { t } = useLanguage(); // Get translations
 
   const navItems = [
-    { text: t("carsForSale"), icon: <DirectionsCarIcon /> },
-    { text: t("newArrivals"), icon: <FiberNewIcon /> },
-    { text: t("offersDiscounts"), icon: <LocalOfferIcon /> },
-    { text: t("requestCar"), icon: <CarRentalIcon /> },
-    { text: t("financing"), icon: <AccountBalanceIcon /> },
-    { text: t("aboutUs"), icon: <InfoOutlinedIcon /> },
+    {
+      text: t("carsForSale"),
+      icon: <DirectionsCarIcon />,
+      path: "/cars-for-sale",
+    },
+    { text: t("newArrivals"), icon: <FiberNewIcon />, path: "/new-arrivals" },
+    {
+      text: t("offersDiscounts"),
+      icon: <LocalOfferIcon />,
+      path: "/offers-discounts",
+    },
+    { text: t("requestCar"), icon: <CarRentalIcon />, path: "/request-car" },
+    { text: t("financing"), icon: <AccountBalanceIcon />, path: "/financing" },
+    { text: t("aboutUs"), icon: <InfoOutlinedIcon />, path: "/about-us" },
   ];
 
   return (
@@ -54,8 +62,8 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
       {/* Drawer Header */}
       <Box sx={{ display: "flex", justifyContent: "center", padding: 2 }}>
         <Typography
-        component={Link}
-        to="/"
+          component={Link}
+          to="/"
           sx={{
             fontWeight: "bold",
             color: isDarkMode ? "white" : "black",
@@ -65,19 +73,26 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
           Al Muslmi
         </Typography>
       </Box>
-      <Divider sx={{ backgroundColor: 'gray'}} />
+      <Divider sx={{ backgroundColor: "gray" }} />
 
       {/* Drawer Items */}
       <List>
         {navItems.map((item) => (
-          <ListItem button key={item.text} onClick={onClose}>
+          <ListItem
+            button
+            key={item.text}
+            component={Link}
+            to={item.path}
+            onClick={onClose}
+            sx={{
+              textDecoration: "none",
+              color: isDarkMode ? "white" : "black",
+            }}
+          >
             <IconButton sx={{ color: isDarkMode ? "white" : "black", mr: 2 }}>
               {item.icon}
             </IconButton>
-            <ListItemText
-              primary={item.text}
-              sx={{ color: isDarkMode ? "white" : "black" }}
-            />
+            <ListItemText primary={item.text} />
           </ListItem>
         ))}
       </List>
