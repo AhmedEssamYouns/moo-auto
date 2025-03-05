@@ -1,15 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { Box, Paper, IconButton, Icon, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Paper,
+  IconButton,
+  Icon,
+  useMediaQuery,
+  useTheme,
+  Button,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import CategoryIcon from "@mui/icons-material/Category";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import TuneIcon from "@mui/icons-material/Tune";
+import AddIcon from "@mui/icons-material/Add"; // Add icon for the button
 import { useLanguage } from "../contexts/LanguageContext";
 import PriceRangeDialog from "./PriceRangeDialog";
 import BrandSelectionDialog from "./BrandSelectionDialog";
 import MobileDrawerFilters from "./mobileFilter";
 import FilterItem from "./FilterItem"; // Filter Item Component
+import DriveEtaIcon from "@mui/icons-material/DriveEta";
+import TransmissionIcon from "@mui/icons-material/Transform";
 
 const Filters = ({ onApplyFilters, allBrands }) => {
   const { t } = useLanguage();
@@ -25,6 +38,10 @@ const Filters = ({ onApplyFilters, allBrands }) => {
   const [usedCars, setUsedCars] = useState(false);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(100000);
+
+  // State for the menu
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openMenu, setOpenMenu] = useState(false);
 
   const filteredBrands = allBrands.filter((brand) =>
     brand.toLowerCase().includes(searchQuery.toLowerCase())
@@ -44,6 +61,18 @@ const Filters = ({ onApplyFilters, allBrands }) => {
       usedCars,
     });
     setOpenBottomSheet(false);
+  };
+
+  // Handle menu open
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpenMenu(true);
+  };
+
+  // Handle menu item selection
+  const handleMenuClose = (value) => {
+    setSelectedTransmission(value);
+    setOpenMenu(false);
   };
 
   return (
@@ -92,12 +121,13 @@ const Filters = ({ onApplyFilters, allBrands }) => {
               text={t("allPrices")}
               onClick={() => setOpenPriceDialog(true)}
             />
+
             <FilterItem
-              icon={<AttachMoneyIcon />}
+              icon={<TransmissionIcon />} 
               text={t(
                 selectedTransmission === "manual" ? "manual" : "automatic"
               )}
-              onClick={() => setOpenDialog(true)}
+              onClick={handleMenuClick} // Open menu on click
             />
           </Box>
 
@@ -105,9 +135,6 @@ const Filters = ({ onApplyFilters, allBrands }) => {
             sx={{
               justifyContent: "center",
               alignItems: "center",
-              bgcolor: theme.palette.mode === "dark" ? "#444" : "#222",
-              color: "white",
-              borderRadius: "50%",
             }}
           >
             <TuneIcon sx={{ fontSize: 28 }} />
@@ -117,18 +144,57 @@ const Filters = ({ onApplyFilters, allBrands }) => {
 
       {/* Mobile View */}
       {isMobile && (
-        <MobileDrawerFilters
-          openBottomSheet={openBottomSheet}
-          setOpenBottomSheet={setOpenBottomSheet}
-          allBrands={allBrands}
-          selectedBrand={selectedBrand}
-          setSelectedBrand={setSelectedBrand}
-          selectedPrice={selectedPrice}
-          setSelectedPrice={setSelectedPrice}
-          handleSelectFilter={handleSelectFilter}
-          handleApplyFilters={handleApplyFilters}
-        />
+        <>
+          <MobileDrawerFilters
+            openBottomSheet={openBottomSheet}
+            setOpenBottomSheet={setOpenBottomSheet}
+            allBrands={allBrands}
+            selectedBrand={selectedBrand}
+            setSelectedBrand={setSelectedBrand}
+            selectedPrice={selectedPrice}
+            setSelectedPrice={setSelectedPrice}
+            handleSelectFilter={handleSelectFilter}
+            handleApplyFilters={handleApplyFilters}
+          />
+
+          {/* Floating Button to Open Bottom Sheet */}
+          <Box
+            sx={{
+              position: "fixed",
+              bottom: 20,
+              right: 20,
+              zIndex: 1000,
+            }}
+          >
+            <IconButton
+              onClick={() => setOpenBottomSheet(true)}
+              sx={{
+                bgcolor: theme.palette.primary.main,
+                color: "white",
+                borderRadius: "50%",
+                boxShadow: 3,
+                padding: 2,
+              }}
+            >
+              <TuneIcon />
+            </IconButton>
+          </Box>
+        </>
       )}
+
+      {/* Transmission Menu */}
+      <Menu
+        anchorEl={anchorEl}
+        open={openMenu}
+        onClose={() => setOpenMenu(false)}
+      >
+        <MenuItem onClick={() => handleMenuClose("manual")}>
+          {t("manual")}
+        </MenuItem>
+        <MenuItem onClick={() => handleMenuClose("automatic")}>
+          {t("automatic")}
+        </MenuItem>
+      </Menu>
 
       {/* Price Range Dialog */}
       <PriceRangeDialog

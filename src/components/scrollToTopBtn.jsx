@@ -23,7 +23,7 @@ const ScrollToTopButton = ({ darkMode }) => {
       sx={{
         position: "fixed",
         bottom: 20,
-        right: 20,
+        left: 20,
         zIndex: 1000,
         opacity: visible ? 1 : 0,
         transform: visible ? "scale(1)" : "scale(0.7)",
