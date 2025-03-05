@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import HomeScreen from "../screens/home";
 import ProductsScreen from "../screens/products";
+import NotFound from "../screens/404";
 
 // Dummy Pages
 const CarsForSale = () => <h2>Cars for Sale</h2>;
@@ -21,7 +22,8 @@ const AppRoutes = () => {
       <Route path="/request-car" element={<RequestCar />} />
       <Route path="/financing" element={<Financing />} />
       <Route path="/about-us" element={<AboutUs />} />
-      <Route path="*" element={<CarsForSale />} />
+      <Route path="*" element={<NotFound />} />
+
     </Routes>
   );
 };

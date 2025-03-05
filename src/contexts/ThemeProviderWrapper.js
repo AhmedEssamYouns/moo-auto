@@ -1,11 +1,11 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
+import { ThemeProvider, createTheme, CssBaseline, TextField } from "@mui/material";
 import { useLanguage } from "./LanguageContext";
 
 const ThemeProviderWrapper = ({ children }) => {
   const storedMode = localStorage.getItem("darkMode") === "true";
   const [darkMode, setDarkMode] = useState(storedMode);
-  const { language } = useLanguage(); // Get the selected language from context
+  const { language } = useLanguage();
 
   useEffect(() => {
     localStorage.setItem("darkMode", darkMode);
@@ -17,14 +17,14 @@ const ThemeProviderWrapper = ({ children }) => {
         palette: {
           mode: darkMode ? "dark" : "light",
           primary: {
-            main: darkMode ? "#1E293B" : "#1976D2", // Deep purple for dark, rich blue for light
+            main: darkMode ? "#1976D2" : "#1976D2",
             contrastText: "#fff",
           },
           secondary: {
-            main: darkMode ? "#03DAC6" : "#FF4081", // Teal in dark mode, Pink in light mode
+            main: darkMode ? "#03DAC6" : "#FF4081",
           },
           error: {
-            main: darkMode ? "#CF6679" : "#D32F2F", // Soft red for dark mode
+            main: darkMode ? "#CF6679" : "#D32F2F",
           },
           warning: {
             main: darkMode ? "#FBC02D" : "#FFA000",
@@ -41,7 +41,7 @@ const ThemeProviderWrapper = ({ children }) => {
           },
           text: {
             primary: darkMode ? "#ffffff" : "#000000",
-            secondary: darkMode ? "#B0BEC5" : "#757575", // Better contrast
+            secondary: darkMode ? "#B0BEC5" : "#757575",
           },
         },
         typography: {
@@ -61,13 +61,48 @@ const ThemeProviderWrapper = ({ children }) => {
           MuiButton: {
             styleOverrides: {
               outlined: {
-
-                borderColor: darkMode ? "#80CBC4" : "#1976D2", // Outline color for dark and light mode
-                color: darkMode ? "white" : "#1976D2", // Text color for outlined buttons
-                '&:hover': {
-                  borderColor: darkMode ? "#B2DFDB" : "#1565C0", // Hover outline color
-                  backgroundColor: darkMode ? "#80CBC4" : "#1976D2", // Hover background color
+                borderColor: darkMode ? "#80CBC4" : "#1976D2",
+                color: darkMode ? "white" : "#1976D2",
+                "&:hover": {
+                  borderColor: darkMode ? "#B2DFDB" : "#1565C0",
+                  backgroundColor: darkMode ? "#80CBC4" : "#1976D2",
                   color: "#ffffff",
+                },
+              },
+            },
+          },
+          MuiTypography: {
+            styleOverrides: {
+              root: {
+                "&:hover": {
+                  color: darkMode ? "#80CBC4" : "#1976D2",
+                  cursor: "pointer",
+                },
+              },
+            },
+          },
+          MuiTextField: {
+            styleOverrides: {
+              root: {
+                "& .MuiInputBase-input": {
+                  color: darkMode ? "#ffffff" : "#000000", // Text color in input
+                },
+                "& .MuiFormLabel-root": {
+                  color: darkMode ? "#B0BEC5" : "#757575", // Label color
+                  "&.Mui-focused": {
+                    color: darkMode ? "#80CBC4" : "#1976D2", // Focused label color
+                  },
+                },
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: darkMode ? "#B0BEC5" : "#1976D2", // Border color for outlined input
+                  },
+                  "&:hover fieldset": {
+                    borderColor: darkMode ? "#80CBC4" : "#1565C0", // Hover border color
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: darkMode ? "#80CBC4" : "#1976D2", // Focused border color
+                  },
                 },
               },
             },
