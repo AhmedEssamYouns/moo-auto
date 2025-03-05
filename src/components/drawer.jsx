@@ -20,6 +20,7 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { useTheme } from "@mui/material/styles";
 import { useLanguage } from "../contexts/LanguageContext";
+import { Link } from "react-router-dom";
 
 const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
   const theme = useTheme();
@@ -53,6 +54,8 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
       {/* Drawer Header */}
       <Box sx={{ display: "flex", justifyContent: "center", padding: 2 }}>
         <Typography
+        component={Link}
+        to="/"
           sx={{
             fontWeight: "bold",
             color: isDarkMode ? "white" : "black",

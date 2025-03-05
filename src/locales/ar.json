@@ -12,7 +12,7 @@
   "darkMode": "الوضع الليلي",
   "lightMode": "الوضع العادي",
   "filters": "التصفية",
-  "findCarsNearYou": "دور على عربية للبيع أو للإيجار قريبة منك",
+  "findCarsNearYou": "عربيتك الجديدة مستنياك، اختار اللي يعجبك!",
   "findYourDreamCar": "دور على عربيتك المفضلة",
   "filterOptions": "خيارات التصفية",
   "option1": "الخيار الأول",
@@ -31,6 +31,7 @@
   "bestSellingCars": "أفضل السيارات مبيعًا",
   "greatPrice": "سعر رائع",
   "viewDetails": "عرض التفاصيل",
+  "exploreNow": "تسوق الآن",
   "fuel": {
     "electric": "كهربائي",
     "diesel": "ديزل",

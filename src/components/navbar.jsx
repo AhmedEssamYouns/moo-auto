@@ -19,23 +19,24 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import NavDrawer from "./drawer";
 import { useLanguage } from "../contexts/LanguageContext";
+import { Link } from "react-router-dom";
 
 const Navbar = ({ darkMode, toggleDarkMode }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const { language, setLanguage, t } = useLanguage(); 
+  const { language, setLanguage, t } = useLanguage();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const isTablet = useMediaQuery("(max-width: 1500px)");
 
   const navItems = [
-    { text: t("carsForSale") },
-    { text: t("newArrivals") },
-    { text: t("offersDiscounts") },
-    { text: t("requestCar") },
-    { text: t("financing") },
-    { text: t("aboutUs") },
+    { text: t("carsForSale"), path: "/cars-for-sale" },
+    { text: t("newArrivals"), path: "/new-arrivals" },
+    { text: t("offersDiscounts"), path: "/offers-discounts" },
+    { text: t("requestCar"), path: "/request-car" },
+    { text: t("financing"), path: "/financing" },
+    { text: t("aboutUs"), path: "/about-us" },
   ];
 
   return (
@@ -60,6 +61,8 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
 
           {!searchOpen && (
             <Typography
+              component={Link}
+              to="/"
               variant="h6"
               sx={{
                 width: 150,
@@ -68,6 +71,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                 fontFamily: "'Permanent Marker', cursive",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
+                textDecoration: "none",
               }}
             >
               Al Muslmi
@@ -130,8 +134,16 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
               {navItems.map((item) => (
                 <Typography
                   key={item.text}
+                  component={Link}
+                  to={item.path}
                   variant="body1"
-                  sx={{ color: darkMode ? "white" : "black" }}
+                  sx={{
+                    color: darkMode ? "white" : "black",
+                    textDecoration: "none",
+                    "&:hover": {
+                      textDecoration: "underline", 
+                    },
+                  }}
                 >
                   {item.text}
                 </Typography>
@@ -185,7 +197,12 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
         </Toolbar>
       </AppBar>
 
-      <NavDrawer open={drawerOpen} darkMode={darkMode} toggleDarkMode={toggleDarkMode} onClose={() => setDrawerOpen(false)} />
+      <NavDrawer
+        open={drawerOpen}
+        darkMode={darkMode}
+        toggleDarkMode={toggleDarkMode}
+        onClose={() => setDrawerOpen(false)}
+      />
     </>
   );
 };

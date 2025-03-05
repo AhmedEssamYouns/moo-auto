@@ -30,16 +30,6 @@ const HomeScreen = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
 
-  const handleOpenMenu = (event, filter) => {
-    if (isMobile) {
-      setOpenBottomSheet(true);
-    } else {
-      setAnchorEl(event.currentTarget);
-      setSelectedFilter(filter);
-    }
-  };
-
-  const handleCloseBottomSheet = () => setOpenBottomSheet(false);
   const handleCloseMenu = () => {
     setAnchorEl(null);
     setSelectedFilter("");
@@ -61,37 +51,6 @@ const HomeScreen = () => {
           textAlign: "center",
         }}
       >
-        {isMobile && (
-          <ButtonBase
-            onClick={() => setOpenBottomSheet(true)}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              bgcolor: theme.palette.background.default,
-              borderRadius: 5,
-              px: 2,
-              width: "100%",
-              maxWidth: 400,
-              mb: 4,
-              boxShadow: theme.shadows[2],
-              textAlign: "left",
-            }}
-          >
-            <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-              {t("filters")}
-            </Typography>
-            <IconButton
-              onClick={(e) => {
-                e.stopPropagation();
-                setOpenBottomSheet(true);
-              }}
-            >
-              <TuneIcon />
-            </IconButton>
-          </ButtonBase>
-        )}
-
         {/* Small Header */}
         <Typography
           variant="subtitle1"
@@ -103,202 +62,104 @@ const HomeScreen = () => {
         {/* Big Bold Header */}
         <Typography
           variant="h3"
-          fontFamily={language === "ar" ? "'Marhey', sans-serif" : "'Permanent Marker', cursive"}
+          fontFamily={
+            language === "ar"
+              ? "'Marhey', sans-serif"
+              : "'IBM Plex Sans Arabic', sans-serif"
+          }
           sx={{ fontWeight: "bold", color: theme.palette.text.primary, mb: 3 }}
         >
           {t("findYourDreamCar")}
         </Typography>
 
-        <Drawer
-          anchor="bottom"
-          open={openBottomSheet}
-          onClose={handleCloseBottomSheet}
-          PaperProps={{ sx: { borderRadius: "20px 20px 0 0", p: 2 } }}
-        >
-          <Typography variant="h6" sx={{ textAlign: "center", mb: 2 }}>
-            {t("filterOptions")}
-          </Typography>
-          <MenuItem onClick={handleCloseBottomSheet}>{t("option1")}</MenuItem>
-          <MenuItem onClick={handleCloseBottomSheet}>{t("option2")}</MenuItem>
-          <MenuItem onClick={handleCloseBottomSheet}>{t("option3")}</MenuItem>
-          <Button
-            onClick={handleCloseBottomSheet}
-            fullWidth
-            variant="contained"
-          >
-            {t("applyFilters")}
-          </Button>
-        </Drawer>
-
-        {!isMobile && (
-          <Paper
-            elevation={4}
-            sx={{
-              mx: "auto",
-              width: "90%",
-              my: 4,
-              maxWidth: 700,
-              p: 2,
-              display: "flex",
-              alignItems: "center",
-              borderRadius: 10,
-              bgcolor: theme.palette.background.paper,
-              boxShadow: theme.shadows[3],
-              flexWrap: "wrap",
-              justifyContent: "space-between",
-              gap: 2,
-            }}
-          >
-            {/* Filter Items */}
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 2,
-                flexGrow: 1,
-                justifyContent: { xs: "center", md: "flex-start" },
-              }}
-            >
-              <FilterItem
-                icon={<DirectionsCarIcon />}
-                text={t("usedCars")}
-                onClick={handleOpenMenu}
-              />
-              <FilterItem
-                icon={<CategoryIcon />}
-                text={t("anyMake")}
-                onClick={handleOpenMenu}
-              />
-              <FilterItem
-                icon={<LocalOfferIcon />}
-                text={t("anyBrand")}
-                onClick={handleOpenMenu}
-              />
-              <FilterItem
-                icon={<AttachMoneyIcon />}
-                text={t("allPrices")}
-                onClick={handleOpenMenu}
-              />
-            </Box>
-
-            {/* Menu Button */}
-            <IconButton
-              sx={{
-                bgcolor: theme.palette.mode === "dark" ? "#444" : "#222",
-                color: "white",
-                borderRadius: "50%",
-                width: 50,
-                height: 50,
-                ml: 2,
-                "&:hover": {
-                  bgcolor: theme.palette.mode === "dark" ? "#555" : "#333",
-                },
-              }}
-              onClick={(e) => handleOpenMenu(e, t("filters"))}
-            >
-              <TuneIcon sx={{ fontSize: 28 }} />
-            </IconButton>
-          </Paper>
-        )}
-
         {/* Car SVG */}
         <Box
-  sx={{
-    width: "80%",
-    maxWidth: 500,
-    opacity: 0,
-    transform: "translateX(100%)",
-    animation: "slideIn 0.8s ease-out forwards",
-    "@keyframes slideIn": {
-      "0%": { opacity: 0, transform: "translateX(100%)" },
-      "100%": { opacity: 1, transform: "translateX(0)" },
-    },
-  }}
->
-  <CarSVG width="100%" height="auto" fill={theme.palette.text.primary} />
-</Box>
-
-
-        {/* Menu for Filter Options */}
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleCloseMenu}
+          sx={{
+            width: "80%",
+            maxWidth: 500,
+            opacity: 0,
+            transform: "translateX(100%)",
+            animation: "slideIn 0.8s ease-out forwards",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 2, 
+            "@keyframes slideIn": {
+              "0%": { opacity: 0, transform: "translateX(100%)" },
+              "100%": { opacity: 1, transform: "translateX(0)" },
+            },
+          }}
         >
-          <MenuItem onClick={handleCloseMenu}>
-            {t("option1")} {selectedFilter}
-          </MenuItem>
-          <MenuItem onClick={handleCloseMenu}>
-            {t("option2")} {selectedFilter}
-          </MenuItem>
-          <MenuItem onClick={handleCloseMenu}>
-            {t("option3")} {selectedFilter}
-          </MenuItem>
-        </Menu>
+          {/* Animated "Explore Now" Button */}
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: theme.palette.primary.main,
+              color: "#fff",
+              fontWeight: "bold",
+              px: 3,
+              py: 1,
+              animation: "dance 1.5s infinite ease-in-out",
+              "@keyframes dance": {
+                "0%, 100%": { transform: "scale(1)" },
+                "50%": { transform: "scale(1.1)" },
+              },
+            }}
+          >
+            {t("exploreNow")}
+          </Button>
+
+          {/* Car SVG */}
+          <CarSVG
+            width="100%"
+            height="auto"
+            fill={theme.palette.text.primary}
+          />
+        </Box>
+       
       </Box>
 
       <Box
-      sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: 2,
-        alignItems: "center",
-        justifyContent: "center",
-        mt: 4,
-        width: "100%",
-        mx: "auto",
-        textAlign: "center",
-      }}
-    >
-      <InfoCard
-        bgColor={theme.palette.mode === "dark" ? "#1E293B" : "#E3F2FD"}
-        title={t("lookingForCar")}
-        description={t("lookingForCarDesc")}
-        btn={theme.palette.mode === "dark" ? "#60A5FA" : "#1E40AF"}
         sx={{
-          animation: "slideInLeft 1s ease-out",
-          "@keyframes slideInLeft": {
-            "0%": { transform: "translateX(-100%)", opacity: 0 },
-            "100%": { transform: "translateX(0)", opacity: 1 },
-          },
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 2,
+          alignItems: "center",
+          justifyContent: "center",
+          mt: 4,
+          width: "100%",
+          mx: "auto",
+          textAlign: "center",
         }}
-      />
-      <InfoCard
-        bgColor={theme.palette.mode === "dark" ? "#3F1D38" : "#FEE2E2"}
-        title={t("lookingToSellCar")}
-        description={t("lookingToSellCarDesc")}
-        btn={theme.palette.mode === "dark" ? "#EC4899" : "#9B1C1C"}
-        sx={{
-          animation: "slideInRight 1s ease-out",
-          "@keyframes slideInRight": {
-            "0%": { transform: "translateX(-100%)", opacity: 0 },
-            "100%": { transform: "translateX(0)", opacity: 1 },
-          },
-        }}
-      />
-    </Box>
-
+      >
+        <InfoCard
+          bgColor={theme.palette.mode === "dark" ? "#1E293B" : "#E3F2FD"}
+          title={t("lookingForCar")}
+          description={t("lookingForCarDesc")}
+          btn={theme.palette.mode === "dark" ? "#60A5FA" : "#1E40AF"}
+          sx={{
+            animation: "slideInLeft 1s ease-out",
+            "@keyframes slideInLeft": {
+              "0%": { transform: "translateX(-100%)", opacity: 0 },
+              "100%": { transform: "translateX(0)", opacity: 1 },
+            },
+          }}
+        />
+        <InfoCard
+          bgColor={theme.palette.mode === "dark" ? "#3F1D38" : "#FEE2E2"}
+          title={t("lookingToSellCar")}
+          description={t("lookingToSellCarDesc")}
+          btn={theme.palette.mode === "dark" ? "#EC4899" : "#9B1C1C"}
+          sx={{
+            animation: "slideInRight 1s ease-out",
+            "@keyframes slideInRight": {
+              "0%": { transform: "translateX(-100%)", opacity: 0 },
+              "100%": { transform: "translateX(0)", opacity: 1 },
+            },
+          }}
+        />
+      </Box>
       <BestSelling />
-    </Box>
-  );
-};
-
-// Reusable Filter Item Component
-const FilterItem = ({ icon, text, onClick }) => {
-  const theme = useTheme();
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: 1,
-        cursor: "pointer",
-        "&:hover": { color: theme.palette.primary.main },
-      }}
-      onClick={(e) => onClick(e, text)}
-    >
-      {icon}
-      <Typography sx={{ fontSize: 14, fontWeight: 500 }}>{text}</Typography>
     </Box>
   );
 };
