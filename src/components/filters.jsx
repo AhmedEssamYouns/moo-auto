@@ -4,12 +4,20 @@ import {
   Paper,
   IconButton,
   Menu,
+  Button,
   MenuItem,
   useMediaQuery,
   useTheme,
   Drawer,
   Typography,
-  Button,
+  ButtonBase,
+  Popover,
+  Slider,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
 } from "@mui/material";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -17,32 +25,83 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import TuneIcon from "@mui/icons-material/Tune";
 import { useLanguage } from "../contexts/LanguageContext";
+import MobileDrawerFilters from "./mobileFilter";
 
-const Filters = () => {
+const Filters = ({ onApplyFilters, allBrands }) => {
   const { t } = useLanguage();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState("");
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
+  const [openPriceDialog, setOpenPriceDialog] = useState(false);
 
+  // Filter states
+  const [selectedPrice, setSelectedPrice] = useState([0, 100000]);
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [selectedTransmission, setSelectedTransmission] = useState("manual");
+  const [usedCars, setUsedCars] = useState(false);
+
+  // Handle opening and closing of menus
   const handleOpenMenu = (event, filter) => {
-    if (isMobile) {
-      setOpenBottomSheet(true);
-    } else {
-      setAnchorEl(event.currentTarget);
-      setSelectedFilter(filter);
-    }
+    setAnchorEl(event.currentTarget);
+    setSelectedFilter(filter);
   };
 
-  const handleCloseBottomSheet = () => setOpenBottomSheet(false);
   const handleCloseMenu = () => {
     setAnchorEl(null);
     setSelectedFilter("");
   };
 
+  const handleSelectFilter = (filter, value) => {
+    if (filter === "transmission") setSelectedTransmission(value);
+    if (filter === "brand") setSelectedBrand(value);
+    if (filter === "usedCars") setUsedCars(!usedCars);
+    handleCloseMenu();
+  };
+
+  const handleApplyFilters = () => {
+    onApplyFilters({
+      selectedPrice,
+      selectedBrand,
+      selectedTransmission,
+      usedCars,
+    });
+    setOpenBottomSheet(false);
+  };
+
+  // Open price range dialog
+  const handlePriceRangeClick = () => setOpenPriceDialog(true);
+  const handlePriceRangeClose = () => setOpenPriceDialog(false);
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Handle opening the dialog
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  // Handle closing the dialog
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  // Handle brand selection from the search
+  const handleSelectBrand = (brand) => {
+    setSelectedBrand(brand);
+    setOpenDialog(false); // Close the dialog when a brand is selected
+  };
+
+  
+
+  // Filter brands based on search query
+  const filteredBrands = allBrands.filter((brand) =>
+    brand.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <>
+      {/* Desktop View */}
       {!isMobile && (
         <Paper
           elevation={4}
@@ -62,7 +121,6 @@ const Filters = () => {
             gap: 2,
           }}
         >
-          {/* Filter Items */}
           <Box
             sx={{
               display: "flex",
@@ -74,27 +132,28 @@ const Filters = () => {
           >
             <FilterItem
               icon={<DirectionsCarIcon />}
-              text={t("usedCars")}
-              onClick={handleOpenMenu}
+              text={usedCars ? t("newCars") : t("usedCars")}
+              onClick={() => handleSelectFilter("usedCars")}
             />
             <FilterItem
               icon={<CategoryIcon />}
-              text={t("anyMake")}
-              onClick={handleOpenMenu}
+              text={t("allBrands")}
+              onClick={(e) => handleOpenMenu(e, "brands")}
             />
             <FilterItem
               icon={<LocalOfferIcon />}
-              text={t("anyBrand")}
-              onClick={handleOpenMenu}
+              text={t("allPrices")}
+              onClick={handlePriceRangeClick}
             />
             <FilterItem
               icon={<AttachMoneyIcon />}
-              text={t("allPrices")}
-              onClick={handleOpenMenu}
+              text={t(
+                selectedTransmission === "manual" ? "manual" : "automatic"
+              )}
+              onClick={(e) => handleOpenMenu(e, "transmission")}
             />
           </Box>
 
-          {/* Menu Button */}
           <IconButton
             sx={{
               bgcolor: theme.palette.mode === "dark" ? "#444" : "#222",
@@ -114,35 +173,87 @@ const Filters = () => {
         </Paper>
       )}
 
-      {/* Bottom Sheet for Mobile */}
-      <Drawer
-        anchor="bottom"
-        open={openBottomSheet}
-        onClose={handleCloseBottomSheet}
-        PaperProps={{ sx: { borderRadius: "20px 20px 0 0", p: 2 } }}
-      >
-        <Typography variant="h6" sx={{ textAlign: "center", mb: 2 }}>
-          {t("filterOptions")}
-        </Typography>
-        <MenuItem onClick={handleCloseBottomSheet}>{t("option1")}</MenuItem>
-        <MenuItem onClick={handleCloseBottomSheet}>{t("option2")}</MenuItem>
-        <MenuItem onClick={handleCloseBottomSheet}>{t("option3")}</MenuItem>
-        <Button onClick={handleCloseBottomSheet} fullWidth variant="contained">
-          {t("applyFilters")}
-        </Button>
-      </Drawer>
+      {/* Mobile View */}
+      {isMobile && (
+        <ButtonBase
+          onClick={() => setOpenBottomSheet(true)}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            px: 2,
+            py: 1,
+            my: 4,
+            borderRadius: 20,
+            bgcolor: theme.palette.background.paper,
+            boxShadow: theme.shadows[4],
+            width: "100%",
+            zIndex: 1000,
+          }}
+        >
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            {t("filters")}
+          </Typography>
 
-      {/* Menu for Filter Options */}
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
-        <MenuItem onClick={handleCloseMenu}>
-          {t("option1")} {selectedFilter}
-        </MenuItem>
-        <MenuItem onClick={handleCloseMenu}>
-          {t("option2")} {selectedFilter}
-        </MenuItem>
-        <MenuItem onClick={handleCloseMenu}>
-          {t("option3")} {selectedFilter}
-        </MenuItem>
+          <IconButton
+            sx={{
+              bgcolor: theme.palette.mode === "dark" ? "#444" : "#222",
+              color: "white",
+              borderRadius: "50%",
+              width: 50,
+              height: 50,
+              "&:hover": {
+                bgcolor: theme.palette.mode === "dark" ? "#555" : "#333",
+              },
+            }}
+          >
+            <TuneIcon sx={{ fontSize: 28 }} />
+          </IconButton>
+        </ButtonBase>
+      )}
+
+      <MobileDrawerFilters
+        openBottomSheet={openBottomSheet}
+        setOpenBottomSheet={setOpenBottomSheet}
+        allBrands={allBrands}
+        selectedBrand={selectedBrand}
+        setSelectedBrand={setSelectedBrand}
+        selectedPrice={selectedPrice}
+        setSelectedPrice={setSelectedPrice}
+        handleSelectFilter={handleSelectFilter}
+        handlePriceRangeClick={handlePriceRangeClick}
+        handleApplyFilters={handleApplyFilters}
+      />
+
+      {/* Menu for Filter Options (Desktop) */}
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleCloseMenu}
+      >
+        {selectedFilter === "transmission" && (
+          <>
+            <MenuItem
+              onClick={() => handleSelectFilter("transmission", "manual")}
+            >
+              {t("manual")}
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleSelectFilter("transmission", "automatic")}
+            >
+              {t("automatic")}
+            </MenuItem>
+          </>
+        )}
+        {selectedFilter === "brands" &&
+          allBrands.map((brand, index) => (
+            <MenuItem
+              key={index}
+              onClick={() => handleSelectFilter("brand", brand)}
+            >
+              {brand}
+            </MenuItem>
+          ))}
       </Menu>
     </>
   );
@@ -160,7 +271,7 @@ const FilterItem = ({ icon, text, onClick }) => {
         cursor: "pointer",
         "&:hover": { color: theme.palette.primary.main },
       }}
-      onClick={(e) => onClick(e, text)}
+      onClick={onClick}
     >
       {icon}
       <Typography sx={{ fontSize: 14, fontWeight: 500 }}>{text}</Typography>

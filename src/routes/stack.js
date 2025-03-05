@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import HomeScreen from "../screens/home";
+import ProductsScreen from "../screens/products";
 
 // Dummy Pages
 const CarsForSale = () => <h2>Cars for Sale</h2>;
@@ -14,7 +15,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<HomeScreen />} />
-      <Route path="/cars-for-sale" element={<CarsForSale />} />
+      <Route path="/cars-for-sale" element={<ProductsScreen />} />
       <Route path="/new-arrivals" element={<NewArrivals />} />
       <Route path="/offers" element={<Offers />} />
       <Route path="/request-car" element={<RequestCar />} />

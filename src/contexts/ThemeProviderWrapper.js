@@ -57,6 +57,22 @@ const ThemeProviderWrapper = ({ children }) => {
           body1: { fontFamily: "'IBM Plex Sans Arabic', sans-serif" },
           body2: { fontFamily: "'IBM Plex Sans Arabic', sans-serif" },
         },
+        components: {
+          MuiButton: {
+            styleOverrides: {
+              outlined: {
+
+                borderColor: darkMode ? "#80CBC4" : "#1976D2", // Outline color for dark and light mode
+                color: darkMode ? "white" : "#1976D2", // Text color for outlined buttons
+                '&:hover': {
+                  borderColor: darkMode ? "#B2DFDB" : "#1565C0", // Hover outline color
+                  backgroundColor: darkMode ? "#80CBC4" : "#1976D2", // Hover background color
+                  color: "#ffffff",
+                },
+              },
+            },
+          },
+        },
       }),
     [darkMode, language]
   );
