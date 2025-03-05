@@ -33,11 +33,11 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
       icon: <DirectionsCarIcon />,
       path: "/cars-for-sale",
     },
-    { text: t("newArrivals"), icon: <FiberNewIcon />, path: "/new-arrivals" },
+    { text: t("newArrivals"), icon: <FiberNewIcon />, path: "/cars-for-sale" },
     {
       text: t("offersDiscounts"),
       icon: <LocalOfferIcon />,
-      path: "/offers-discounts",
+      path: "/cars-for-sale",
     },
     { text: t("requestCar"), icon: <CarRentalIcon />, path: "/request-car" },
     { text: t("financing"), icon: <AccountBalanceIcon />, path: "/financing" },
@@ -63,6 +63,7 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
       <Box sx={{ display: "flex", justifyContent: "center", padding: 2 }}>
         <Typography
           component={Link}
+          onClick={onClose}
           to="/"
           sx={{
             fontWeight: "bold",

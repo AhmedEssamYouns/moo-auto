@@ -21,6 +21,7 @@ import TuneIcon from "@mui/icons-material/Tune";
 import InfoCard from "../components/infoCard";
 import BestSelling from "../components/products";
 import { useLanguage } from "../contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 const HomeScreen = () => {
   const { t, language } = useLanguage();
@@ -29,10 +30,13 @@ const HomeScreen = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
-
+  const navigate = useNavigate();
   const handleCloseMenu = () => {
     setAnchorEl(null);
     setSelectedFilter("");
+  };
+  const handleClick = () => {
+    navigate("/cars-for-sale");
   };
 
   return (
@@ -83,7 +87,7 @@ const HomeScreen = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: 2, 
+            gap: 2,
             "@keyframes slideIn": {
               "0%": { opacity: 0, transform: "translateX(100%)" },
               "100%": { opacity: 1, transform: "translateX(0)" },
@@ -105,6 +109,7 @@ const HomeScreen = () => {
                 "50%": { transform: "scale(1.1)" },
               },
             }}
+            onClick={handleClick} // Attach the navigate function to the button click
           >
             {t("exploreNow")}
           </Button>
@@ -116,7 +121,6 @@ const HomeScreen = () => {
             fill={theme.palette.text.primary}
           />
         </Box>
-       
       </Box>
 
       <Box
