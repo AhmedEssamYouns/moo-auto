@@ -4,13 +4,12 @@ import HomeScreen from "../screens/home";
 import ProductsScreen from "../screens/products";
 import NotFound from "../screens/404";
 import ProductScreen from "../screens/productDetails";
+import RequestCarScreen from "../screens/requestCar";
+import InstallmentServicesScreen from "../screens/finance";
+import AboutUsScreen from "../screens/about";
 // Dummy Pages
-const CarsForSale = () => <h2>Cars for Sale</h2>;
 const NewArrivals = () => <h2>New Arrivals</h2>;
 const Offers = () => <h2>Offers & Discounts</h2>;
-const RequestCar = () => <h2>Request a Car</h2>;
-const Financing = () => <h2>Financing</h2>;
-const AboutUs = () => <h2>About Us</h2>;
 
 const AppRoutes = () => {
   return (
@@ -20,9 +19,9 @@ const AppRoutes = () => {
       <Route path="/new-arrivals" element={<NewArrivals />} />
       <Route path="/offers" element={<Offers />} />
       <Route path="/product/:id" element={<ProductScreen />} />
-      <Route path="/request-car" element={<RequestCar />} />
-      <Route path="/financing" element={<Financing />} />
-      <Route path="/about-us" element={<AboutUs />} />
+      <Route path="/request-car" element={<RequestCarScreen />} />
+      <Route path="/financing" element={<InstallmentServicesScreen />} />
+      <Route path="/about-us" element={<AboutUsScreen />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

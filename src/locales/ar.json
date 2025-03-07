@@ -49,8 +49,16 @@
   "TikTok": "تيك توك",
   "Location": "الموقع",
   "Find Our Location": "اعثر على موقعنا",
+  "carName": "اسم السيارة",
+  "carModel": "طراز السيارة",
+  "carColor": "لون السيارة",
+  "yourName": "اسمك",
+  "phoneNumber": "رقم الهاتف",
+  "email": "البريد الإلكتروني",
+  "submit": "إرسال الطلب",
+  "thankYouMessage": "شكرًا لك! سنرد عليك في أقرب وقت ممكن.",
+  "successMessage": "تم إرسال طلبك بنجاح!",
 
-  
   "fuel": {
     "electric": "كهربائي",
     "diesel": "ديزل",
