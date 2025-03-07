@@ -11,6 +11,7 @@ import {
   Switch,
 } from "@mui/material";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import logo from "../assets/imgs/logo.png";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import CarRentalIcon from "@mui/icons-material/CarRental";
@@ -60,19 +61,23 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
       }}
     >
       {/* Drawer Header */}
-      <Box sx={{ display: "flex", justifyContent: "center", padding: 2 }}>
-        <Typography
-          component={Link}
-          onClick={onClose}
-          to="/"
-          sx={{
-            fontWeight: "bold",
-            color: isDarkMode ? "white" : "black",
-            fontFamily: "'Permanent Marker', cursive",
-          }}
-        >
-          Al Muslmi
-        </Typography>
+      <Box
+        component={Link}
+        to="/"
+        sx={{
+          width: "90%",
+          my: 2,
+          alignSelf: "center",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <img
+          src={logo}
+          alt="Al Muslmi Logo"
+          style={{ width: "100%", height: "100%", borderRadius: 45 }}
+        />
       </Box>
       <Divider sx={{ backgroundColor: "gray" }} />
 

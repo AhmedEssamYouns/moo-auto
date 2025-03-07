@@ -13,6 +13,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import logo from "../assets/imgs/logo.png";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
@@ -32,8 +33,8 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
 
   const navItems = [
     { text: t("carsForSale"), path: "/cars-for-sale" },
-    { text: t("newArrivals"), path: "/cars-for-sale"  },
-    { text: t("offersDiscounts"),  path: "/cars-for-sale"  },
+    { text: t("newArrivals"), path: "/cars-for-sale" },
+    { text: t("offersDiscounts"), path: "/cars-for-sale" },
     { text: t("requestCar"), path: "/request-car" },
     { text: t("financing"), path: "/financing" },
     { text: t("aboutUs"), path: "/about-us" },
@@ -60,22 +61,23 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
           )}
 
           {!searchOpen && (
-            <Typography
+            <Box
               component={Link}
               to="/"
-              variant="h6"
               sx={{
                 width: 150,
-                fontWeight: "bold",
-                color: darkMode ? "white" : "black",
-                fontFamily: "'Permanent Marker', cursive",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textDecoration: "none",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              Al Muslmi
-            </Typography>
+              <img
+                src={logo}
+                alt="Al Muslmi Logo"
+                style={{ width: "100%", height: "100%", borderRadius: 45 }}
+              />
+            </Box>
           )}
 
           <Box
@@ -141,7 +143,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                     color: darkMode ? "white" : "black",
                     textDecoration: "none",
                     "&:hover": {
-                      textDecoration: "underline", 
+                      textDecoration: "underline",
                     },
                   }}
                 >
