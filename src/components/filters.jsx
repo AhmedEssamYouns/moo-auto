@@ -24,7 +24,7 @@ import FilterItem from "./FilterItem"; // Filter Item Component
 import DriveEtaIcon from "@mui/icons-material/DriveEta";
 import TransmissionIcon from "@mui/icons-material/Transform";
 
-const Filters = ({ onApplyFilters, brandsData }) => {
+const Filters = ({ onApplyFilters, brandsData, filters }) => {
   const { t } = useLanguage();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
@@ -48,6 +48,19 @@ const Filters = ({ onApplyFilters, brandsData }) => {
     brand.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  useEffect(() => {
+    if (filters) {
+      setSelectedPrice(
+        filters.MinPrice ? [filters.MinPrice, filters.MaxPrice] : [0, 100000]
+      );
+      setMinPrice(filters.MinPrice || 0);
+      setMaxPrice(filters.MaxPrice || 100000);
+      setSelectedBrand(filters.CarBrand);
+      setSelectedTransmission(filters.TransmissionType);
+      setUsedCars(filters.CarState === "used");
+    }
+  }, [filters]);
+
   const handleSelectFilter = (filter, value) => {
     if (filter === "transmission") setSelectedTransmission(value);
     if (filter === "brand") {
@@ -57,11 +70,11 @@ const Filters = ({ onApplyFilters, brandsData }) => {
     if (filter === "usedCars") setUsedCars(!usedCars);
   };
 
-  const handleApplyFilters = () => {
+  const handleApplyFilters = (TheSelectedBrand) => {
     onApplyFilters({
       MinPrice: minPrice,
-      MaxPrice: maxPrice,
-      CarBrand: brandsData.find((brand) => brand.name === selectedBrand).id,
+      MaxPrice: maxPrice === 100000 ? null : maxPrice,
+      CarBrand: selectedBrand || TheSelectedBrand ,
       // TransmissionType: selectedTransmission,
       // CarState: usedCars ? "used" : "new",
     });
@@ -222,7 +235,15 @@ const Filters = ({ onApplyFilters, brandsData }) => {
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         filteredBrands={filteredBrands}
-        setSelectedBrand={setSelectedBrand && handleApplyFilters}
+        setSelectedBrand={(brandName) => {
+          console.log("Selected brand from dialog:", brandName);
+          const selectedBrandObj = brandsData.find(
+            (brand) => brand.name === brandName
+          );
+          console.log("Matched brand object:", selectedBrandObj);
+          setSelectedBrand(selectedBrandObj ? selectedBrandObj.id : null);
+          handleApplyFilters(selectedBrandObj ? selectedBrandObj.id : null);
+        }}
         t={t}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}

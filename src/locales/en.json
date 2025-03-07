@@ -42,6 +42,7 @@
   "carColor": "Car Color",
   "yourName": "Your Name",
   "phoneNumber": "Phone Number",
+  "NoCarsFound": "No Cars Found",
   "email": "Email",
   "submit": "Submit Request",
   "thankYouMessage": "Thank you! We will reply as soon as possible.",

@@ -1,11 +1,11 @@
 import axios from "axios";
 
 const apiService = axios.create({
-  baseURL: "https://almosallmy.runasp.net/api", // Update this
+  baseURL: "https://almosallmy.runasp.net/api", 
   headers: { "Content-Type": "application/json" },
 });
 
-// Request Interceptor (Attach Token only if isAuth is true)
+
 apiService.interceptors.request.use(
   (config) => {
     if (config.isAuth === true) {
@@ -17,7 +17,7 @@ apiService.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response Interceptor (Handle Errors)
+
 apiService.interceptors.response.use(
   (response) => response,
   (error) => {
