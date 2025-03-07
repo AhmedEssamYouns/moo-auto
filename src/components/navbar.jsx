@@ -60,11 +60,11 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
           )}
 
           {!searchOpen && (
-            <Box component={Link} to="/" sx={{ width: 150, height: "100%" }}>
+            <Box component={Link} to="/" sx={{ width: 140,mt: 1, height: "90%" }}>
               <img
                 src={logo}
                 alt="Al Muslmi Logo"
-                style={{ width: "100%", height: "100%", borderRadius: 45 }}
+                style={{ width: "100%", height: "90%", borderRadius: 45 }}
               />
             </Box>
           )}
@@ -144,7 +144,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                       button
                       key={item.id}
                       component={Link}
-                      to={`/cars/${item.id}`}
+                      to={`/product/${item.id}`}
                       sx={{
                         "&:hover": { bgcolor: darkMode ? "#444" : "#f0f0f0" },
                       }}
