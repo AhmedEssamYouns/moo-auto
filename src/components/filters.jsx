@@ -148,6 +148,7 @@ const Filters = ({ onApplyFilters, allBrands }) => {
       {isMobile && (
         <>
           <MobileDrawerFilters
+            setOpenPriceDialog={setOpenPriceDialog}
             openBottomSheet={openBottomSheet}
             setOpenBottomSheet={setOpenBottomSheet}
             allBrands={allBrands}

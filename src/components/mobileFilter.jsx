@@ -24,14 +24,12 @@ const MobileDrawerFilters = ({
   handleSelectFilter,
   handlePriceRangeClick,
   handleApplyFilters,
+  setOpenPriceDialog
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredBrands, setFilteredBrands] = useState(allBrands);
   const [openDialog, setOpenDialog] = useState(false);
   const theme = useTheme();
-
-  const [openPriceDialog, setOpenPriceDialog] = useState(false);
-
   const [minPrice, setMinPrice] = useState(selectedPrice[0]);
   const [maxPrice, setMaxPrice] = useState(selectedPrice[1]);
   // New state to track selected transmission type
@@ -223,7 +221,7 @@ const MobileDrawerFilters = ({
       </Dialog>
 
       {/* Price Range Dialog */}
-      <Dialog
+      {/* <Dialog
         open={openPriceDialog}
         onClose={() => setOpenPriceDialog(false)}
         sx={{
@@ -279,7 +277,7 @@ const MobileDrawerFilters = ({
             Apply
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </>
   );
 };
