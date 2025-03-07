@@ -17,6 +17,7 @@ import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
+import SpeedIcon from "@mui/icons-material/Speed"; // Better icon for transmission
 
 const ProductCard = ({ car }) => {
   const theme = useTheme();
@@ -61,7 +62,7 @@ const ProductCard = ({ car }) => {
       <Box sx={{ position: "relative", height: "200px", overflow: "hidden" }}>
         <CardMedia
           component="img"
-          image={
+          image={car.images[0] ||
             "https://hips.hearstapps.com/hmg-prod/images/2025-bmw-x3-m50-165-673658ffda8c2.jpg?crop=0.814xw:0.916xh;0.0849xw,0.0841xh&resize=768:*"
           }
           alt={car.name}
@@ -100,32 +101,38 @@ const ProductCard = ({ car }) => {
           variant="h6"
           sx={{ fontWeight: "bold", color: isDarkMode ? "white" : "black" }}
         >
-          {car.name} - {car.model}
+          {car.name} - 
+          {/* {car.model} */}
         </Typography>
-        <Box sx={{ display: "flex", gap: 0.5, mt: 1, mb: 2 }}>
-          <Chip
-            icon={<LocalGasStationIcon fontSize="small" />}
-            label={t(`${car.fuel}`)}
-            size="small"
-            sx={{
-              bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
-              color: isDarkMode ? "white" : "black",
-              px: 0.5,
-              minWidth: "auto",
-            }}
-          />
-          <Chip
-            icon={<DirectionsCarIcon fontSize="small" />}
-            label={t(`${car.transmission}`)}
-            size="small"
-            sx={{
-              bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
-              color: isDarkMode ? "white" : "black",
-              px: 0.5,
-              minWidth: "auto",
-            }}
-          />
-        </Box>
+
+<Box sx={{ display: "flex", gap: 0.5, mt: 1, mb: 2 }}>
+  {/* Brand Name */}
+  <Chip
+    icon={<DirectionsCarIcon fontSize="small" />} // Represents a car brand
+    label={t(`${car?.brandName}`)}
+    size="small"
+    sx={{
+      bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
+      color: isDarkMode ? "white" : "black",
+      px: 0.5,
+      minWidth: "auto",
+    }}
+  />
+  
+  {/* Transmission Type */}
+  <Chip
+    icon={<SpeedIcon fontSize="small" />} // Better for automatic/manual indication
+    label={t(`${car.transmission === 1 ? "automatic" : "manual"}`)}
+    size="small"
+    sx={{
+      bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
+      color: isDarkMode ? "white" : "black",
+      px: 0.5,
+      minWidth: "auto",
+    }}
+  />
+</Box>
+
         <Box
           sx={{
             display: "flex",

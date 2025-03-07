@@ -7,7 +7,7 @@ const apiService = axios.create({
 
 // Request Interceptor (Attach Token only if isAuth is true)
 apiService.interceptors.request.use(
-  (config:any) => {
+  (config) => {
     if (config.isAuth === true) {
       const token = localStorage.getItem("token");
       if (token) config.headers.Authorization = `Bearer ${token}`;
@@ -18,7 +18,7 @@ apiService.interceptors.request.use(
 );
 
 // Response Interceptor (Handle Errors)
-api.interceptors.response.use(
+apiService.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
@@ -28,5 +28,4 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 export default apiService;

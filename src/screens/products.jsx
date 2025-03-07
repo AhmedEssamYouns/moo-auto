@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Box, Grid, Typography, Pagination, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  Pagination,
+  CircularProgress,
+} from "@mui/material";
 import ProductCard from "../components/productItem";
 import Filters from "../components/filters";
 import { useTheme } from "@mui/material/styles";
@@ -7,9 +13,26 @@ import { useCars } from "../services/hooks/useCards";
 import { useLanguage } from "../contexts/LanguageContext";
 
 const brandsList = [
-  "Toyota", "BMW", "Ford", "Honda", "Chevrolet", "Mercedes", "Audi", "Volkswagen",
-  "Nissan", "Hyundai", "Kia", "Mazda", "Subaru", "Jaguar", "Porsche", "Tesla",
-  "Lexus", "Mitsubishi", "Peugeot", "Land Rover",
+  "Toyota",
+  "BMW",
+  "Ford",
+  "Honda",
+  "Chevrolet",
+  "Mercedes",
+  "Audi",
+  "Volkswagen",
+  "Nissan",
+  "Hyundai",
+  "Kia",
+  "Mazda",
+  "Subaru",
+  "Jaguar",
+  "Porsche",
+  "Tesla",
+  "Lexus",
+  "Mitsubishi",
+  "Peugeot",
+  "Land Rover",
 ];
 
 const ProductsScreen = () => {
@@ -22,13 +45,13 @@ const ProductsScreen = () => {
   const [filters, setFilters] = useState({
     MinPrice: null,
     MaxPrice: null,
-    CarCategory: "",
-    TransmissionType: "",
+    CarCategory: null,
+    TransmissionType: null,
     Model: null,
     IsPaginated: true,
     PageNumber: currentPage,
     PageSize: productsPerPage,
-    CarState: "",
+    CarState: null,
     CarBrand: null,
   });
 
@@ -40,21 +63,21 @@ const ProductsScreen = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleApplyFilters = (newFilters) => {
+    setFilters((prev) => ({
+      ...prev,
+      ...newFilters,
+      PageNumber: 1, // Reset to first page after applying filters
+    }));
+  };
   return (
-    <Box sx={{ p: 4 }}>
-      <Typography
-        variant="h4"
-        sx={{
-          fontWeight: "bold",
-          mb: 3,
-          textAlign: "center",
-          color: isDarkMode ? "white" : "black",
-        }}
-      >
-        {t("vehicles")}
+    <Box sx={{ p: 4, minHeight: "100vh" }}>
+      <Typography variant="h4" textAlign="center" mt={2} mb={4}>
+        {t("Our Cars")}
+        {filters.CarBrand && ` - ${filters.CarBrand}`}
+        {filters.MinPrice && ` - ${filters.MinPrice} - ${filters.MaxPrice}`}
       </Typography>
-
-      <Filters allBrands={brandsList} setFilters={setFilters} />
+      <Filters allBrands={brandsList} onApplyFilters={handleApplyFilters} />
 
       {isLoading ? (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
@@ -62,12 +85,12 @@ const ProductsScreen = () => {
         </Box>
       ) : error ? (
         <Typography color="error" textAlign="center">
-          {t("Something went wrong!")}
+          {t("Something went wrong!")} {error.message}
         </Typography>
       ) : (
         <>
           <Grid container spacing={3} justifyContent={"center"}>
-            {data?.cars?.map((car) => (
+            {data?.items?.map((car) => (
               <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={car.id}>
                 <ProductCard car={car} />
               </Grid>
@@ -76,7 +99,7 @@ const ProductsScreen = () => {
 
           <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
             <Pagination
-              count={Math.ceil((data?.total || 1) / productsPerPage)}
+              count={data?.totalPages}
               page={currentPage}
               onChange={handlePageChange}
               color="primary"

@@ -55,11 +55,13 @@ const Filters = ({ onApplyFilters, allBrands }) => {
 
   const handleApplyFilters = () => {
     onApplyFilters({
-      selectedPrice,
-      selectedBrand,
-      selectedTransmission,
-      usedCars,
+      MinPrice: minPrice,
+      MaxPrice: maxPrice,
+      // CarBrand: selectedBrand,
+      // TransmissionType: selectedTransmission,
+      // CarState: usedCars ? "used" : "new",
     });
+
     setOpenBottomSheet(false);
   };
 
@@ -123,7 +125,7 @@ const Filters = ({ onApplyFilters, allBrands }) => {
             />
 
             <FilterItem
-              icon={<TransmissionIcon />} 
+              icon={<TransmissionIcon />}
               text={t(
                 selectedTransmission === "manual" ? "manual" : "automatic"
               )}
@@ -205,6 +207,7 @@ const Filters = ({ onApplyFilters, allBrands }) => {
         minPrice={minPrice}
         setMinPrice={setMinPrice}
         maxPrice={maxPrice}
+        handleApplyFilters={handleApplyFilters}
         setMaxPrice={setMaxPrice}
         t={t}
       />

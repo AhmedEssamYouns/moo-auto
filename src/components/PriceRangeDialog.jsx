@@ -10,6 +10,7 @@ const PriceRangeDialog = ({
   setMinPrice,
   maxPrice,
   setMaxPrice,
+  handleApplyFilters,
   t,
 }) => {
   const handlePriceChange = (event, newValue) => {
@@ -66,6 +67,7 @@ const PriceRangeDialog = ({
           onClick={() => {
             setSelectedPrice([minPrice, maxPrice]);
             onClose();
+            handleApplyFilters()
           }}
         >
           {t("apply")}

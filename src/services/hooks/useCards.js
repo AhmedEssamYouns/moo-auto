@@ -7,6 +7,6 @@ export const useCars = (filters) => {
     queryFn: () => getCars(filters),
     gcTime: 1000 * 60 * 10, 
     refetchOnWindowFocus: false, 
-    retry: 2, 
+    retry: 0, 
   });
 };
