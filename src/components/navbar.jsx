@@ -34,7 +34,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
   const navItems = [
     { text: t("carsForSale"), path: "/cars-for-sale" },
     { text: t("newArrivals"), path: "/cars-for-sale" },
-    { text: t("offersDiscounts"), path: "/cars-for-sale" },
+    // { text: t("offersDiscounts"), path: "/cars-for-sale" },
     { text: t("requestCar"), path: "/request-car" },
     { text: t("financing"), path: "/financing" },
     { text: t("aboutUs"), path: "/about-us" },

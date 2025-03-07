@@ -33,6 +33,10 @@
   "viewDetails": "View Details",
   "exploreNow": "Explore Now",
   "vehicles": "Vehicles",
+  "price": "Price",
+  "overview": "Overview",
+  "share": "Share",
+  "linkCopied": "Link copied to clipboard!",
   "fuel": {
     "electric": "Electric",
     "diesel": "Diesel",
