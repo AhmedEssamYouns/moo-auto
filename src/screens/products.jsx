@@ -1,56 +1,42 @@
 import React, { useState } from "react";
-import { Box, Grid, Typography, Pagination } from "@mui/material";
+import { Box, Grid, Typography, Pagination, CircularProgress } from "@mui/material";
 import ProductCard from "../components/productItem";
+import Filters from "../components/filters";
 import { useTheme } from "@mui/material/styles";
-import { useMediaQuery } from "@mui/material";
-import { productsData as products } from "../data/products";
-import Filters from "../components/filters"; 
+import { useCars } from "../services/hooks/useCards";
 import { useLanguage } from "../contexts/LanguageContext";
 
 const brandsList = [
-  "Toyota",
-  "BMW",
-  "Ford",
-  "Honda",
-  "Chevrolet",
-  "Mercedes",
-  "Audi",
-  "Volkswagen",
-  "Nissan",
-  "Hyundai",
-  "Kia",
-  "Mazda",
-  "Subaru",
-  "Jaguar",
-  "Porsche",
-  "Tesla",
-  "Lexus",
-  "Mitsubishi",
-  "Peugeot",
-  "Land Rover",
-  "BMW",
+  "Toyota", "BMW", "Ford", "Honda", "Chevrolet", "Mercedes", "Audi", "Volkswagen",
+  "Nissan", "Hyundai", "Kia", "Mazda", "Subaru", "Jaguar", "Porsche", "Tesla",
+  "Lexus", "Mitsubishi", "Peugeot", "Land Rover",
 ];
 
 const ProductsScreen = () => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
-  const isTablet = useMediaQuery("(max-width: 1500px)");
+  const { t } = useLanguage(); // Get the translation function
 
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 6;
+  const [filters, setFilters] = useState({
+    MinPrice: null,
+    MaxPrice: null,
+    CarCategory: "",
+    TransmissionType: "",
+    Model: null,
+    IsPaginated: true,
+    PageNumber: currentPage,
+    PageSize: productsPerPage,
+    CarState: "",
+    CarBrand: null,
+  });
 
-  const { t } = useLanguage(); // Get the translation function
+  const { data, isLoading, error } = useCars(filters);
 
-  // Pagination logic
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
-
-  const handlePageChange = (event, value) => {
+  const handlePageChange = (_, value) => {
     setCurrentPage(value);
+    setFilters((prev) => ({ ...prev, PageNumber: value }));
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -65,25 +51,39 @@ const ProductsScreen = () => {
           color: isDarkMode ? "white" : "black",
         }}
       >
-        {`${t("vehicles")} ${products.length}`} {/* Change to vehicles or another term */}
+        {t("vehicles")}
       </Typography>
-      <Filters allBrands={brandsList} /> {/* Keep the Filters Component */}
-      <Grid container spacing={3} justifyContent={"center"}>
-        {currentProducts.map((product) => (
-          <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={product.id}>
-            <ProductCard car={product} />
+
+      <Filters allBrands={brandsList} setFilters={setFilters} />
+
+      {isLoading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <CircularProgress />
+        </Box>
+      ) : error ? (
+        <Typography color="error" textAlign="center">
+          {t("Something went wrong!")}
+        </Typography>
+      ) : (
+        <>
+          <Grid container spacing={3} justifyContent={"center"}>
+            {data?.cars?.map((car) => (
+              <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={car.id}>
+                <ProductCard car={car} />
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
-      {/* Pagination */}
-      <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-        <Pagination
-          count={Math.ceil(products.length / productsPerPage)}
-          page={currentPage}
-          onChange={handlePageChange}
-          color="primary"
-        />
-      </Box>
+
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+            <Pagination
+              count={Math.ceil((data?.total || 1) / productsPerPage)}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Box>
+        </>
+      )}
     </Box>
   );
 };

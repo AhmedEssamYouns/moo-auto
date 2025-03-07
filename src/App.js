@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { Box, Container } from "@mui/material";
 import ThemeProviderWrapper from "./contexts/ThemeProviderWrapper";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Navbar from "./components/navbar";
 import ScrollToTop from "./utils/scrollToTop";
 import ScrollToTopButton from "./components/scrollToTopBtn";
@@ -10,6 +11,10 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 import LottieComponent from "./components/loader";
 import Footer from "./components/fotter";
 import { HelmetProvider } from "react-helmet-async";
+
+
+const queryClient = new QueryClient();
+
 
 const App = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -29,38 +34,43 @@ const App = () => {
 
   return (
     <HelmetProvider>
-    <LanguageProvider>
-      <ThemeProviderWrapper>
-        {(darkMode, setDarkMode) => (
-          <BrowserRouter>
-            {/* Show Lottie animation for 1 second */}
-            {showLottie ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100vh",// Adjust this value as needed
-                  width: "100%", // Make sure it spans full width
-                }}
-              >
-                <LottieComponent />
-              </Box>
-            ) : (
-              <>
-                <ScrollToTop />
-                <ScrollToTopButton darkMode={darkMode} />
-                <Navbar darkMode={darkMode} toggleDarkMode={() => setDarkMode((prev) => !prev)} />
-                <Container sx={{ mt: 4 }}>
-                  <AppRoutes />
-                </Container>
-                <Footer darkMode={darkMode} />
-              </>
+      <QueryClientProvider client={queryClient}>
+        <LanguageProvider>
+          <ThemeProviderWrapper>
+            {(darkMode, setDarkMode) => (
+              <BrowserRouter>
+                {/* Show Lottie animation for 1 second */}
+                {showLottie ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "100vh", // Adjust this value as needed
+                      width: "100%", // Make sure it spans full width
+                    }}
+                  >
+                    <LottieComponent />
+                  </Box>
+                ) : (
+                  <>
+                    <ScrollToTop />
+                    <ScrollToTopButton darkMode={darkMode} />
+                    <Navbar
+                      darkMode={darkMode}
+                      toggleDarkMode={() => setDarkMode((prev) => !prev)}
+                    />
+                    <Container sx={{ mt: 4 }}>
+                      <AppRoutes />
+                    </Container>
+                    <Footer darkMode={darkMode} />
+                  </>
+                )}
+              </BrowserRouter>
             )}
-          </BrowserRouter>
-        )}
-      </ThemeProviderWrapper>
-    </LanguageProvider>
+          </ThemeProviderWrapper>
+        </LanguageProvider>
+      </QueryClientProvider>
     </HelmetProvider>
   );
 };
