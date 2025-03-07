@@ -9,6 +9,7 @@ import AppRoutes from "./routes/stack";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import LottieComponent from "./components/loader";
 import Footer from "./components/fotter";
+import { HelmetProvider } from "react-helmet-async";
 
 const App = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -27,6 +28,7 @@ const App = () => {
   if (!fontsLoaded) return null; // Wait until fonts are fully loaded
 
   return (
+    <HelmetProvider>
     <LanguageProvider>
       <ThemeProviderWrapper>
         {(darkMode, setDarkMode) => (
@@ -59,6 +61,7 @@ const App = () => {
         )}
       </ThemeProviderWrapper>
     </LanguageProvider>
+    </HelmetProvider>
   );
 };
 

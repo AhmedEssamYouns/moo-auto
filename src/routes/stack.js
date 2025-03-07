@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import HomeScreen from "../screens/home";
 import ProductsScreen from "../screens/products";
 import NotFound from "../screens/404";
-import ProductScreen from '../screens/productDetails';
+import ProductScreen from "../screens/productDetails";
 // Dummy Pages
 const CarsForSale = () => <h2>Cars for Sale</h2>;
 const NewArrivals = () => <h2>New Arrivals</h2>;
@@ -24,7 +24,6 @@ const AppRoutes = () => {
       <Route path="/financing" element={<Financing />} />
       <Route path="/about-us" element={<AboutUs />} />
       <Route path="*" element={<NotFound />} />
-
     </Routes>
   );
 };
