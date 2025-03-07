@@ -17,6 +17,7 @@ import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import { useLanguage } from "../contexts/LanguageContext";
 import { FuelType, TransmissionType } from "../types/e-nums";
+import ProductCard from "./productItem";
 
 const cars = [
   {
@@ -68,122 +69,7 @@ const BestSelling = () => {
       >
         {cars.map((car) => (
           <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={car.id}>
-            <Card
-              sx={{
-                borderRadius: 3,
-                boxShadow: 3,
-                transition: "0.3s",
-                overflow: "hidden",
-                "&:hover": { boxShadow: 6 },
-                bgcolor: isDarkMode ? "#1E1E1E" : "white",
-              }}
-            >
-              <Box
-                sx={{
-                  position: "relative",
-                  height: "200px",
-                  overflow: "hidden",
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  image={car.img}
-                  alt={car.name}
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
-                />
-                <Chip
-                  label={t("greatPrice")}
-                  sx={{
-                    position: "absolute",
-                    top: 10,
-                    left: 10,
-                    bgcolor: "#4CAF50",
-                    color: "white",
-                  }}
-                />
-                <IconButton
-                  sx={{
-                    position: "absolute",
-                    top: 10,
-                    right: 10,
-                    bgcolor: isDarkMode ? "#333" : "white",
-                    color: isDarkMode ? "white" : "black",
-                  }}
-                >
-                  <BookmarkBorderIcon />
-                </IconButton>
-              </Box>
-              <CardContent>
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: "bold",
-                    color: isDarkMode ? "white" : "black",
-                  }}
-                >
-                  {car.name} - {car.model}
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 0.5,
-                    flexWrap: isTablet ? "wrap" : "nowrap",
-                    mt: 1,
-                    mb: 2,
-                  }}
-                >
-                  <Chip
-                    icon={<LocalGasStationIcon fontSize="small" />}
-                    label={t(`fuel.${car.fuel}`)}
-                    size="small"
-                    sx={{
-                      bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
-                      color: isDarkMode ? "white" : "black",
-                      px: 0.5,
-                      minWidth: "auto",
-                    }}
-                  />
-                  <Chip
-                    icon={<DirectionsCarIcon fontSize="small" />}
-                    label={t(`transmission.${car.transmission}`)}
-                    size="small"
-                    sx={{
-                      bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
-                      color: isDarkMode ? "white" : "black",
-                      px: 0.5,
-                      minWidth: "auto",
-                    }}
-                  />
-                </Box>
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography
-                    variant="h6"
-                    sx={{ fontWeight: "bold", color: "#4CAF50" }}
-                  >
-                    EGP{car.price}
-                  </Typography>
-                  <Button
-                    sx={{
-                      color: isDarkMode ? "white" : "black",
-                      textTransform: "none",
-                    }}
-                  >
-                    {t("viewDetails")} →
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
+            <ProductCard car={car} />
           </Grid>
         ))}
       </Grid>
