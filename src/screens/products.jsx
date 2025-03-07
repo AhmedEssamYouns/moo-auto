@@ -5,6 +5,8 @@ import {
   Typography,
   Pagination,
   CircularProgress,
+  Chip,
+  Button,
 } from "@mui/material";
 import ProductCard from "../components/productItem";
 import Filters from "../components/filters";
@@ -38,7 +40,7 @@ const brandsList = [
 const ProductsScreen = () => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
-  const { t } = useLanguage(); // Get the translation function
+  const { t } = useLanguage();
 
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 6;
@@ -67,18 +69,73 @@ const ProductsScreen = () => {
     setFilters((prev) => ({
       ...prev,
       ...newFilters,
-      PageNumber: 1, // Reset to first page after applying filters
+      PageNumber: 1,
     }));
   };
+
+  const handleClearFilter = (key) => {
+    setFilters((prev) => ({ ...prev, [key]: null, PageNumber: 1 }));
+  };
+
+  const handleClearAllFilters = () => {
+    setFilters({
+      MinPrice: null,
+      MaxPrice: null,
+      CarCategory: null,
+      TransmissionType: null,
+      Model: null,
+      IsPaginated: true,
+      PageNumber: 1,
+      PageSize: productsPerPage,
+      CarState: null,
+      CarBrand: null,
+    });
+  };
+
   return (
     <Box sx={{ p: 4, minHeight: "100vh" }}>
       <Typography variant="h4" textAlign="center" mt={2} mb={4}>
         {t("Our Cars")}
-        {filters.CarBrand && ` - ${filters.CarBrand}`}
-        {filters.MinPrice && ` - ${filters.MinPrice} - ${filters.MaxPrice}`}
       </Typography>
+
+      {/* Filters Component */}
       <Filters allBrands={brandsList} onApplyFilters={handleApplyFilters} />
 
+      {/* Active Filters */}
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
+        {Object.entries(filters).map(([key, value]) =>
+          value &&
+          key !== "PageNumber" &&
+          key !== "PageSize" &&
+          key !== "IsPaginated" ? (
+            <Chip
+              key={key}
+              label={`${key}: ${value}`}
+              onDelete={() => handleClearFilter(key)}
+              color="primary"
+            />
+          ) : null
+        )}
+
+        {/* Clear All Filters Button */}
+        {Object.entries(filters).some(
+          ([key, value]) =>
+            value !== null &&
+            key !== "PageNumber" &&
+            key !== "PageSize" &&
+            key !== "IsPaginated"
+        ) && (
+          <Button
+            onClick={handleClearAllFilters}
+            variant="outlined"
+            color="secondary"
+          >
+            Clear All
+          </Button>
+        )}
+      </Box>
+
+      {/* Loading & Error Handling */}
       {isLoading ? (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <CircularProgress />
@@ -89,6 +146,7 @@ const ProductsScreen = () => {
         </Typography>
       ) : (
         <>
+          {/* Product List */}
           <Grid container spacing={3} justifyContent={"center"}>
             {data?.items?.map((car) => (
               <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={car.id}>
@@ -97,6 +155,7 @@ const ProductsScreen = () => {
             ))}
           </Grid>
 
+          {/* Pagination */}
           <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
             <Pagination
               count={data?.totalPages}
