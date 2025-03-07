@@ -3,7 +3,10 @@ import apiService from "../interceptor";
 export const getCars = async (filters) => {
   console.log("Fetching cars with filters:", filters); // Log the payload
 
-  const response = await apiService.get("/cars", { params: filters, isAuth: false });
+  const response = await apiService.get("/cars", {
+    params: filters,
+    isAuth: false,
+  });
 
   console.log("API Response:", response.data); // Log the response
 
@@ -26,4 +29,12 @@ export const getBrands = async () => {
   console.log("API Response:", response.data); // Log the response
 
   return response.data;
-}
+};
+
+export const searchCars = async (SearchValue) => {
+  const response = await apiService.get(`/cars/Search`, {
+    params: { SearchValue},
+    isAuth: false,
+  });
+  return response.data;
+};

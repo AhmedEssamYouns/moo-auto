@@ -11,34 +11,33 @@ import {
   useMediaQuery,
   Select,
   MenuItem,
+  List,
+  ListItem,
+  ListItemText,
+  Paper,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
-import logo from "../assets/imgs/logo.png";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import NavDrawer from "./drawer";
 import { useLanguage } from "../contexts/LanguageContext";
-import { Link } from "react-router-dom";
-
+import { useSearch } from "../services/hooks/useCards";
+import logo from "../assets/imgs/logo.png";
 const Navbar = ({ darkMode, toggleDarkMode }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const { language, setLanguage, t } = useLanguage();
-
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const isTablet = useMediaQuery("(max-width: 1500px)");
 
-  const navItems = [
-    { text: t("carsForSale"), path: "/cars-for-sale" },
-    { text: t("newArrivals"), path: "/cars-for-sale" },
-    // { text: t("offersDiscounts"), path: "/cars-for-sale" },
-    { text: t("requestCar"), path: "/request-car" },
-    { text: t("financing"), path: "/financing" },
-    { text: t("aboutUs"), path: "/about-us" },
-  ];
+  const { data: searchResults, error } = useSearch(searchText);
+  const hasResults = searchResults?.items?.length > 0;
 
   return (
     <>
@@ -61,17 +60,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
           )}
 
           {!searchOpen && (
-            <Box
-              component={Link}
-              to="/"
-              sx={{
-                width: 150,
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
+            <Box component={Link} to="/" sx={{ width: 150, height: "100%" }}>
               <img
                 src={logo}
                 alt="Al Muslmi Logo"
@@ -80,13 +69,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
             </Box>
           )}
 
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              flexGrow: isMobile ? 1 : 0,
-            }}
-          >
+          <Box sx={{ position: "relative", flexGrow: isMobile ? 1 : 0 }}>
             {isMobile ? (
               <Slide
                 direction="left"
@@ -105,6 +88,12 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                   }}
                 >
                   <InputBase
+                    value={searchText}
+                    onFocus={() => setIsSearchFocused(true)}
+                    onBlur={() =>
+                      setTimeout(() => setIsSearchFocused(false), 200)
+                    }
+                    onChange={(e) => setSearchText(e.target.value)}
                     placeholder={t("searchPlaceholder")}
                     fullWidth
                     sx={{ color: darkMode ? "white" : "black" }}
@@ -119,6 +108,10 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
               </Slide>
             ) : (
               <InputBase
+                value={searchText}
+                onFocus={() => setIsSearchFocused(true)}
+                onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                onChange={(e) => setSearchText(e.target.value)}
                 placeholder={t("searchPlaceholder")}
                 sx={{
                   bgcolor: darkMode ? "#333" : "#f0f0f0",
@@ -129,11 +122,56 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                 }}
               />
             )}
+
+            {hasResults && isSearchFocused && (
+              <Paper
+                sx={{
+                  position: "absolute",
+                  top: "100%",
+                  left: 0,
+                  width: "100%",
+                  maxHeight: 300,
+                  overflowY: "auto",
+                  zIndex: 10,
+                  bgcolor: darkMode ? "#333" : "white",
+                  boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
+                  borderRadius: "0 0 8px 8px",
+                }}
+              >
+                <List>
+                  {searchResults.items.map((item) => (
+                    <ListItem
+                      button
+                      key={item.id}
+                      component={Link}
+                      to={`/cars/${item.id}`}
+                      sx={{
+                        "&:hover": { bgcolor: darkMode ? "#444" : "#f0f0f0" },
+                      }}
+                    >
+                      <ListItemText
+                        primary={item.name}
+                        secondary={item.brandName}
+                        sx={{
+                          color: darkMode ? "white" : "black",
+                        }}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </Paper>
+            )}
           </Box>
 
           {!isMobile && (
             <Box sx={{ display: "flex", gap: 3 }}>
-              {navItems.map((item) => (
+              {[
+                { text: t("carsForSale"), path: "/cars-for-sale" },
+                { text: t("newArrivals"), path: "/cars-for-sale" },
+                { text: t("requestCar"), path: "/request-car" },
+                { text: t("financing"), path: "/financing" },
+                { text: t("aboutUs"), path: "/about-us" },
+              ].map((item) => (
                 <Typography
                   key={item.text}
                   component={Link}
@@ -142,9 +180,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                   sx={{
                     color: darkMode ? "white" : "black",
                     textDecoration: "none",
-                    "&:hover": {
-                      textDecoration: "underline",
-                    },
+                    "&:hover": { textDecoration: "underline" },
                   }}
                 >
                   {item.text}
@@ -183,13 +219,8 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                 fontSize: "0.85rem",
                 minWidth: 90,
                 height: 32,
-                "& .MuiSelect-select": {
-                  padding: "4px 8px",
-                },
-                "& .MuiSelect-icon": {
-                  fontSize: "1rem",
-                  color: darkMode ? "white" : "black",
-                },
+                "& .MuiSelect-select": { padding: "4px 8px" },
+                "& .MuiSelect-icon": { fontSize: "1rem" },
               }}
             >
               <MenuItem value="en">{t("english")}</MenuItem>
