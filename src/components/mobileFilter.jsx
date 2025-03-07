@@ -182,14 +182,12 @@ const MobileDrawerFilters = ({
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         sx={{
-          width: 380,
-          height: 600,
           justifySelf: "center",
           alignSelf: "center",
         }}
       >
         <DialogTitle>Search Brand</DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ pb: 2,height: 500,width: 300 }}>
           <TextField
             autoFocus
             margin="dense"
@@ -200,7 +198,7 @@ const MobileDrawerFilters = ({
             value={searchQuery}
             onChange={handleSearchChange}
           />
-          <Box sx={{ maxHeight: 300, overflowY: "auto", mt: 2 }}>
+          <Box sx={{ overflowY: "auto", mt: 2 }}>
             {filteredBrands.map((brand, index) => (
               <Button
                 key={index}

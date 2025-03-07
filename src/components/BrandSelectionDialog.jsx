@@ -16,13 +16,15 @@ const BrandSelectionDialog = ({
       onClose={onClose}
       PaperProps={{
         sx: {
-          width: "80%",  // Make the dialog wider (adjust as needed)
+          width: 650,
+          height:700,
+          padding: 2,  // Make the dialog wider (adjust as needed)
           maxWidth: 650, // Max width
           margin: "auto", // Center the dialog on the screen
         },
       }}
     >
-      <DialogTitle>{t("selectBrand")}</DialogTitle>
+      <DialogTitle pt={4}>{t("selectBrand")}</DialogTitle>
       <DialogContent>
         <TextField
           label={t("searchBrand")}
