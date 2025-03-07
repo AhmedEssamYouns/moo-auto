@@ -59,6 +59,15 @@
   "submit": "إرسال الطلب",
   "thankYouMessage": "شكرًا لك! سنرد عليك في أقرب وقت ممكن.",
   "successMessage": "تم إرسال طلبك بنجاح!",
+  "allBrands": "كل الماركات",
+  "allModels": "كل الطرازات",
+  "newCars": "عربيات جديدة",
+  "selectBrand": "اختر ماركة",
+  "CarBrand": "ماركة السيارة",
+  "searchBrand": "ابحث عن ماركة",
+  "automatic": "أوتوماتيكي",
+  "manual": "يدوي",
+
 
   "fuel": {
     "electric": "كهربائي",

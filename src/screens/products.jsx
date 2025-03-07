@@ -88,10 +88,13 @@ const ProductsScreen = () => {
           {t("Failed to load brands")}
         </Typography>
       ) : (
-        <Filters filters={filters} brandsData={brandsData} onApplyFilters={handleApplyFilters} />
+        <Filters
+          filters={filters}
+          brandsData={brandsData}
+          onApplyFilters={handleApplyFilters}
+        />
       )}
 
-      {/* Active Filters */}
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
         {Object.entries(filters).map(([key, value]) =>
           value &&
@@ -100,7 +103,19 @@ const ProductsScreen = () => {
           key !== "IsPaginated" ? (
             <Chip
               key={key}
-              label={`${key}: ${value}`}
+              label={`${
+                key === "CarBrand"
+                  ? "Brand"
+                  : key === "MinPrice"
+                  ? "Min Price"
+                  : key === "MaxPrice"
+                  ? "Max Price"
+                  : key
+              }: ${
+                key === "CarBrand"
+                  ? brandsData?.find((brand) => brand.id === value)?.name
+                  : value
+              }`}
               onDelete={() => handleClearFilter(key)}
               color="primary"
             />

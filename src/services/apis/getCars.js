@@ -38,3 +38,11 @@ export const searchCars = async (SearchValue) => {
   });
   return response.data;
 };
+
+
+export const  getCar = async (id) => {
+  const response = await apiService.get(`/cars/${id}`, { isAuth: false });
+  return response.data;
+}
+
+

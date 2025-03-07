@@ -60,7 +60,11 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
           )}
 
           {!searchOpen && (
-            <Box component={Link} to="/" sx={{ width: 140,mt: 1, height: "90%" }}>
+            <Box
+              component={Link}
+              to="/"
+              sx={{ width: 140, mt: 1, height: "90%" }}
+            >
               <img
                 src={logo}
                 alt="Al Muslmi Logo"
@@ -123,7 +127,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
               />
             )}
 
-            {hasResults && isSearchFocused && (
+            {isSearchFocused && searchText && (
               <Paper
                 sx={{
                   position: "absolute",
@@ -136,29 +140,54 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                   bgcolor: darkMode ? "#333" : "white",
                   boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
                   borderRadius: "0 0 8px 8px",
+                  display: hasResults ? "block" : "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: hasResults ? 0 : 2,
                 }}
               >
-                <List>
-                  {searchResults.items.map((item) => (
-                    <ListItem
-                      button
-                      key={item.id}
-                      component={Link}
-                      to={`/product/${item.id}`}
-                      sx={{
-                        "&:hover": { bgcolor: darkMode ? "#444" : "#f0f0f0" },
-                      }}
-                    >
-                      <ListItemText
-                        primary={item.name}
-                        secondary={item.brandName}
+                {hasResults ? (
+                  <List>
+                    {searchResults.items.map((item) => (
+                      <ListItem
+                        button
+                        key={item.id}
+                        component={Link}
+                        to={`/product/${item.id}`}
                         sx={{
-                          color: darkMode ? "white" : "black",
+                          "&:hover": { bgcolor: darkMode ? "#444" : "#f0f0f0" },
                         }}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
+                      >
+                        <ListItem
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <ListItemText
+                            primary={item.name}
+                            secondary={item.brandName}
+                            sx={{ color: darkMode ? "white" : "black" }}
+                          />
+                          <Typography
+                            sx={{ color: darkMode ? "white" : "black" }}
+                          >
+                            {t("Model")} {item.model}
+                            <br />
+                            EGP {item.price}
+                          </Typography>
+                        </ListItem>
+                      </ListItem>
+                    ))}
+                  </List>
+                ) : (
+                  <Typography
+                    sx={{ color: darkMode ? "white" : "black", fontSize: 16 }}
+                  >
+                    {t("NoCarsFound")}
+                  </Typography>
+                )}
               </Paper>
             )}
           </Box>

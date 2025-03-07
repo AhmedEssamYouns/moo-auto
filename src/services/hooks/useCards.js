@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getBrands, getCars, searchCars } from "../apis/getCars";
+import { getBrands, getCar, getCars, searchCars } from "../apis/getCars";
 import { use } from "react";
 
 export const useCars = (filters) => {
@@ -27,6 +27,16 @@ export const useSearch = (query) => {
   return useQuery({
     queryKey: ["search", query],
     queryFn: () => searchCars(query),
+    gcTime: 1000 * 60 * 10, 
+    refetchOnWindowFocus: false, 
+    retry: 0, 
+  });
+};
+
+export const useCar = (id) => {
+  return useQuery({
+    queryKey: ["car", id],
+    queryFn: () => getCar(id),
     gcTime: 1000 * 60 * 10, 
     refetchOnWindowFocus: false, 
     retry: 0, 
