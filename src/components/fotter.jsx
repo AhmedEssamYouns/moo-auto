@@ -78,7 +78,7 @@ const Footer = ({ darkMode }) => {
                     target="_blank"
                     sx={{ display: "block", color: "inherit" }}
                   >
-                    <FaTiktok style={{ marginRight: 8 }} /> {t("TikTok")}
+                    <FaTiktok style={{ marginRight: 8 ,marginLeft:5}} /> {t("TikTok")}
                   </Link>
                 </Box>
               </Grid>

@@ -10,14 +10,16 @@ import {
   Button,
   useTheme,
 } from "@mui/material";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import IosShareIcon from "@mui/icons-material/Reply";
 import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import { useLanguage } from "../contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({ car }) => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
+  const navigate = useNavigate();
   const { t } = useLanguage();
 
   return (
@@ -34,8 +36,9 @@ const ProductCard = ({ car }) => {
       <Box sx={{ position: "relative", height: "200px", overflow: "hidden" }}>
         <CardMedia
           component="img"
-
-          image={"https://hips.hearstapps.com/hmg-prod/images/2025-bmw-x3-m50-165-673658ffda8c2.jpg?crop=0.814xw:0.916xh;0.0849xw,0.0841xh&resize=768:*"}
+          image={
+            "https://hips.hearstapps.com/hmg-prod/images/2025-bmw-x3-m50-165-673658ffda8c2.jpg?crop=0.814xw:0.916xh;0.0849xw,0.0841xh&resize=768:*"
+          }
           alt={car.name}
           sx={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
@@ -56,9 +59,14 @@ const ProductCard = ({ car }) => {
             right: 10,
             bgcolor: isDarkMode ? "#333" : "white",
             color: isDarkMode ? "white" : "black",
+            transition: "0.3s",
+            "&:hover": {
+              bgcolor: "#4CAF50", // Green color on hover
+              color: "white",
+            },
           }}
         >
-          <BookmarkBorderIcon />
+          <IosShareIcon sx={{ transform: "scaleX(-1)" }} />
         </IconButton>
       </Box>
       <CardContent>
@@ -92,11 +100,26 @@ const ProductCard = ({ car }) => {
             }}
           />
         </Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Typography variant="h6" sx={{ fontWeight: "bold", color: "#4CAF50" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: "bold", color: "#4CAF50" }}
+          >
             EGP{car.price}
           </Typography>
-          <Button sx={{ color: isDarkMode ? "white" : "black", textTransform: "none" }}>
+          <Button
+          onClick={() => {navigate(`/product/${car.id}`)}}
+            sx={{
+              color: isDarkMode ? "white" : "black",
+              textTransform: "none",
+            }}
+          >
             {t("viewDetails")} →
           </Button>
         </Box>

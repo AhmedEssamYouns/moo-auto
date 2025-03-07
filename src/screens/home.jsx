@@ -109,7 +109,7 @@ const HomeScreen = () => {
                 "50%": { transform: "scale(1.1)" },
               },
             }}
-            onClick={handleClick} // Attach the navigate function to the button click
+            onClick={handleClick}
           >
             {t("exploreNow")}
           </Button>
