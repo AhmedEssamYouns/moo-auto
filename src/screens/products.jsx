@@ -11,31 +11,8 @@ import {
 import ProductCard from "../components/productItem";
 import Filters from "../components/filters";
 import { useTheme } from "@mui/material/styles";
-import { useCars } from "../services/hooks/useCards";
+import { useBrands, useCars } from "../services/hooks/useCards";
 import { useLanguage } from "../contexts/LanguageContext";
-
-const brandsList = [
-  "Toyota",
-  "BMW",
-  "Ford",
-  "Honda",
-  "Chevrolet",
-  "Mercedes",
-  "Audi",
-  "Volkswagen",
-  "Nissan",
-  "Hyundai",
-  "Kia",
-  "Mazda",
-  "Subaru",
-  "Jaguar",
-  "Porsche",
-  "Tesla",
-  "Lexus",
-  "Mitsubishi",
-  "Peugeot",
-  "Land Rover",
-];
 
 const ProductsScreen = () => {
   const theme = useTheme();
@@ -58,6 +35,11 @@ const ProductsScreen = () => {
   });
 
   const { data, isLoading, error } = useCars(filters);
+  const {
+    data: brandsData,
+    isLoading: brandsLoading,
+    error: brandsError,
+  } = useBrands();
 
   const handlePageChange = (_, value) => {
     setCurrentPage(value);
@@ -98,8 +80,16 @@ const ProductsScreen = () => {
         {t("Our Cars")}
       </Typography>
 
-      {/* Filters Component */}
-      <Filters allBrands={brandsList} onApplyFilters={handleApplyFilters} />
+      {/* Show loading if brands are still fetching */}
+      {brandsLoading ? (
+        <Typography textAlign="center">{t("Loading brands...")}</Typography>
+      ) : brandsError ? (
+        <Typography color="error" textAlign="center">
+          {t("Failed to load brands")}
+        </Typography>
+      ) : (
+        <Filters brandsData={brandsData} onApplyFilters={handleApplyFilters} />
+      )}
 
       {/* Active Filters */}
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
@@ -169,5 +159,4 @@ const ProductsScreen = () => {
     </Box>
   );
 };
-
 export default ProductsScreen;

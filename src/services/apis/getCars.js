@@ -19,3 +19,11 @@ export const getCars = async (filters) => {
 
 //   return response.data;
 // }
+
+export const getBrands = async () => {
+  const response = await apiService.get("/brands", { isAuth: false });
+
+  console.log("API Response:", response.data); // Log the response
+
+  return response.data;
+}

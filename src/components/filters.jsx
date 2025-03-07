@@ -24,7 +24,7 @@ import FilterItem from "./FilterItem"; // Filter Item Component
 import DriveEtaIcon from "@mui/icons-material/DriveEta";
 import TransmissionIcon from "@mui/icons-material/Transform";
 
-const Filters = ({ onApplyFilters, allBrands }) => {
+const Filters = ({ onApplyFilters, brandsData }) => {
   const { t } = useLanguage();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
@@ -38,6 +38,7 @@ const Filters = ({ onApplyFilters, allBrands }) => {
   const [usedCars, setUsedCars] = useState(false);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(100000);
+  const allBrands = brandsData?.map((brand) => brand.name) || [];
 
   // State for the menu
   const [anchorEl, setAnchorEl] = useState(null);
@@ -49,7 +50,10 @@ const Filters = ({ onApplyFilters, allBrands }) => {
 
   const handleSelectFilter = (filter, value) => {
     if (filter === "transmission") setSelectedTransmission(value);
-    if (filter === "brand") setSelectedBrand(value);
+    if (filter === "brand") {
+      const selectedBrandObj = brandsData.find((brand) => brand.name === value);
+      setSelectedBrand(selectedBrandObj ? selectedBrandObj.id : null);
+    }
     if (filter === "usedCars") setUsedCars(!usedCars);
   };
 
@@ -57,7 +61,7 @@ const Filters = ({ onApplyFilters, allBrands }) => {
     onApplyFilters({
       MinPrice: minPrice,
       MaxPrice: maxPrice,
-      // CarBrand: selectedBrand,
+      CarBrand: brandsData.find((brand) => brand.name === selectedBrand).id,
       // TransmissionType: selectedTransmission,
       // CarState: usedCars ? "used" : "new",
     });
@@ -218,7 +222,7 @@ const Filters = ({ onApplyFilters, allBrands }) => {
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         filteredBrands={filteredBrands}
-        setSelectedBrand={setSelectedBrand}
+        setSelectedBrand={setSelectedBrand && handleApplyFilters}
         t={t}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
