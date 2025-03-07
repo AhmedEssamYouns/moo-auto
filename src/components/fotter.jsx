@@ -158,7 +158,7 @@ const Footer = ({ darkMode }) => {
                 </Typography>
                 <Box>
                   <Link
-                    href="https://maps.google.com"
+                    href="https://www.google.com/maps/dir/?api=1&destination=30.078438570283%2C31.339852683185&fbclid=IwY2xjawI3yiNleHRuA2FlbQIxMAABHemcfOepXC6mi32aNDAN4hhJxcljhQvRf6WGOGxlwG5S5sQbgqsy5vhO4w_aem_m45TbUKfvhJ4t7ajg40wLA"
                     target="_blank"
                     sx={{ color: "inherit" }}
                   >

@@ -9,6 +9,8 @@ import {
   IconButton,
   Button,
   useTheme,
+  Snackbar,
+  useMediaQuery,
 } from "@mui/material";
 import IosShareIcon from "@mui/icons-material/Reply";
 import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
@@ -21,9 +23,32 @@ const ProductCard = ({ car }) => {
   const isDarkMode = theme.palette.mode === "dark";
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+  const shareUrl = `${window.location.origin}/product/${car.id || 1}`;
+
+  const handleShare = async () => {
+    if (navigator.share && isMobile) {
+      try {
+        await navigator.share({
+          title: car.name,
+          text: `Check out this car: ${car.name} - ${car.model}`,
+          url: shareUrl,
+        });
+      } catch (error) {
+        console.error("Error sharing:", error);
+      }
+    } else {
+      navigator.clipboard.writeText(shareUrl);
+      setSnackbarOpen(true);
+    }
+  };
 
   return (
     <Card
+      onClick={() => {
+        navigate(`/product/${car.id}`);
+      }}
       sx={{
         borderRadius: 3,
         boxShadow: 3,
@@ -53,6 +78,7 @@ const ProductCard = ({ car }) => {
           }}
         />
         <IconButton
+          onClick={handleShare}
           sx={{
             position: "absolute",
             top: 10,
@@ -61,7 +87,7 @@ const ProductCard = ({ car }) => {
             color: isDarkMode ? "white" : "black",
             transition: "0.3s",
             "&:hover": {
-              bgcolor: "#4CAF50", // Green color on hover
+              bgcolor: "#4CAF50",
               color: "white",
             },
           }}
@@ -114,7 +140,9 @@ const ProductCard = ({ car }) => {
             EGP{car.price}
           </Typography>
           <Button
-          onClick={() => {navigate(`/product/${car.id}`)}}
+            onClick={() => {
+              navigate(`/product/${car.id}`);
+            }}
             sx={{
               color: isDarkMode ? "white" : "black",
               textTransform: "none",
@@ -124,6 +152,15 @@ const ProductCard = ({ car }) => {
           </Button>
         </Box>
       </CardContent>
+
+      {/* Snackbar for Copy Success */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        message="Link copied to clipboard!"
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      />
     </Card>
   );
 };

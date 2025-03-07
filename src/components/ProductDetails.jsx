@@ -8,7 +8,6 @@ import ShareIcon from "@mui/icons-material/Share";
 const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
   const shareUrl = `${window.location.origin}/product/${product.id}`;
   const handleShare = async () => {
-
     if (navigator.share && isMobile) {
       try {
         await navigator.share({
@@ -32,6 +31,28 @@ const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
         textAlign: isMobile ? "center" : "left",
       }}
     >
+      <Button
+        sx={{
+          mb: 2,
+          position: "absolute",
+          ...(isMobile
+            ? { bottom: 8, right: 20, position: "fixed" } // Floating at bottom-right on mobile
+            : { top: 100, right: 100 }), // Default for larger screens
+          zIndex: 1000, // Ensure it's above other elements
+          borderRadius: "50%", // Optional: Make it circular on mobile
+          width: isMobile ? 56 : "auto", // Adjust size for mobile
+          height: isMobile ? 56 : "auto",
+          minWidth: isMobile ? "auto" : "64px",
+          p: isMobile ? 1 : "auto",
+        }}
+        variant="contained"
+        color="primary"
+        startIcon={!isMobile && <ShareIcon />} // Hide icon on mobile for circular button
+        onClick={handleShare}
+      >
+        {isMobile ? <ShareIcon /> : "Share"}
+      </Button>
+
       {/* Dynamic Meta Tags */}
       <Helmet>
         <title>{`${product.name} - ${product.model}`}</title>
@@ -79,15 +100,6 @@ const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
           }}
         />
       </Box>
-
-      <Button
-        variant="contained"
-        color="primary"
-        startIcon={<ShareIcon />}
-        onClick={handleShare}
-      >
-        Share
-      </Button>
 
       <Box
         sx={{
