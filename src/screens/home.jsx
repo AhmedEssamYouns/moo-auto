@@ -140,6 +140,7 @@ const HomeScreen = () => {
           bgColor={theme.palette.mode === "dark" ? "#1E293B" : "#E3F2FD"}
           title={t("lookingForCar")}
           description={t("lookingForCarDesc")}
+          onclick={() => navigate("/cars-for-sale")}
           btn={theme.palette.mode === "dark" ? "#60A5FA" : "#1E40AF"}
           sx={{
             animation: "slideInLeft 1s ease-out",
@@ -149,7 +150,8 @@ const HomeScreen = () => {
             },
           }}
         />
-        <InfoCard
+        {/* <InfoCard
+          onclick={() => navigate("/cars-for-sale")}
           bgColor={theme.palette.mode === "dark" ? "#3F1D38" : "#FEE2E2"}
           title={t("lookingToSellCar")}
           description={t("lookingToSellCarDesc")}
@@ -161,7 +163,7 @@ const HomeScreen = () => {
               "100%": { transform: "translateX(0)", opacity: 1 },
             },
           }}
-        />
+        /> */}
       </Box>
       <BestSelling />
     </Box>

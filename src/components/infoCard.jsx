@@ -2,7 +2,7 @@ import React from "react";
 import { Paper, Typography, Button, Box, useTheme } from "@mui/material";
 import { useLanguage } from "../contexts/LanguageContext";
 
-const InfoCard = ({ title, description, Svg , sx }) => {
+const InfoCard = ({ title, description, Svg , sx,onclick }) => {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const { t } = useLanguage();
@@ -30,6 +30,7 @@ const InfoCard = ({ title, description, Svg , sx }) => {
       </Typography>
       <Typography sx={{ color: descColor, mb: 2 }}>{description}</Typography>
       <Button
+      onClick={onclick}
         variant="contained"
         sx={{
           bgcolor: btnColor,
