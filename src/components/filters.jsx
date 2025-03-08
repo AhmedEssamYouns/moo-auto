@@ -74,11 +74,9 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
     onApplyFilters({
       MinPrice: minPrice,
       MaxPrice: maxPrice === 100000 ? null : maxPrice,
-      CarBrand: selectedBrand || TheSelectedBrand ,
-      // TransmissionType: selectedTransmission,
-      // CarState: usedCars ? "used" : "new",
+      CarBrand: selectedBrand || TheSelectedBrand,
+      CarState: usedCars ? (usedCars ? 2 : 1) : null,
     });
-
     setOpenBottomSheet(false);
   };
 
@@ -92,6 +90,7 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
   const handleMenuClose = (value) => {
     setSelectedTransmission(value);
     setOpenMenu(false);
+    onApplyFilters({ TransmissionType: value === "manual" ? 1 : 2 });
   };
 
   return (
@@ -128,8 +127,12 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
             <FilterItem
               icon={<DirectionsCarIcon />}
               text={usedCars ? t("newCars") : t("usedCars")}
-              onClick={() => handleSelectFilter("usedCars")}
+              onClick={() => {
+                setUsedCars(!usedCars);
+                onApplyFilters({ CarState: usedCars ? 1 : 2 });
+              }}
             />
+
             <FilterItem
               icon={<CategoryIcon />}
               text={t("allBrands")}
@@ -143,10 +146,8 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
 
             <FilterItem
               icon={<TransmissionIcon />}
-              text={t(
-                selectedTransmission === "manual" ? "manual" : "automatic"
-              )}
-              onClick={handleMenuClick} // Open menu on click
+              text={t("automatic")}
+              onClick={() => handleMenuClose("automatic")}
             />
           </Box>
 
@@ -169,6 +170,8 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
             openBottomSheet={openBottomSheet}
             setOpenBottomSheet={setOpenBottomSheet}
             allBrands={allBrands}
+            onApplyFilters={onApplyFilters}
+            setOpenDialog={setOpenDialog}
             selectedBrand={selectedBrand}
             setSelectedBrand={setSelectedBrand}
             selectedPrice={selectedPrice}
@@ -230,7 +233,6 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
         t={t}
       />
 
-      {/* Brand Selection Dialog */}
       <BrandSelectionDialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}

@@ -1,5 +1,5 @@
 import React, { use, useState } from "react";
-import { Box, Typography, useMediaQuery } from "@mui/material";
+import { Box, CircularProgress, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useLanguage } from "../contexts/LanguageContext";
 import ProductImages from "../components/ProductImages";
@@ -15,11 +15,14 @@ const ProductScreen = () => {
   const isDarkMode = theme.palette.mode === "dark";
   const { t } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
-  const { data: product } = useCar(id);
+  const { data: product ,isLoading} = useCar(id);
 
+  if (isLoading) {
+    return <Box minHeight={"70vh"} display={"flex"} justifyContent={"center"} alignItems={"center"}><CircularProgress color="primary" size={50} thickness={4} /></Box>;
+  }
   if (!product) {
     console.error("Product not found. Check productsData or the ID:", id);
-    return <Typography variant="h5">Product not found</Typography>;
+    return <Box minHeight={"70vh"} display={"flex"} justifyContent={"center"} alignItems={"center"}><Typography variant="h5">Product not found</Typography></Box>;
   }
 
   return (

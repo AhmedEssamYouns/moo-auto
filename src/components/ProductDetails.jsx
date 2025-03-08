@@ -4,16 +4,18 @@ import { Box, Typography, Chip, Button } from "@mui/material";
 import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import ShareIcon from "@mui/icons-material/Share";
+import { baseUrl } from "../utils/baseUrl";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
-  const shareUrl = `${window.location.origin}/product/${product.id}`;
-
+  const shareUrl = `${baseUrl}/cars/Shared/${product.id}`;
+const {language}=useLanguage()
   const handleShare = async () => {
     if (navigator.share && isMobile) {
       try {
         await navigator.share({
           title: product.name,
-          text: shareUrl,
+          text: language == "en" ? `Check out this car: ${product.name} - ${product.model} : ${product.description}` : `تحقق من هذه السيارة: ${product.name} - ${product.model} : ${product.description}`,
           url: shareUrl,
         });
       } catch (error) {
@@ -40,8 +42,8 @@ const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
             ? { bottom: 8, right: 20, position: "fixed" }
             : { top: 100, right: 100 }),
           zIndex: 1000,
-          borderRadius: "50%",
-          width: isMobile ? 56 : "auto",
+          borderRadius:  isMobile ? "50%" : "10%",
+          width: isMobile ? 56 : "150px",
           height: isMobile ? 56 : "auto",
           minWidth: isMobile ? "auto" : "64px",
           p: isMobile ? 1 : "auto",
@@ -80,7 +82,7 @@ const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
       <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mb: 2 }}>
         <Chip
           icon={<LocalGasStationIcon />}
-          label={t(product.fuel)}
+          label={t(product.status == 1 ? "new" : "used")}
           sx={{
             bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
             color: isDarkMode ? "white" : "black",
@@ -88,7 +90,7 @@ const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
         />
         <Chip
           icon={<DirectionsCarIcon />}
-          label={t(product.transmission)}
+          label={t(product.transmission == 2 ? "automatic" : "manual")}
           sx={{
             bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
             color: isDarkMode ? "white" : "black",

@@ -69,12 +69,12 @@ const ProductCard = ({ car }) => {
           sx={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
         <Chip
-          label={t("greatPrice")}
+          label={t(car.status == 1 ? "new" : "used")}
           sx={{
             position: "absolute",
             top: 10,
             left: 10,
-            bgcolor: "#4CAF50",
+            bgcolor: car.status == 1 ? "#4CAF50" : "ActiveBorder",
             color: "white",
           }}
         />
@@ -84,6 +84,7 @@ const ProductCard = ({ car }) => {
             position: "absolute",
             top: 10,
             right: 10,
+            zIndex: 1000,
             bgcolor: isDarkMode ? "#333" : "white",
             color: isDarkMode ? "white" : "black",
             transition: "0.3s",
@@ -122,7 +123,7 @@ const ProductCard = ({ car }) => {
   {/* Transmission Type */}
   <Chip
     icon={<SpeedIcon fontSize="small" />} // Better for automatic/manual indication
-    label={t(`${car.transmission === 1 ? "automatic" : "manual"}`)}
+    label={t(`${car.transmission == 2 ? "automatic" : "manual"}`)}
     size="small"
     sx={{
       bgcolor: isDarkMode ? "#424242" : "#E0E0E0",

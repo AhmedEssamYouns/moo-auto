@@ -38,6 +38,7 @@ const HomeScreen = () => {
   const handleClick = () => {
     navigate("/cars-for-sale");
   };
+  
 
   return (
     <Box mb={4}>

@@ -10,6 +10,7 @@ const PriceRangeDialog = ({
   setMinPrice,
   maxPrice,
   setMaxPrice,
+  
   handleApplyFilters,
   t,
 }) => {

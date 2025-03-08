@@ -165,13 +165,28 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                             alignItems: "center",
                           }}
                         >
+                          <Box>
+                            <img
+                              src={item.images[0]}
+                              alt={item.name}
+                              style={{
+                                width: "50px",
+                                height: "50px",
+                                borderRadius: 50,
+                                marginRight: 10,
+                              }}
+                            />
+                          </Box>
                           <ListItemText
                             primary={item.name}
                             secondary={item.brandName}
                             sx={{ color: darkMode ? "white" : "black" }}
                           />
                           <Typography
-                            sx={{ color: darkMode ? "white" : "black" }}
+                            sx={{
+                              color: darkMode ? "white" : "black",
+                              fontSize: isMobile ? 12 : 16,
+                            }}
                           >
                             {t("Model")} {item.model}
                             <br />
@@ -196,7 +211,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
             <Box sx={{ display: "flex", gap: 3 }}>
               {[
                 { text: t("carsForSale"), path: "/cars-for-sale" },
-                { text: t("newArrivals"), path: "/cars-for-sale" },
+                { text: t("newArrivals"), path: "/new-arrivals" },
                 { text: t("requestCar"), path: "/request-car" },
                 { text: t("financing"), path: "/financing" },
                 { text: t("aboutUs"), path: "/about-us" },

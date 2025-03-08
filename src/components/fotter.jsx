@@ -1,25 +1,18 @@
 import React from "react";
-import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  Link,
-  IconButton,
-} from "@mui/material";
+import { Box, Container, Typography, Grid, IconButton } from "@mui/material";
 import {
   Facebook,
   WhatsApp,
   PhoneInTalk,
   Instagram,
 } from "@mui/icons-material";
-import logo from "../assets/imgs/logo.png";
+import { Link } from "react-router-dom";
 import { FaTiktok } from "react-icons/fa"; // Use react-icons for TikTok
+import logo from "../assets/imgs/logo.png";
 import { useLanguage } from "../contexts/LanguageContext";
 
 const Footer = ({ darkMode }) => {
   const { t } = useLanguage(); // Translation function
-
   const currentYear = new Date().getFullYear(); // Get the current year
 
   return (
@@ -32,7 +25,7 @@ const Footer = ({ darkMode }) => {
     >
       <Container>
         <Grid container spacing={3}>
-          {/* Left Section - Text Logo */}
+          {/* Left Section - Logo */}
           <Grid item xs={12} md={3}>
             <Box
               component={Link}
@@ -54,6 +47,7 @@ const Footer = ({ darkMode }) => {
             </Box>
           </Grid>
 
+          {/* Middle Section - Links */}
           <Grid item xs={12} md={6}>
             <Grid container spacing={3}>
               <Grid item xs={6} md={4}>
@@ -61,30 +55,26 @@ const Footer = ({ darkMode }) => {
                   {t("Quick Links")}
                 </Typography>
                 <Box>
-                  <Link
-                    href="/cars-for-sale"
-                    sx={{ display: "block", color: "inherit" }}
+                  <Box
+                    component={Link}
+                    to="/cars-for-sale"
+                    style={{ display: "block", color: "inherit" }}
                   >
                     {t("Cars for Sale")}
-                  </Link>
-                  <Link
-                    href="/new-arrivals"
-                    sx={{ display: "block", color: "inherit" }}
-                  >
+                  </Box>
+                  <Link to="/new-arrivals" style={{ display: "block", color: "inherit" }}>
                     {t("New Arrivals")}
                   </Link>
-                  <Link
-                    href="/offers"
-                    sx={{ display: "block", color: "inherit" }}
-                  >
+                  {/* <Link to="/offers" style={{ display: "block", color: "inherit" }}>
                     {t("Offers & Discounts")}
-                  </Link>
-                  <Link
-                    href="/request-car"
-                    sx={{ display: "block", color: "inherit" }}
+                  </Link>  */}
+                  <Box
+                    component={Link}
+                    to="/request-car"
+                    style={{ display: "block", color: "inherit" }}
                   >
                     {t("Request a Car")}
-                  </Link>
+                  </Box>
                 </Box>
               </Grid>
 
@@ -93,62 +83,57 @@ const Footer = ({ darkMode }) => {
                   {t("Contact Us")}
                 </Typography>
                 <Box>
-                  <Link
+                  <a
                     href="tel:+123456789"
-                    sx={{
+                    style={{
                       display: "flex",
-                      flexDirection: "row",
                       alignItems: "center",
                       color: "inherit",
+                      textDecoration: "none",
                     }}
                   >
-                    <PhoneInTalk sx={{ mr: 1 }} />{" "}
+                    <PhoneInTalk style={{ marginRight: 8 }} />
                     <Typography>012 03333274</Typography>
-                  </Link>
-                  {/* <Link
-                    href="https://wa.me/1234567890"
-                    target="_blank"
-                    sx={{ display: "block", color: "inherit" }}
-                    >
-                    <WhatsApp sx={{ mr: 1 }} /> {t("WhatsApp")}
-                    </Link> */}
-                  <Link
+                  </a>
+                  <a
                     href="https://www.instagram.com/almosallamy.automotive/"
                     target="_blank"
-                    sx={{
+                    rel="noopener noreferrer"
+                    style={{
                       display: "flex",
-                      flexDirection: "row",
                       alignItems: "center",
                       color: "inherit",
+                      textDecoration: "none",
                     }}
                   >
-                    <Instagram sx={{ mr: 1 }} /> {t("Instagram")}
-                  </Link>
-                  <Link
+                    <Instagram style={{ marginRight: 8 }} /> {t("Instagram")}
+                  </a>
+                  <a
                     href="https://www.facebook.com/Free4auto"
                     target="_blank"
-                    sx={{
+                    rel="noopener noreferrer"
+                    style={{
                       display: "flex",
-                      flexDirection: "row",
                       alignItems: "center",
                       color: "inherit",
+                      textDecoration: "none",
                     }}
                   >
-                    <Facebook sx={{ mr: 1 }} /> {t("Facebook")}
-                  </Link>
-                  <Link
+                    <Facebook style={{ marginRight: 8 }} /> {t("Facebook")}
+                  </a>
+                  <a
                     href="https://www.tiktok.com/@almosallamyautomotive"
                     target="_blank"
-                    sx={{
+                    rel="noopener noreferrer"
+                    style={{
                       display: "flex",
-                      flexDirection: "row",
                       alignItems: "center",
                       color: "inherit",
+                      textDecoration: "none",
                     }}
                   >
-                    <FaTiktok style={{ marginRight: 8, marginLeft: 5 }} />{" "}
-                    {t("TikTok")}
-                  </Link>
+                    <FaTiktok style={{ marginRight: 8 }} /> {t("TikTok")}
+                  </a>
                 </Box>
               </Grid>
 
@@ -157,13 +142,14 @@ const Footer = ({ darkMode }) => {
                   {t("Location")}
                 </Typography>
                 <Box>
-                  <Link
-                    href="https://www.google.com/maps/dir/?api=1&destination=30.078438570283%2C31.339852683185&fbclid=IwY2xjawI3yiNleHRuA2FlbQIxMAABHemcfOepXC6mi32aNDAN4hhJxcljhQvRf6WGOGxlwG5S5sQbgqsy5vhO4w_aem_m45TbUKfvhJ4t7ajg40wLA"
+                  <a
+                    href="https://www.google.com/maps/dir/?api=1&destination=30.078438570283%2C31.339852683185"
                     target="_blank"
-                    sx={{ color: "inherit" }}
+                    rel="noopener noreferrer"
+                    style={{ color: "inherit", textDecoration: "none" }}
                   >
                     {t("Find Our Location")}
-                  </Link>
+                  </a>
                 </Box>
               </Grid>
             </Grid>
@@ -180,6 +166,7 @@ const Footer = ({ darkMode }) => {
         </Grid>
       </Container>
 
+      {/* Bottom Footer Bar */}
       <Box sx={{ backgroundColor: "#000", color: "#fff", py: 2, mt: 4 }}>
         <Container>
           <Typography

@@ -1,10 +1,10 @@
 import axios from "axios";
+import { baseUrl } from "../utils/baseUrl";
 
 const apiService = axios.create({
-  baseURL: "https://almosallmy.runasp.net/api", 
+  baseURL: baseUrl,
   headers: { "Content-Type": "application/json" },
 });
-
 
 apiService.interceptors.request.use(
   (config) => {
@@ -16,7 +16,6 @@ apiService.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
-
 
 apiService.interceptors.response.use(
   (response) => response,

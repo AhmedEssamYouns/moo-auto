@@ -34,7 +34,19 @@
   "exploreNow": "تسوق الآن",
   "vehicles": "السيارات",
   "price": "السعر",
-  "overview": "نظرة عامة",
+  "overview": "التفاصيل",
+  "new": "جديدة",
+  "CarStutes": "حالة السيارة",
+  "MinPrice": "السعر الادنى",
+  "priceRange": "نطاق السعر",
+  "MaxPrice": "السعر الأعلى",
+  "minPrice":"السعر الادنى",
+  "maxPrice": "السعر الأعلى",
+  "TransmissionType": "نوع الجير",
+  "NewArrivals": "العربيات الجديدة",
+  "Brand": "الماركة",
+  "ClearAllFilters": "مسح التصفية",
+  "used": "مستعملة",
   "share": "مشاركة",
   "linkCopied": "تم نسخ الرابط إلى الحافظة!",
   "Quick Links": "روابط سريعة",
@@ -67,7 +79,6 @@
   "searchBrand": "ابحث عن ماركة",
   "automatic": "أوتوماتيكي",
   "manual": "يدوي",
-
 
   "fuel": {
     "electric": "كهربائي",

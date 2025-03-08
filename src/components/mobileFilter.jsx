@@ -15,20 +15,21 @@ import {
 
 const MobileDrawerFilters = ({
   openBottomSheet,
+  setOpenDialog,
   setOpenBottomSheet,
   allBrands,
   selectedBrand,
+  onApplyFilters,
   setSelectedBrand,
   selectedPrice,
   setSelectedPrice,
   handleSelectFilter,
   handlePriceRangeClick,
   handleApplyFilters,
-  setOpenPriceDialog
+  setOpenPriceDialog,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredBrands, setFilteredBrands] = useState(allBrands);
-  const [openDialog, setOpenDialog] = useState(false);
   const theme = useTheme();
   const [minPrice, setMinPrice] = useState(selectedPrice[0]);
   const [maxPrice, setMaxPrice] = useState(selectedPrice[1]);
@@ -166,7 +167,12 @@ const MobileDrawerFilters = ({
 
         {/* Apply Button */}
         <Button
-          onClick={handleApplyFilters}
+          onClick={() => {
+            onApplyFilters({
+              TransmissionType: selectedTransmission == "manual" ? 1 : 2,
+            });
+            setOpenBottomSheet(false);
+          }}
           fullWidth
           variant="contained"
           sx={{ mt: 2 }}
@@ -176,49 +182,6 @@ const MobileDrawerFilters = ({
       </Drawer>
 
       {/* Brand Search Dialog */}
-      <Dialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-        sx={{
-          justifySelf: "center",
-          alignSelf: "center",
-        }}
-      >
-        <DialogTitle>Search Brand</DialogTitle>
-        <DialogContent sx={{ pb: 2,height: 500,width: 300 }}>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Search Brand"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-          <Box sx={{ overflowY: "auto", mt: 2 }}>
-            {filteredBrands.map((brand, index) => (
-              <Button
-                key={index}
-                variant="outlined"
-                fullWidth
-                onClick={() => {
-                  setSelectedBrand(brand);
-                  setOpenDialog(false);
-                }}
-                sx={{ mb: 1 }}
-              >
-                {brand}
-              </Button>
-            ))}
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button variant="outlined" onClick={() => setOpenDialog(false)}>
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
 
       {/* Price Range Dialog */}
       {/* <Dialog

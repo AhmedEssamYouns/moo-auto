@@ -95,7 +95,17 @@ const ProductsScreen = () => {
         />
       )}
 
-      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignSelf: "center",
+          justifyContent: "center",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 1,
+          mb: 2,
+        }}
+      >
         {Object.entries(filters).map(([key, value]) =>
           value &&
           key !== "PageNumber" &&
@@ -103,17 +113,29 @@ const ProductsScreen = () => {
           key !== "IsPaginated" ? (
             <Chip
               key={key}
-              label={`${
+              label={`${t(
                 key === "CarBrand"
                   ? "Brand"
+                  : key === "CarState"
+                  ? "CarStutes"
+                  : key === "TransmissionType"
+                  ? "TransmissionType"
                   : key === "MinPrice"
-                  ? "Min Price"
+                  ? "MinPrice"
                   : key === "MaxPrice"
-                  ? "Max Price"
+                  ? "MaxPrice"
                   : key
-              }: ${
+              )}: ${
                 key === "CarBrand"
                   ? brandsData?.find((brand) => brand.id === value)?.name
+                  : key === "CarState"
+                  ? value === 1
+                    ? t("new")
+                    : t("used")
+                  : key === "TransmissionType"
+                  ? value === 2
+                    ? t("automatic")
+                    : t("manual")
                   : value
               }`}
               onDelete={() => handleClearFilter(key)}
@@ -135,7 +157,7 @@ const ProductsScreen = () => {
             variant="outlined"
             color="secondary"
           >
-            Clear All
+            {t("ClearAllFilters")}
           </Button>
         )}
       </Box>

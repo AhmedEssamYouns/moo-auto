@@ -13,15 +13,13 @@ export const getCars = async (filters) => {
   return response.data;
 };
 
-// export const getCar = async (id) => {
-//   console.log("Fetching car with id:", id); // Log the payload
+export const getLatestCars = async () => {
+  const response = await apiService.get("/cars/Latest", { isAuth: false });
 
-//   const response = await apiService.get(`/cars/${id}`, { isAuth: false });
+  console.log("API Response:", response.data); // Log the response
 
-//   console.log("API Response:", response.data); // Log the response
-
-//   return response.data;
-// }
+  return response.data;
+};
 
 export const getBrands = async () => {
   const response = await apiService.get("/brands", { isAuth: false });

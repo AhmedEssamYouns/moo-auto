@@ -16,11 +16,11 @@ const BrandSelectionDialog = ({
       onClose={onClose}
       PaperProps={{
         sx: {
-          width: 650,
-          height:700,
-          padding: 2,  // Make the dialog wider (adjust as needed)
-          maxWidth: 650, // Max width
-          margin: "auto", // Center the dialog on the screen
+          width: 500,
+          height:600,
+          padding: 2,  
+          maxWidth: 650, 
+          margin: "auto",
         },
       }}
     >

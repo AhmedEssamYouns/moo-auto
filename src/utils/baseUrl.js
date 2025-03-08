@@ -1,0 +1,1 @@
+export const baseUrl = "https://almosallmy.runasp.net/api";
