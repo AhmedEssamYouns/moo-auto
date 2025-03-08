@@ -32,19 +32,20 @@ const CarsListScreen = () => {
       sx={{
         p: 4,
         minHeight: "100vh",
-        direction: language === "ar" ? "rtl" : "ltr",
       }}
     >
       <Typography
         sx={{
-          transform: `translateY(-${language === "ar" ? "50px" : "0"})`,
+          direction: language === "ar" ? "rtl" : "ltr",
           textAlign: language === "ar" ? "right" : "center",
         }}
         variant="h4"
         mt={2}
         mb={4}
       >
-        {searchText ? `${t("Results for")} "${searchText}"` : t("Available Cars")}
+        {searchText
+          ? `${t("Results for")} "${searchText}"`
+          : t("Available Cars")}
       </Typography>
 
       <Box
@@ -61,9 +62,15 @@ const CarsListScreen = () => {
           flexDirection: language === "ar" ? "row-reverse" : "row",
         }}
       >
-        <DirectionsCarIcon color="primary" fontSize={isMobile ? "small" : "medium"} />
+        <DirectionsCarIcon
+          color="primary"
+          fontSize={isMobile ? "small" : "medium"}
+        />
         <Typography variant={isMobile ? "body2" : "h6"} fontWeight="bold">
-          {t("Total Cars")} <span style={{ color: theme.palette.primary.main }}>{cars.length}</span>
+          {t("Total Cars")}{" "}
+          <span style={{ color: theme.palette.primary.main }}>
+            {cars.length}
+          </span>
         </Typography>
       </Box>
 
