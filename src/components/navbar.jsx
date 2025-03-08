@@ -16,7 +16,7 @@ import {
   ListItemText,
   Paper,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -35,7 +35,13 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const isTablet = useMediaQuery("(max-width: 1500px)");
-
+  const navigate = useNavigate();
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && searchText.trim() && hasResults) {
+      setSearchOpen(false);
+      navigate("/cars-list", { state: { cars: searchResults.items, searchText } });
+    }
+  };
   const { data: searchResults, error ,isLoading} = useSearch(searchText);
   const hasResults = searchResults?.items?.length > 0;
 
@@ -92,6 +98,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                   }}
                 >
                   <InputBase
+                  onKeyDown={handleKeyDown}
                     value={searchText}
                     onFocus={() => setIsSearchFocused(true)}
                     onBlur={() =>
@@ -113,6 +120,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
             ) : (
               <InputBase
                 value={searchText}
+                onKeyDown={handleKeyDown}
                 onFocus={() => setIsSearchFocused(true)}
                 onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
                 onChange={(e) => setSearchText(e.target.value)}
