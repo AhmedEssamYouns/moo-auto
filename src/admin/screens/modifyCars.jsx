@@ -130,7 +130,7 @@ return (
             </>
         )}
 
-        <CarEditForm open={open} onClose={handleClose} id={selectedCarId} />
+        <CarEditForm open={open} brandData={brandsData} onClose={handleClose} id={selectedCarId} />
     </Box>
 );
 };

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getBrands, getCar, getCars, getLatestCars, searchCars } from "../apis/getCars";
+import { getBrands, getCar, getCars, getLatestCars, searchCars } from "../apis/carsServices";
 import { use } from "react";
 
 export const useCars = (filters) => {
@@ -51,3 +51,4 @@ export const useCar = (id) => {
     retry: 0, 
   });
 };
+

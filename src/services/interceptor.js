@@ -3,7 +3,6 @@ import { baseUrl } from "../utils/baseUrl";
 
 const apiService = axios.create({
   baseURL: baseUrl,
-  headers: { "Content-Type": "application/json" },
 });
 
 apiService.interceptors.request.use(
@@ -12,6 +11,14 @@ apiService.interceptors.request.use(
       const token = localStorage.getItem("token");
       if (token) config.headers.Authorization = `Bearer ${token}`;
     }
+
+    // Allow FormData by not setting Content-Type if it's FormData
+    if (config.data instanceof FormData) {
+      config.headers["Content-Type"] = "multipart/form-data";
+    } else {
+      config.headers["Content-Type"] = "application/json";
+    }
+
     return config;
   },
   (error) => Promise.reject(error)
@@ -27,4 +34,5 @@ apiService.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 export default apiService;
