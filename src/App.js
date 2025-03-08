@@ -38,7 +38,7 @@ const App = () => {
           <ThemeProviderWrapper>
             {(darkMode, setDarkMode) => (
               <BrowserRouter>
-                {showLottie ? (
+                {showLottie && !isAdmin ? (
                   <Box
                     sx={{
                       display: "flex",

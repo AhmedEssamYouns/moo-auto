@@ -1,5 +1,6 @@
 import axios from "axios";
 import { baseUrl } from "../utils/baseUrl";
+import { Alert } from "@mui/material";
 
 const apiService = axios.create({
   baseURL: baseUrl,
@@ -28,8 +29,10 @@ apiService.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      console.error("Unauthorized! Logging out...");
-      // Handle logout logic here (clear token, redirect, etc.)
+      alert("Session expired, please login again");
+      setTimeout(() => {
+        window.location.href = "/login"; // Redirect using JavaScript
+      }, 500);
     }
     return Promise.reject(error);
   }

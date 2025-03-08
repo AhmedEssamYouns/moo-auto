@@ -49,3 +49,7 @@ export const editCar = async (id, data) => {
 }
 
 
+export const deleteCar = async (id) => {
+  const response = await apiService.delete(`/cars/${id}`, { isAuth: true });
+  return response.data;
+}

@@ -12,9 +12,9 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { postLogin } from "../services/adminServices";
-import { baseUrl } from "../../utils/baseUrl";
 import { useNavigate } from "react-router-dom";
+import { baseUrl } from "../../utils/baseUrl";
+import logo from "../../assets/imgs/logo.png";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -23,11 +23,17 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const emailRef = React.useRef();
+  const passwordRef = React.useRef();
+
   const validate = () => {
     let tempErrors = {};
     tempErrors.email = formData.email.trim() ? "" : "Email is required";
-    tempErrors.password = formData.password.trim() ? "" : "Password is required";
+    tempErrors.password = formData.password.trim()
+      ? ""
+      : "Password is required";
     setErrors(tempErrors);
     return Object.values(tempErrors).every((x) => x === "");
   };
@@ -36,56 +42,110 @@ const navigate = useNavigate();
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleKeyDown = (e, nextFieldRef) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (nextFieldRef) {
+        nextFieldRef.current.focus();
+      } else {
+        handleSubmit(e);
+      }
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-  
+
     setLoading(true);
     setApiError("");
     setSuccessMessage("");
+
     try {
-        const response = await fetch(`${baseUrl}/auth/login`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password,
-          }),
-        });
-      
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.detail || "Login failed!");
-        }
-      
-        setSuccessMessage("Login successful! Redirecting...");
-        console.log("API Response:", data);
-        localStorage.setItem("token", data.token);
-        setTimeout(() => {
-        navigate("/admin/cars");
-        }, 500);
-      } catch (error) {
-        console.log("Fetch Error:", error);
-        setApiError(error.message);
+      const response = await fetch(`${baseUrl}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Login failed!");
       }
-      
+
+      const data = await response.json();
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("refreshToken", data.refreshToken);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          id: data.id,
+          email: data.email,
+          userName: data.userName,
+        })
+      );
+
+      setSuccessMessage("Login successful! Redirecting...");
+
+      setTimeout(() => window.location.replace("/admin/cars"), 500);
+    } catch (error) {
+      setApiError(error.message);
+    } finally {
       setLoading(false);
-    };      
-  
+    }
+  };
+
   return (
-    <Container maxWidth="xs">
-      <Paper elevation={3} sx={{ p: 3, mt: 5, textAlign: "center" }}>
-        <Typography variant="h5" gutterBottom>
+    <Container
+      maxWidth="xs"
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "90vh",
+        flexDirection: "column",
+      }}
+    >
+      <Box sx={{ width: "100%" }}>
+        <img
+          src={logo}
+          
+          alt="Admin Logo"
+          style={{ width: "100%", height: "auto",borderRadius:"22px" }}
+        />
+      </Box>
+      <Paper
+        elevation={5}
+        sx={{
+          p: 4,
+          mt: 5,
+          textAlign: "center",
+          borderRadius: "12px",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+          <img
+            src={logo}
+            alt="Admin Logo"
+            style={{ width: 120, height: "auto" }}
+          />
+        </Box>
+        <Typography variant="h5" gutterBottom fontWeight="bold">
           Login
         </Typography>
 
         {successMessage && <Alert severity="success">{successMessage}</Alert>}
         {apiError && <Alert severity="error">{apiError}</Alert>}
 
-        <Box component="form" onSubmit={handleSubmit}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
           <TextField
             label="Email"
             name="email"
@@ -96,6 +156,8 @@ const navigate = useNavigate();
             onChange={handleChange}
             error={!!errors.email}
             helperText={errors.email}
+            inputRef={emailRef}
+            onKeyDown={(e) => handleKeyDown(e, passwordRef)}
           />
           <TextField
             label="Password"
@@ -108,10 +170,15 @@ const navigate = useNavigate();
             onChange={handleChange}
             error={!!errors.password}
             helperText={errors.password}
+            inputRef={passwordRef}
+            onKeyDown={(e) => handleKeyDown(e, null)}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    edge="end"
+                  >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
@@ -122,14 +189,13 @@ const navigate = useNavigate();
             type="submit"
             variant="contained"
             fullWidth
-            sx={{ mt: 2 }}
+            sx={{ mt: 3, borderRadius: "8px", fontWeight: "bold" }}
             disabled={loading}
           >
             {loading ? <CircularProgress size={24} /> : "Login"}
           </Button>
         </Box>
       </Paper>
-
     </Container>
   );
 };
