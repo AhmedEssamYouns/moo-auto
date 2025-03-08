@@ -36,7 +36,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const isTablet = useMediaQuery("(max-width: 1500px)");
 
-  const { data: searchResults, error } = useSearch(searchText);
+  const { data: searchResults, error ,isLoading} = useSearch(searchText);
   const hasResults = searchResults?.items?.length > 0;
 
   return (
@@ -127,7 +127,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
               />
             )}
 
-            {isSearchFocused && searchText && (
+            {isSearchFocused && searchText && !isLoading && (
               <Paper
                 sx={{
                   position: "absolute",

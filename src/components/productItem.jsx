@@ -84,7 +84,6 @@ const ProductCard = ({ car }) => {
             position: "absolute",
             top: 10,
             right: 10,
-            zIndex: 1000,
             bgcolor: isDarkMode ? "#333" : "white",
             color: isDarkMode ? "white" : "black",
             transition: "0.3s",

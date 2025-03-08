@@ -37,6 +37,7 @@ const {language}=useLanguage()
       <Button
         sx={{
           mb: 2,
+          zIndex: 9999,
           position: "absolute",
           ...(isMobile
             ? { bottom: 8, right: 20, position: "fixed" }
