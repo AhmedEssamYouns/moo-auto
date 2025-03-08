@@ -7,12 +7,15 @@ import {
   CircularProgress,
   Chip,
   Button,
+  useMediaQuery,
 } from "@mui/material";
 import ProductCard from "../components/productItem";
 import Filters from "../components/filters";
 import { useTheme } from "@mui/material/styles";
 import { useBrands, useCars } from "../services/hooks/useCards";
 import { useLanguage } from "../contexts/LanguageContext";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import LayersIcon from "@mui/icons-material/Layers";
 
 const ProductsScreen = () => {
   const theme = useTheme();
@@ -73,12 +76,55 @@ const ProductsScreen = () => {
       CarBrand: null,
     });
   };
-
+  const ismobile = useMediaQuery("(max-width: 1000px)");
   return (
     <Box sx={{ p: 4, minHeight: "100vh" }}>
       <Typography variant="h4" textAlign="center" mt={2} mb={4}>
         {t("Our Cars")}
       </Typography>
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: ismobile ? "100%" : "50%",
+          alignItems: "center",
+          mb: 3,
+          justifySelf: "center",
+          alignSelf: "center",
+          p: 2,
+          borderRadius: 2,
+          boxShadow: 1,
+          backgroundColor: theme.palette.background.paper,
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <DirectionsCarIcon
+            color="primary"
+            fontSize={ismobile ? "small" : "medium"}
+          />
+          <Typography variant={ismobile ? "body2" : "h6"} fontWeight="bold">
+            {t("Total Cars")}:{" "}
+            <span style={{ color: theme.palette.primary.main }}>
+              {data?.totalCount || 0}
+            </span>
+          </Typography>
+        </Box>
+
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <LayersIcon
+            color="primary"
+            fontSize={ismobile ? "small" : "medium"}
+          />
+          <Typography variant={ismobile ? "body2" : "h6"} fontWeight="bold">
+            {t("Page")}:{" "}
+            <span style={{ color: theme.palette.primary.main }}>
+              {currentPage}
+            </span>{" "}
+            / {data?.totalPages || 1}
+          </Typography>
+        </Box>
+      </Box>
 
       {/* Show loading if brands are still fetching */}
       {brandsLoading ? (
@@ -94,73 +140,6 @@ const ProductsScreen = () => {
           onApplyFilters={handleApplyFilters}
         />
       )}
-
-      <Box
-        sx={{
-          display: "flex",
-          alignSelf: "center",
-          justifyContent: "center",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: 1,
-          mb: 2,
-        }}
-      >
-        {Object.entries(filters).map(([key, value]) =>
-          value &&
-          key !== "PageNumber" &&
-          key !== "PageSize" &&
-          key !== "IsPaginated" ? (
-            <Chip
-              key={key}
-              label={`${t(
-                key === "CarBrand"
-                  ? "Brand"
-                  : key === "CarState"
-                  ? "CarStutes"
-                  : key === "TransmissionType"
-                  ? "TransmissionType"
-                  : key === "MinPrice"
-                  ? "MinPrice"
-                  : key === "MaxPrice"
-                  ? "MaxPrice"
-                  : key
-              )}: ${
-                key === "CarBrand"
-                  ? brandsData?.find((brand) => brand.id === value)?.name
-                  : key === "CarState"
-                  ? value === 1
-                    ? t("new")
-                    : t("used")
-                  : key === "TransmissionType"
-                  ? value === 2
-                    ? t("automatic")
-                    : t("manual")
-                  : value
-              }`}
-              onDelete={() => handleClearFilter(key)}
-              color="primary"
-            />
-          ) : null
-        )}
-
-        {/* Clear All Filters Button */}
-        {Object.entries(filters).some(
-          ([key, value]) =>
-            value !== null &&
-            key !== "PageNumber" &&
-            key !== "PageSize" &&
-            key !== "IsPaginated"
-        ) && (
-          <Button
-            onClick={handleClearAllFilters}
-            variant="outlined"
-            color="secondary"
-          >
-            {t("ClearAllFilters")}
-          </Button>
-        )}
-      </Box>
 
       {/* Loading & Error Handling */}
       {isLoading ? (

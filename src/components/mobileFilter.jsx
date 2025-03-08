@@ -12,6 +12,7 @@ import {
   Slider,
   useTheme,
 } from "@mui/material";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const MobileDrawerFilters = ({
   openBottomSheet,
@@ -30,6 +31,7 @@ const MobileDrawerFilters = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredBrands, setFilteredBrands] = useState(allBrands);
+  const { t } = useLanguage();
   const theme = useTheme();
   const [minPrice, setMinPrice] = useState(selectedPrice[0]);
   const [maxPrice, setMaxPrice] = useState(selectedPrice[1]);
@@ -76,7 +78,7 @@ const MobileDrawerFilters = ({
         {/* Transmission Filter */}
         <Box sx={{ mb: 3 }}>
           <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>
-            Transmission
+            {t("Transmission")}
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Button
@@ -103,7 +105,7 @@ const MobileDrawerFilters = ({
                     : "transparent",
               }}
             >
-              Manual
+              {t("manual")}
             </Button>
             <Button
               variant="outlined"
@@ -128,7 +130,7 @@ const MobileDrawerFilters = ({
                     : "transparent",
               }}
             >
-              Automatic
+              {t("automatic")}
             </Button>
           </Box>
         </Box>
@@ -136,7 +138,7 @@ const MobileDrawerFilters = ({
         {/* Brand Filter */}
         <Box sx={{ mb: 3 }}>
           <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>
-            Select Brand
+            {t("Brand")}
           </Typography>
           <Button
             variant="outlined"
@@ -144,14 +146,14 @@ const MobileDrawerFilters = ({
             onClick={() => setOpenDialog(true)}
             sx={{ mb: 1 }}
           >
-            {selectedBrand || "Select Brand"}
+            {selectedBrand || t("Brand")}
           </Button>
         </Box>
 
         {/* Price Filter */}
         <Box sx={{ mb: 3 }}>
           <Typography variant="subtitle1" sx={{ fontWeight: "bold", mb: 1 }}>
-            Price Range
+            {t("priceRange")}
           </Typography>
           <Button
             variant="outlined"
@@ -177,7 +179,7 @@ const MobileDrawerFilters = ({
           variant="contained"
           sx={{ mt: 2 }}
         >
-          Apply Filters
+          {t("ApplyFilters")}
         </Button>
       </Drawer>
 

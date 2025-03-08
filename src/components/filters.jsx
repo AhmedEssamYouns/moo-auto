@@ -6,96 +6,107 @@ import {
   Icon,
   useMediaQuery,
   useTheme,
-  Button,
   Menu,
   MenuItem,
+  Chip,
 } from "@mui/material";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import CategoryIcon from "@mui/icons-material/Category";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import TuneIcon from "@mui/icons-material/Tune";
-import AddIcon from "@mui/icons-material/Add"; // Add icon for the button
 import { useLanguage } from "../contexts/LanguageContext";
 import PriceRangeDialog from "./PriceRangeDialog";
 import BrandSelectionDialog from "./BrandSelectionDialog";
 import MobileDrawerFilters from "./mobileFilter";
-import FilterItem from "./FilterItem"; // Filter Item Component
-import DriveEtaIcon from "@mui/icons-material/DriveEta";
+import FilterItem from "./FilterItem";
 import TransmissionIcon from "@mui/icons-material/Transform";
 
 const Filters = ({ onApplyFilters, brandsData, filters }) => {
   const { t } = useLanguage();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [openPriceDialog, setOpenPriceDialog] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+
   const [selectedPrice, setSelectedPrice] = useState([0, 100000]);
   const [selectedBrand, setSelectedBrand] = useState(null);
-  const [selectedTransmission, setSelectedTransmission] = useState("manual");
-  const [usedCars, setUsedCars] = useState(false);
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(100000);
-  const allBrands = brandsData?.map((brand) => brand.name) || [];
+  const [selectedTransmission, setSelectedTransmission] = useState(null);
+  const [usedCars, setUsedCars] = useState(null);
 
-  // State for the menu
   const [anchorEl, setAnchorEl] = useState(null);
-  const [openMenu, setOpenMenu] = useState(false);
+  const openMenu = Boolean(anchorEl);
 
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(10000000);
+
+  const allBrands = brandsData?.map((brand) => brand.name) || [];
   const filteredBrands = allBrands.filter((brand) =>
     brand.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   useEffect(() => {
     if (filters) {
-      setSelectedPrice(
-        filters.MinPrice ? [filters.MinPrice, filters.MaxPrice] : [0, 100000]
+      setSelectedPrice([filters.MinPrice ?? 0, filters.MaxPrice ?? 10000000]);
+      setSelectedBrand(filters.CarBrand || null);
+      setSelectedTransmission(filters.TransmissionType || null);
+      setUsedCars(
+        filters.CarState === 2 ? true : filters.CarState === 1 ? false : null
       );
-      setMinPrice(filters.MinPrice || 0);
-      setMaxPrice(filters.MaxPrice || 100000);
-      setSelectedBrand(filters.CarBrand);
-      setSelectedTransmission(filters.TransmissionType);
-      setUsedCars(filters.CarState === "used");
     }
   }, [filters]);
 
-  const handleSelectFilter = (filter, value) => {
-    if (filter === "transmission") setSelectedTransmission(value);
-    if (filter === "brand") {
-      const selectedBrandObj = brandsData.find((brand) => brand.name === value);
-      setSelectedBrand(selectedBrandObj ? selectedBrandObj.id : null);
-    }
-    if (filter === "usedCars") setUsedCars(!usedCars);
-  };
-
-  const handleApplyFilters = (TheSelectedBrand) => {
+  const handleApplyFilters = (newFilters = {}) => {
     onApplyFilters({
-      MinPrice: minPrice,
-      MaxPrice: maxPrice === 100000 ? null : maxPrice,
-      CarBrand: selectedBrand || TheSelectedBrand,
-      CarState: usedCars ? (usedCars ? 2 : 1) : null,
+      MinPrice: selectedPrice[0],
+      MaxPrice: selectedPrice[1] === 100000 ? null : selectedPrice[1],
+      CarBrand: selectedBrand,
+      CarState: usedCars === true ? 2 : usedCars === false ? 1 : null,
+      TransmissionType: selectedTransmission,
+      ...newFilters,
     });
     setOpenBottomSheet(false);
   };
 
-  // Handle menu open
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
-    setOpenMenu(true);
+  const handleClearFilters = () => {
+    setSelectedPrice([0, 100000]);
+    setSelectedBrand(null);
+    setSelectedTransmission(null);
+    setUsedCars(null);
+
+    onApplyFilters({
+      MinPrice: 0,
+      MaxPrice: null,
+      CarBrand: null,
+      CarState: null,
+      TransmissionType: null,
+    });
   };
 
-  // Handle menu item selection
-  const handleMenuClose = (value) => {
-    setSelectedTransmission(value);
-    setOpenMenu(false);
-    onApplyFilters({ TransmissionType: value === "manual" ? 1 : 2 });
+  const removePriceFilter = () => {
+    setSelectedPrice([0, 100000]);
+    onApplyFilters({ MinPrice: 0, MaxPrice: null });
+  };
+
+  const removeBrandFilter = () => {
+    setSelectedBrand(null);
+    onApplyFilters({ CarBrand: null });
+  };
+
+  const removeTransmissionFilter = () => {
+    setSelectedTransmission(null);
+    onApplyFilters({ TransmissionType: null });
+  };
+
+  const removeUsedCarFilter = () => {
+    setUsedCars(null);
+    onApplyFilters({ CarState: null });
   };
 
   return (
     <>
-      {/* Desktop View */}
       {!isMobile && (
         <Paper
           elevation={4}
@@ -126,10 +137,10 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
           >
             <FilterItem
               icon={<DirectionsCarIcon />}
-              text={usedCars ? t("newCars") : t("usedCars")}
+              text={usedCars ? t("usedCars") : t("newCars")}
               onClick={() => {
-                setUsedCars(!usedCars);
-                onApplyFilters({ CarState: usedCars ? 1 : 2 });
+                setUsedCars((prev) => !prev);
+                handleApplyFilters({ CarState: usedCars ? 1 : 2 });
               }}
             />
 
@@ -143,26 +154,78 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
               text={t("allPrices")}
               onClick={() => setOpenPriceDialog(true)}
             />
-
             <FilterItem
               icon={<TransmissionIcon />}
-              text={t("automatic")}
-              onClick={() => handleMenuClose("automatic")}
+              text={selectedTransmission === 1 ? t("manual") : t("automatic")}
+              onClick={(e) => setAnchorEl(e.currentTarget)}
             />
           </Box>
 
-          <Icon
-            sx={{
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <Icon sx={{ justifyContent: "center", alignItems: "center" }}>
             <TuneIcon sx={{ fontSize: 28 }} />
           </Icon>
         </Paper>
       )}
 
-      {/* Mobile View */}
+      {(selectedBrand ||
+        selectedPrice[0] > 0 ||
+        selectedPrice[1] < 1000000 ||
+        selectedTransmission ||
+        usedCars !== null) && (
+        <Paper
+          sx={{
+            mx: "auto",
+            width: isMobile ? "100%" : "70%",
+            my: 2,
+            p: 2,
+            display: "flex",
+            alignItems: "center",
+            borderRadius: 10,
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+            gap: 1,
+          }}
+        >
+          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+            {selectedBrand && (
+              <Chip
+                label={`${t("Brand")}: ${
+                  brandsData.find((b) => b.id === selectedBrand)?.name
+                }`}
+                onDelete={() => removeBrandFilter()}
+              />
+            )}
+            {selectedPrice[0] > 0 && (
+              <Chip
+                label={`${t("price")}: ${selectedPrice[0]} - ${
+                  selectedPrice[1]
+                }`}
+                onDelete={() => removePriceFilter()}
+              />
+            )}
+            {selectedTransmission && (
+              <Chip
+                label={`${t("transmission")}: ${
+                  selectedTransmission === 1 ? t("manual") : t("automatic")
+                }`}
+                onDelete={() => removeTransmissionFilter()}
+              />
+            )}
+            {usedCars !== null && (
+              <Chip
+                label={usedCars ? t("usedCars") : t("newCars")}
+                onDelete={() => removeUsedCarFilter()}
+              />
+            )}
+          </Box>
+
+          <Chip
+            onDelete={handleClearFilters}
+            label={t("ClearAllFilters")}
+          />
+        </Paper>
+      )}
+
       {isMobile && (
         <>
           <MobileDrawerFilters
@@ -170,25 +233,15 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
             openBottomSheet={openBottomSheet}
             setOpenBottomSheet={setOpenBottomSheet}
             allBrands={allBrands}
-            onApplyFilters={onApplyFilters}
+            onApplyFilters={handleApplyFilters}
             setOpenDialog={setOpenDialog}
             selectedBrand={selectedBrand}
             setSelectedBrand={setSelectedBrand}
             selectedPrice={selectedPrice}
             setSelectedPrice={setSelectedPrice}
-            handleSelectFilter={handleSelectFilter}
-            handleApplyFilters={handleApplyFilters}
           />
 
-          {/* Floating Button to Open Bottom Sheet */}
-          <Box
-            sx={{
-              position: "fixed",
-              bottom: 20,
-              right: 20,
-              zIndex: 1000,
-            }}
-          >
+          <Box sx={{ position: "fixed", bottom: 20, right: 20, zIndex: 1000 }}>
             <IconButton
               onClick={() => setOpenBottomSheet(true)}
               sx={{
@@ -209,12 +262,24 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
       <Menu
         anchorEl={anchorEl}
         open={openMenu}
-        onClose={() => setOpenMenu(false)}
+        onClose={() => setAnchorEl(null)}
       >
-        <MenuItem onClick={() => handleMenuClose("manual")}>
+        <MenuItem
+          onClick={() => {
+            setSelectedTransmission(1);
+            handleApplyFilters({ TransmissionType: 1 });
+            setAnchorEl(null);
+          }}
+        >
           {t("manual")}
         </MenuItem>
-        <MenuItem onClick={() => handleMenuClose("automatic")}>
+        <MenuItem
+          onClick={() => {
+            setSelectedTransmission(2);
+            handleApplyFilters({ TransmissionType: 2 });
+            setAnchorEl(null);
+          }}
+        >
           {t("automatic")}
         </MenuItem>
       </Menu>
@@ -228,23 +293,22 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
         minPrice={minPrice}
         setMinPrice={setMinPrice}
         maxPrice={maxPrice}
-        handleApplyFilters={handleApplyFilters}
         setMaxPrice={setMaxPrice}
+        handleApplyFilters={handleApplyFilters}
         t={t}
       />
 
+      {/* Brand Selection Dialog */}
       <BrandSelectionDialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         filteredBrands={filteredBrands}
         setSelectedBrand={(brandName) => {
-          console.log("Selected brand from dialog:", brandName);
           const selectedBrandObj = brandsData.find(
             (brand) => brand.name === brandName
           );
-          console.log("Matched brand object:", selectedBrandObj);
-          setSelectedBrand(selectedBrandObj ? selectedBrandObj.id : null);
-          handleApplyFilters(selectedBrandObj ? selectedBrandObj.id : null);
+          setSelectedBrand(selectedBrandObj?.id || null);
+          handleApplyFilters({ CarBrand: selectedBrandObj?.id || null });
         }}
         t={t}
         searchQuery={searchQuery}

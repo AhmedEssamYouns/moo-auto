@@ -1,5 +1,14 @@
 import React from "react";
-import { Dialog, DialogActions, DialogContent, DialogTitle, Slider, TextField, Box, Button } from "@mui/material";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Slider,
+  TextField,
+  Box,
+  Button,
+} from "@mui/material";
 
 const PriceRangeDialog = ({
   open,
@@ -10,7 +19,6 @@ const PriceRangeDialog = ({
   setMinPrice,
   maxPrice,
   setMaxPrice,
-  
   handleApplyFilters,
   t,
 }) => {
@@ -35,14 +43,21 @@ const PriceRangeDialog = ({
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{t("priceRange")}</DialogTitle>
       <DialogContent>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            width: "100%",
+          }}
+        >
           <Slider
             value={selectedPrice}
             onChange={handlePriceChange}
             valueLabelDisplay="auto"
             valueLabelFormat={(value) => `${value} ${t("currency")}`}
             min={0}
-            max={100000}
+            max={1000000}
           />
           <Box sx={{ display: "flex", gap: 2 }}>
             <TextField
@@ -68,7 +83,7 @@ const PriceRangeDialog = ({
           onClick={() => {
             setSelectedPrice([minPrice, maxPrice]);
             onClose();
-            handleApplyFilters()
+            handleApplyFilters();
           }}
         >
           {t("apply")}
