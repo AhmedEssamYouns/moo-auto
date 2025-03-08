@@ -18,6 +18,7 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import SpeedIcon from "@mui/icons-material/Speed"; // Better icon for transmission
+import { baseUrl } from "../utils/baseUrl";
 
 const ProductCard = ({ car }) => {
   const theme = useTheme();
@@ -26,9 +27,11 @@ const ProductCard = ({ car }) => {
   const { t } = useLanguage();
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
-  const shareUrl = `${window.location.origin}/product/${car.id || 1}`;
+  const shareUrl = `${baseUrl}/cars/Shared/${car.id}`;
 
-  const handleShare = async () => {
+  const handleShare = async (event) => {
+    event.stopPropagation(); // Prevents Card click event
+
     if (navigator.share && isMobile) {
       try {
         await navigator.share({
@@ -40,7 +43,7 @@ const ProductCard = ({ car }) => {
         console.error("Error sharing:", error);
       }
     } else {
-      navigator.clipboard.writeText(shareUrl);
+      navigator?.clipboard?.writeText(shareUrl);
       setSnackbarOpen(true);
     }
   };
@@ -62,7 +65,8 @@ const ProductCard = ({ car }) => {
       <Box sx={{ position: "relative", height: "200px", overflow: "hidden" }}>
         <CardMedia
           component="img"
-          image={car.images[0] ||
+          image={
+            car.images[0] ||
             "https://hips.hearstapps.com/hmg-prod/images/2025-bmw-x3-m50-165-673658ffda8c2.jpg?crop=0.814xw:0.916xh;0.0849xw,0.0841xh&resize=768:*"
           }
           alt={car.name}
@@ -104,33 +108,33 @@ const ProductCard = ({ car }) => {
           {car.name} - {car.model}
         </Typography>
 
-<Box sx={{ display: "flex", gap: 0.5, mt: 1, mb: 2 }}>
-  {/* Brand Name */}
-  <Chip
-    icon={<DirectionsCarIcon fontSize="small" />} // Represents a car brand
-    label={t(`${car?.brandName}`)}
-    size="small"
-    sx={{
-      bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
-      color: isDarkMode ? "white" : "black",
-      px: 0.5,
-      minWidth: "auto",
-    }}
-  />
-  
-  {/* Transmission Type */}
-  <Chip
-    icon={<SpeedIcon fontSize="small" />} // Better for automatic/manual indication
-    label={t(`${car.transmission == 2 ? "automatic" : "manual"}`)}
-    size="small"
-    sx={{
-      bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
-      color: isDarkMode ? "white" : "black",
-      px: 0.5,
-      minWidth: "auto",
-    }}
-  />
-</Box>
+        <Box sx={{ display: "flex", gap: 0.5, mt: 1, mb: 2 }}>
+          {/* Brand Name */}
+          <Chip
+            icon={<DirectionsCarIcon fontSize="small" />} // Represents a car brand
+            label={t(`${car?.brandName}`)}
+            size="small"
+            sx={{
+              bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
+              color: isDarkMode ? "white" : "black",
+              px: 0.5,
+              minWidth: "auto",
+            }}
+          />
+
+          {/* Transmission Type */}
+          <Chip
+            icon={<SpeedIcon fontSize="small" />} // Better for automatic/manual indication
+            label={t(`${car.transmission == 2 ? "automatic" : "manual"}`)}
+            size="small"
+            sx={{
+              bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
+              color: isDarkMode ? "white" : "black",
+              px: 0.5,
+              minWidth: "auto",
+            }}
+          />
+        </Box>
 
         <Box
           sx={{
@@ -164,7 +168,7 @@ const ProductCard = ({ car }) => {
         open={snackbarOpen}
         autoHideDuration={3000}
         onClose={() => setSnackbarOpen(false)}
-        message="Link copied to clipboard!"
+        message={t("linkCopied")}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       />
     </Card>
