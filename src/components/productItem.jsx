@@ -74,8 +74,8 @@ const ProductCard = ({ car }) => {
             position: "absolute",
             top: 10,
             left: 10,
-            bgcolor: car.status == 1 ? "#4CAF50" : "ActiveBorder",
-            color: "white",
+            bgcolor: car.status == 1 ? "#4CAF50" : "#FFC107",
+            color: car.status == 1 ? "white" : "black",
           }}
         />
         <IconButton
@@ -102,8 +102,7 @@ const ProductCard = ({ car }) => {
           variant="h6"
           sx={{ fontWeight: "bold", color: isDarkMode ? "white" : "black" }}
         >
-          {car.name} - 
-          {/* {car.model} */}
+          {car.name} - {car.model}
         </Typography>
 
 <Box sx={{ display: "flex", gap: 0.5, mt: 1, mb: 2 }}>
