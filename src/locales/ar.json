@@ -85,7 +85,10 @@
   "searchBrand": "ابحث عن ماركة",
   "automatic": "أوتوماتيكي",
   "manual": "يدوي",
-
+"color":"لون",
+"model":"طراز",
+"additionalInfo":"معلومات اضافية",
+"brand":"ماركة",
   "fuel": {
     "electric": "كهربائي",
     "diesel": "ديزل",
