@@ -1,1 +1,1 @@
-export const baseUrl = "https://almosallmy.runasp.net/api";
+export const baseUrl = "https://almosallmy.runasp.net";

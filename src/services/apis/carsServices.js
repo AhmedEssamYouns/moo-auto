@@ -3,7 +3,7 @@ import apiService from "../interceptor";
 export const getCars = async (filters) => {
   console.log("Fetching cars with filters:", filters); // Log the payload
 
-  const response = await apiService.get("/cars", {
+  const response = await apiService.get("/api/cars", {
     params: filters,
     isAuth: false,
   });
@@ -14,7 +14,7 @@ export const getCars = async (filters) => {
 };
 
 export const getLatestCars = async () => {
-  const response = await apiService.get("/cars/Latest", { isAuth: false });
+  const response = await apiService.get("/api/cars/Latest", { isAuth: false });
 
   console.log("API Response:", response.data); // Log the response
 
@@ -22,7 +22,7 @@ export const getLatestCars = async () => {
 };
 
 export const getBrands = async () => {
-  const response = await apiService.get("/brands", { isAuth: false });
+  const response = await apiService.get("/api/brands", { isAuth: false });
 
   console.log("API Response:", response.data); // Log the response
 
@@ -30,7 +30,7 @@ export const getBrands = async () => {
 };
 
 export const searchCars = async (SearchValue) => {
-  const response = await apiService.get(`/cars/Search`, {
+  const response = await apiService.get(`/api/cars/Search`, {
     params: { SearchValue},
     isAuth: false,
   });
@@ -39,17 +39,17 @@ export const searchCars = async (SearchValue) => {
 
 
 export const  getCar = async (id) => {
-  const response = await apiService.get(`/cars/${id}`, { isAuth: false });
+  const response = await apiService.get(`/api/cars/${id}`, { isAuth: false });
   return response.data;
 }
 
 export const editCar = async (id, data) => {
-  const response = await apiService.put(`/cars/${id}`, data, { isAuth: true });
+  const response = await apiService.put(`/api/cars/${id}`, data, { isAuth: true });
   return response.data;
 }
 
 
 export const deleteCar = async (id) => {
-  const response = await apiService.delete(`/cars/${id}`, { isAuth: true });
+  const response = await apiService.delete(`/api/cars/${id}`, { isAuth: true });
   return response.data;
 }

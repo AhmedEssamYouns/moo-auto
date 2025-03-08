@@ -35,7 +35,7 @@ const Cars = () => {
     CarBrand: null,
   });
 
-  const { data, isLoading, error } = useCars(filters);
+  const { data, isLoading, error,refetch } = useCars(filters);
   const {
     data: brandsData,
     isLoading: brandsLoading,
