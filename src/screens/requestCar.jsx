@@ -8,36 +8,61 @@ import {
   useTheme,
   Snackbar,
   Alert,
+  MenuItem,
 } from "@mui/material";
 import { useLanguage } from "../contexts/LanguageContext";
+import { addRequest } from "../services/apis/carsServices";
 
 const RequestCarScreen = () => {
   const { t } = useLanguage();
   const theme = useTheme();
+
   const [formData, setFormData] = useState({
-    carName: "",
-    carModel: "",
-    carColor: "",
-    userName: "",
-    phoneNumber: "",
+    name: "",
     email: "",
+    phoneNumber: "",
+    modelYear: "",
+    color: "",
+    brand: "",
+    model: "",
+    transmission: "",
+    price: "",
+    additionalInfo: "",
   });
+
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormData({   carName: "",
-        carModel: "",
-        carColor: "",
-        userName: "",
-        phoneNumber: "",
-        email: "",
+    try {
+      await addRequest({
+        ...formData,
+        transmission: Number(formData.transmission), // Convert to number
+        modelYear: Number(formData.modelYear),
+        price: Number(formData.price),
       });
-    setSuccess(true);
+
+      setSuccess(true);
+      setFormData({
+        name: "",
+        email: "",
+        phoneNumber: "",
+        modelYear: "",
+        color: "",
+        brand: "",
+        model: "",
+        transmission: "",
+        price: "",
+        additionalInfo: "",
+      });
+    } catch (err) {
+      setError(t("somethingWentWrong"));
+    }
   };
 
   return (
@@ -55,76 +80,35 @@ const RequestCarScreen = () => {
         <Typography variant="h5" fontWeight="bold" mb={2} textAlign="center">
           {t("requestCar")}
         </Typography>
+
         <form onSubmit={handleSubmit}>
-          <TextField
-            fullWidth
-            label={t("carName")}
-            name="carName"
-            value={formData.carName}
-            onChange={handleChange}
-            required
-            margin="dense"
-          />
-          <TextField
-            fullWidth
-            label={t("carModel")}
-            name="carModel"
-            value={formData.carModel}
-            onChange={handleChange}
-            required
-            margin="dense"
-          />
-          <TextField
-            fullWidth
-            label={t("carColor")}
-            name="carColor"
-            value={formData.carColor}
-            onChange={handleChange}
-            required
-            margin="dense"
-          />
-          <TextField
-            fullWidth
-            label={t("yourName")}
-            name="userName"
-            value={formData.userName}
-            onChange={handleChange}
-            required
-            margin="dense"
-          />
-          <TextField
-            fullWidth
-            label={t("phoneNumber")}
-            name="phoneNumber"
-            type="tel"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            required
-            margin="dense"
-          />
-          <TextField
-            fullWidth
-            label={t("email")}
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            margin="dense"
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 2 }}
-          >
+          <TextField fullWidth label={t("yourName")} name="name" value={formData.name} onChange={handleChange} required margin="dense" />
+          <TextField fullWidth label={t("email")} name="email" type="email" value={formData.email} onChange={handleChange} required margin="dense" />
+          <TextField fullWidth label={t("phoneNumber")} name="phoneNumber" type="tel" value={formData.phoneNumber} onChange={handleChange} required margin="dense" />
+          <TextField fullWidth label={t("color")} name="color" value={formData.color} onChange={handleChange} required margin="dense" />
+          <TextField fullWidth label={t("brand")} name="brand" value={formData.brand} onChange={handleChange} required margin="dense" />
+          <TextField fullWidth label={t("model")} name="model" value={formData.model} onChange={handleChange} required margin="dense" />
+          
+          <TextField select fullWidth label={t("Transmission")} name="transmission" value={formData.transmission} onChange={handleChange} required margin="dense">
+            <MenuItem value="1">{t("manual")}</MenuItem>
+            <MenuItem value="2">{t("automatic")}</MenuItem>
+          </TextField>
+
+          <TextField fullWidth label={t("price")} name="price" type="number" value={formData.price} onChange={handleChange} required margin="dense" />
+          <TextField fullWidth label={t("additionalInfo")} name="additionalInfo" value={formData.additionalInfo} onChange={handleChange} margin="dense" multiline rows={3} />
+
+          <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
             {t("submit")}
           </Button>
         </form>
       </Box>
+
       <Snackbar open={success} autoHideDuration={4000} onClose={() => setSuccess(false)}>
         <Alert severity="success">{t("thankYouMessage")}</Alert>
+      </Snackbar>
+
+      <Snackbar open={!!error} autoHideDuration={4000} onClose={() => setError("")}>
+        <Alert severity="error">{error}</Alert>
       </Snackbar>
     </Container>
   );

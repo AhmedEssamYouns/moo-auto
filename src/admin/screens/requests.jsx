@@ -62,7 +62,7 @@ const RequestsScreen = () => {
                   <TableCell>{request.name}</TableCell>
                   <TableCell>{request.brand}</TableCell>
                   <TableCell>{request.model}</TableCell>
-                  <TableCell>{request.transmission === 1 ? "Automatic" : "Manual"}</TableCell>
+                  <TableCell>{request.transmission === 1 ? "Manual" : "Automatic"}</TableCell>
                   <TableCell>${request.price.toLocaleString()}</TableCell>
                 </TableRow>
               ))}
