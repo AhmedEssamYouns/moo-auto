@@ -39,6 +39,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && searchText.trim() && hasResults) {
       setSearchOpen(false);
+      setIsSearchFocused(false);
       navigate("/cars-list", { state: { cars: searchResults.items, searchText } });
     }
   };
