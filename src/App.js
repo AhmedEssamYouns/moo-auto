@@ -3,7 +3,6 @@ import { BrowserRouter } from "react-router-dom";
 import { Box, Container } from "@mui/material";
 import ThemeProviderWrapper from "./contexts/ThemeProviderWrapper";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Navbar from "./components/navbar";
 import ScrollToTop from "./utils/scrollToTop";
 import ScrollToTopButton from "./components/scrollToTopBtn";
 import AppRoutes from "./routes/stack";
@@ -11,26 +10,26 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 import LottieComponent from "./components/loader";
 import Footer from "./components/fotter";
 import { HelmetProvider } from "react-helmet-async";
-
-
+import AdminRoutes from "./admin/routes/adminRouter";
+import Navbar from './components/navbar';
 const queryClient = new QueryClient();
-
 
 const App = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [showLottie, setShowLottie] = useState(true); // State to control Lottie animation visibility
+  const [showLottie, setShowLottie] = useState(true);
+
+  // Check if the current subdomain is "admin"
+  const isAdmin = window.location.hostname.startsWith("admin.");
 
   useEffect(() => {
-    // Wait for fonts to load
     document.fonts.ready.then(() => setFontsLoaded(true));
 
-    // Show Lottie animation for 1 second and then hide it
     setTimeout(() => {
-      setShowLottie(false); // Hide Lottie animation after 1 second
-    }, 2000); // 1000 milliseconds (1 second)
+      setShowLottie(false);
+    }, 2000);
   }, []);
 
-  if (!fontsLoaded) return null; // Wait until fonts are fully loaded
+  if (!fontsLoaded) return null;
 
   return (
     <HelmetProvider>
@@ -39,15 +38,14 @@ const App = () => {
           <ThemeProviderWrapper>
             {(darkMode, setDarkMode) => (
               <BrowserRouter>
-                {/* Show Lottie animation for 1 second */}
                 {showLottie ? (
                   <Box
                     sx={{
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                      height: "100vh", // Adjust this value as needed
-                      width: "100%", // Make sure it spans full width
+                      height: "100vh",
+                      width: "100%",
                     }}
                   >
                     <LottieComponent />
@@ -56,14 +54,16 @@ const App = () => {
                   <>
                     <ScrollToTop />
                     <ScrollToTopButton darkMode={darkMode} />
-                    <Navbar
-                      darkMode={darkMode}
-                      toggleDarkMode={() => setDarkMode((prev) => !prev)}
-                    />
+                    {!isAdmin && (
+                      <Navbar
+                        darkMode={darkMode}
+                        toggleDarkMode={() => setDarkMode((prev) => !prev)}
+                      />
+                    )}
                     <Container sx={{ mt: 4 }}>
-                      <AppRoutes />
+                      {isAdmin ? <AdminRoutes /> : <AppRoutes />}
                     </Container>
-                    <Footer darkMode={darkMode} />
+                    {!isAdmin && <Footer darkMode={darkMode} />}
                   </>
                 )}
               </BrowserRouter>

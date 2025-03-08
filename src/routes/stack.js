@@ -9,6 +9,7 @@ import InstallmentServicesScreen from "../screens/finance";
 import AboutUsScreen from "../screens/about";
 import BestSelling from "../components/products";
 import CarsListScreen from "../screens/searchList";
+import AdminPanel from "../admin/routes/adminRouter";
 // Dummy Pages
 const NewArrivals = () => <h2>New Arrivals</h2>;
 const Offers = () => <h2>Offers & Discounts</h2>;
@@ -23,7 +24,6 @@ const AppRoutes = () => {
       <Route path="/product/:id" element={<ProductScreen />} />
       <Route path="/request-car" element={<RequestCarScreen />} />
       <Route path="/cars-list" element={<CarsListScreen />} />
-
       <Route path="/financing" element={<InstallmentServicesScreen />} />
       <Route path="/about-us" element={<AboutUsScreen />} />
       <Route path="*" element={<NotFound />} />

@@ -205,7 +205,7 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
             )}
             {selectedTransmission && (
               <Chip
-                label={`${t("transmission")}: ${
+                label={`${t("TransmissionType")}: ${
                   selectedTransmission === 1 ? t("manual") : t("automatic")
                 }`}
                 onDelete={() => removeTransmissionFilter()}
