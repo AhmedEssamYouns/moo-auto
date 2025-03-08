@@ -86,6 +86,7 @@
   "automatic": "أوتوماتيكي",
   "manual": "يدوي",
 "color":"لون",
+"modelYear":"سنة الطراز",
 "model":"طراز",
 "additionalInfo":"معلومات اضافية",
 "brand":"ماركة",

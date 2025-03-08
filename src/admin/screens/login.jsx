@@ -62,7 +62,7 @@ const Login = () => {
     setSuccessMessage("");
 
     try {
-      const response = await fetch(`${baseUrl}/auth/login`, {
+      const response = await fetch(`${baseUrl}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

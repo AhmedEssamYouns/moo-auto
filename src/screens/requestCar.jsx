@@ -85,6 +85,7 @@ const RequestCarScreen = () => {
           <TextField fullWidth label={t("yourName")} name="name" value={formData.name} onChange={handleChange} required margin="dense" />
           <TextField fullWidth label={t("email")} name="email" type="email" value={formData.email} onChange={handleChange} required margin="dense" />
           <TextField fullWidth label={t("phoneNumber")} name="phoneNumber" type="tel" value={formData.phoneNumber} onChange={handleChange} required margin="dense" />
+          <TextField fullWidth label={t("modelYear")} name="modelYear" type="number" value={formData.modelYear} onChange={handleChange} required margin="dense" />
           <TextField fullWidth label={t("color")} name="color" value={formData.color} onChange={handleChange} required margin="dense" />
           <TextField fullWidth label={t("brand")} name="brand" value={formData.brand} onChange={handleChange} required margin="dense" />
           <TextField fullWidth label={t("model")} name="model" value={formData.model} onChange={handleChange} required margin="dense" />

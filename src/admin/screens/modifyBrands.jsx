@@ -16,6 +16,7 @@ import {
   DialogActions,
   TextField,
   Grid,
+  CircularProgress,
 } from "@mui/material";
 import { useBrands } from "../../services/hooks/useCards";
 import { editBrand, deleteBrand, addBrand } from "../services/adminServices";
@@ -26,6 +27,8 @@ const ModifyBrands = () => {
   const [brandName, setBrandName] = useState("");
   const [brandImage, setBrandImage] = useState(null);
   const [editingBrand, setEditingBrand] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(null);
 
   const handleOpenDialog = (brand = null) => {
     setEditingBrand(brand);
@@ -39,16 +42,20 @@ const ModifyBrands = () => {
     setBrandName("");
     setBrandImage(null);
     setEditingBrand(null);
+    setLoading(false);
   };
 
   const handleDeleteBrand = async (id) => {
     if (!window.confirm("Are you sure you want to delete this brand?")) return;
 
+    setDeleteLoading(id);
     try {
       await deleteBrand(id);
-      refetch(); // Refresh brand list after deletion
+      refetch();
     } catch (error) {
       console.error("Failed to delete brand", error);
+    } finally {
+      setDeleteLoading(null);
     }
   };
 
@@ -57,6 +64,7 @@ const ModifyBrands = () => {
   };
 
   const handleAddOrUpdateBrand = async () => {
+    setLoading(true);
     const formData = new FormData();
     formData.append("name", brandName);
     if (brandImage) {
@@ -71,10 +79,11 @@ const ModifyBrands = () => {
         await addBrand(formData);
       }
 
-      refetch(); // Refresh brand list
+      refetch();
       handleCloseDialog();
     } catch (error) {
       console.error("Failed to save brand", error);
+      setLoading(false);
     }
   };
 
@@ -94,8 +103,9 @@ const ModifyBrands = () => {
             variant="contained"
             color="primary"
             onClick={() => handleOpenDialog()}
+            disabled={loading}
           >
-            Add Brand
+            {loading ? <CircularProgress size={24} /> : "Add Brand"}
           </Button>
         </Grid>
       </Grid>
@@ -133,16 +143,26 @@ const ModifyBrands = () => {
                     size="small"
                     color="primary"
                     onClick={() => handleOpenDialog(brand)}
+                    disabled={loading}
                   >
-                    Edit
+                    {loading && editingBrand?.id === brand.id ? (
+                      <CircularProgress size={16} />
+                    ) : (
+                      "Edit"
+                    )}
                   </Button>
                   <Button
                     size="small"
                     color="error"
                     onClick={() => handleDeleteBrand(brand.id)}
                     sx={{ ml: 1 }}
+                    disabled={deleteLoading === brand.id}
                   >
-                    Delete
+                    {deleteLoading === brand.id ? (
+                      <CircularProgress size={16} />
+                    ) : (
+                      "Delete"
+                    )}
                   </Button>
                 </TableCell>
               </TableRow>
@@ -170,9 +190,11 @@ const ModifyBrands = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button variant="contained" onClick={handleAddOrUpdateBrand}>
-            {editingBrand ? "Update" : "Add"}
+          <Button onClick={handleCloseDialog} disabled={loading}>
+            Cancel
+          </Button>
+          <Button variant="contained" onClick={handleAddOrUpdateBrand} disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : editingBrand ? "Update" : "Add"}
           </Button>
         </DialogActions>
       </Dialog>
