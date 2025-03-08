@@ -41,7 +41,6 @@ const {language}=useLanguage()
           ...(isMobile
             ? { bottom: 8, right: 20, position: "fixed" }
             : { top: 100, right: 100 }),
-          zIndex: 1000,
           borderRadius:  isMobile ? "50%" : "10%",
           width: isMobile ? 56 : "150px",
           height: isMobile ? 56 : "auto",
