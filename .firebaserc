@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "al-muslmi"
-  }
+  },
+  "targets": {
+    "al-muslmi": {
+      "hosting": {
+        "al-muslmi": [
+          "al-muslmi"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

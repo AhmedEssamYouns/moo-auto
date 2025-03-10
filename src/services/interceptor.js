@@ -30,8 +30,11 @@ apiService.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       alert("Session expired, please login again");
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("refreshToken");
       setTimeout(() => {
-        window.location.href = "/login"; // Redirect using JavaScript
+        window.location.href = "/login"; // Redirect using JavaScrip
       }, 500);
     }
     return Promise.reject(error);

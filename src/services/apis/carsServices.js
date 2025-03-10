@@ -47,6 +47,14 @@ export const editCar = async (id, data) => {
   const response = await apiService.put(`/api/cars/${id}`, data, { isAuth: true });
   return response.data;
 }
+export const addCar = async (data) => {
+  const response = await apiService.post(`/api/cars`, data, { 
+    isAuth: true, 
+    headers: { "Content-Type": "multipart/form-data" } 
+  });
+
+  return response.data;
+};
 
 
 export const deleteCar = async (id) => {

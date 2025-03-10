@@ -6,103 +6,102 @@ import {
   CardContent,
   Typography,
   Chip,
-  IconButton,
   Button,
   useTheme,
   Snackbar,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate } from "react-router-dom";
-import { baseUrl } from "../../utils/baseUrl";
 
 const AdminProductCard = ({ car, onEdit, onDelete }) => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 
-
   return (
     <Card
       sx={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
         borderRadius: 3,
-        height: 400,
         boxShadow: 3,
         transition: "0.3s",
         overflow: "hidden",
         "&:hover": { boxShadow: 6 },
         bgcolor: isDarkMode ? "#1E1E1E" : "white",
-        display: "flex",
-        flexDirection: "column",
-        position: "relative",
+        width: "100%",
+        height: 180,
       }}
     >
-      <Box sx={{ position: "relative", height: "200px", overflow: "hidden" }}>
-        <CardMedia
-          component="img"
-          image={
-            car.images[0] ||
-            "https://hips.hearstapps.com/hmg-prod/images/2025-bmw-x3-m50-165-673658ffda8c2.jpg?crop=0.814xw:0.916xh;0.0849xw,0.0841xh&resize=768:*"
-          }
-          alt={car.name}
-          sx={{ width: "100%", height: "100%", objectFit: "cover" }}
-        />
+      {/* Scrollable Images */}
+      <Box
+        sx={{
+          display: "flex",
+          overflowX: "auto",
+          gap: 1,
+          p: 1,
+          maxWidth: 250,
+          height: "100%",
+          "&::-webkit-scrollbar": { display: "none" }, // Hide scrollbar
+        }}
+      >
+        {car.images.length > 0 ? (
+          car.images.map((img, index) => (
+            <CardMedia
+              key={index}
+              component="img"
+              image={img}
+              alt={car.name}
+              sx={{
+                width: 120,
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: 1,
+              }}
+            />
+          ))
+        ) : (
+          <CardMedia
+            component="img"
+            image="https://hips.hearstapps.com/hmg-prod/images/2025-bmw-x3-m50-165-673658ffda8c2.jpg?crop=0.814xw:0.916xh;0.0849xw,0.0841xh&resize=768:*"
+            alt={car.name}
+            sx={{
+              width: 120,
+              height: "100%",
+              objectFit: "cover",
+              borderRadius: 1,
+            }}
+          />
+        )}
+      </Box>
+
+      {/* Car Details */}
+      <CardContent sx={{ flexGrow: 1, px: 2 }}>
+        <Typography variant="h6" sx={{ fontWeight: "bold", color: isDarkMode ? "white" : "black" }}>
+          {car.name} - {car.model}
+        </Typography>
+
+        <Typography variant="h6" sx={{ fontWeight: "bold", color: "#4CAF50", mt: 1 }}>
+          EGP{car.price}
+        </Typography>
+
         <Chip
           label={car.status === 1 ? "New" : "Used"}
           sx={{
-            position: "absolute",
-            top: 10,
-            left: 10,
+            mt: 1,
             bgcolor: car.status === 1 ? "#4CAF50" : "#FFC107",
             color: car.status === 1 ? "white" : "black",
           }}
         />
-      </Box>
-
-      <CardContent sx={{ flexGrow: 1 }}>
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: "bold", color: isDarkMode ? "white" : "black" }}
-        >
-          {car.name} - {car.model}
-        </Typography>
-
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: "bold", color: "#4CAF50", mt: 1 }}
-        >
-          EGP{car.price}
-        </Typography>
       </CardContent>
 
-      {/* Action Buttons - Always at the bottom */}
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: 16,
-          width: "100%",
-          px: 2,
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => onEdit(car.id)}
-          startIcon={<EditIcon />}
-          fullWidth
-          sx={{ mr: 1 }}
-        >
+      {/* Action Buttons */}
+      <Box sx={{ display: "flex", flexDirection: "column", p: 2, gap: 1 }}>
+        <Button variant="contained" color="primary" onClick={() => onEdit(car.id)} startIcon={<EditIcon />}>
           Edit
         </Button>
-        <Button
-          variant="contained"
-          color="error"
-          onClick={() => onDelete(car.id)}
-          startIcon={<DeleteIcon />}
-          fullWidth
-        >
+        <Button variant="contained" color="error" onClick={() => onDelete(car.id)} startIcon={<DeleteIcon />}>
           Delete
         </Button>
       </Box>

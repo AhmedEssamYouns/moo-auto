@@ -1,19 +1,8 @@
 {
   "hosting": [
     {
-      "target": "main-site",
+      "target": "al-muslmi",
       "public": "build",
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ],
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
-    },
-    {
-      "target": "admin-panel",
-      "public": "admin-build",
       "rewrites": [
         {
           "source": "**",
