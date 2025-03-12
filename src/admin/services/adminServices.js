@@ -31,4 +31,14 @@ export const getRequests = async (searchValue = "") => {
     });
     return response.data;
   };
+
+  export const addUser = async (data) => {
+    const response = await apiService.post(`/api/users`, data, { isAuth: true });
+    return response.data;
+  }
+
+  export const getAllUsers = async () => {
+    const response = await apiService.get(`/api/users`, { isAuth: true });
+    return response.data;
+  }
   

@@ -23,7 +23,7 @@ import logo from "../../assets/imgs/logo.png";
 const sidebarItems = [
   { text: "Modify Cars", path: "/admin/cars", icon: <DirectionsCarIcon /> },
   { text: "Modify Brands", path: "/admin/brands", icon: <BrandingWatermarkIcon /> },
-  { text: "Modify Admins", path: "/admin/admins", icon: <AdminPanelSettingsIcon /> },
+  { text: "Modify Admins", path: "/admin/users", icon: <AdminPanelSettingsIcon /> },
   { text: "View Requests", path: "/admin/requests", icon: <AssignmentIcon /> },
   { text: "Installment Plans", path: "/admin/installments", icon: <PaymentIcon /> },
 ];

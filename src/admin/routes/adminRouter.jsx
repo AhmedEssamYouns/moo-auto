@@ -5,6 +5,7 @@ import Cars from "../screens/modifyCars";
 import Login from "../screens/login";
 import ModifyBrands from "../screens/modifyBrands";
 import RequestsScreen from "../screens/requests";
+import ModifyUserScreen from "../screens/modifyAdmins";
 const AuthContext = createContext(null);
 
 export const useAuth = () => useContext(AuthContext);
@@ -43,6 +44,7 @@ const AdminRouter = () => (
       <Route path="/login" element={<Login />} />
       <Route path="/admin/cars" element={<ProtectedRoute element={<AdminLayout><Cars /></AdminLayout>} />} />
       <Route path="/admin/brands" element={<ProtectedRoute element={<AdminLayout><ModifyBrands /></AdminLayout>} />} />
+      <Route path="/admin/users" element={<ProtectedRoute element={<AdminLayout><ModifyUserScreen /></AdminLayout>} />} />
       <Route path="/admin/requests" element={<ProtectedRoute element={<AdminLayout><RequestsScreen /></AdminLayout>} />} />
       <Route path="*" element={<Navigate to="/admin/cars" replace />} />
     </Routes>
