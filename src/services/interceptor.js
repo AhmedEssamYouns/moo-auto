@@ -66,13 +66,13 @@ apiService.interceptors.response.use(
 
       try {
         const data = await refreshToken(); // Fetch new tokens
-        localStorage.setItem("token", data.accessToken);
+        localStorage.setItem("token", data.token);
         localStorage.setItem("refreshToken", data.refreshToken);
 
-        apiService.defaults.headers.Authorization = `Bearer ${data.accessToken}`;
-        processQueue(null, data.accessToken);
+        apiService.defaults.headers.Authorization = `Bearer ${data.token}`;
+        processQueue(null, data.token);
 
-        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${data.token}`;
         return axios(originalRequest);
       } catch (err) {
         processQueue(err, null);

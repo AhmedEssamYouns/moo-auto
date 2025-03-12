@@ -31,36 +31,38 @@ export const getBrands = async () => {
 
 export const searchCars = async (SearchValue) => {
   const response = await apiService.get(`/api/cars/Search`, {
-    params: { SearchValue},
+    params: { SearchValue },
     isAuth: false,
   });
   return response.data;
 };
 
-
-export const  getCar = async (id) => {
+export const getCar = async (id) => {
   const response = await apiService.get(`/api/cars/${id}`, { isAuth: false });
   return response.data;
-}
+};
 
 export const editCar = async (id, data) => {
-  const response = await apiService.put(`/api/cars/${id}`, data, { isAuth: true });
+  const response = await apiService.put(`/api/cars/${id}`, data, {
+    isAuth: true,
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+
   return response.data;
-}
+};
 export const addCar = async (data) => {
-  const response = await apiService.post(`/api/cars`, data, { 
-    isAuth: true, 
-    headers: { "Content-Type": "multipart/form-data" } 
+  const response = await apiService.post(`/api/cars`, data, {
+    isAuth: true,
+    headers: { "Content-Type": "multipart/form-data" },
   });
 
   return response.data;
 };
 
-
 export const deleteCar = async (id) => {
   const response = await apiService.delete(`/api/cars/${id}`, { isAuth: true });
   return response.data;
-}
+};
 
 export const addRequest = async (data) => {
   const response = await apiService.post(`/car-requests`, data, {

@@ -83,7 +83,7 @@ const Cars = () => {
 
   const handleEditCar = async (formData) => {
     try {
-      await editCar(formData);
+      await editCar(selectedCarId,formData);
       alert("Car edited successfully!");
       setOpenEdit(false);
       refetch();
@@ -218,7 +218,15 @@ const Cars = () => {
       )}
 
       {/* Add Car Modal */}
-      <Dialog open={openAddCar} onClose={() => setOpenAddCar(false)} fullWidth maxWidth="md">
+      <Dialog
+        open={openAddCar}
+        onClose={() => {
+          setOpenAddCar(false);
+          setSearchQuery("");
+        }}
+        fullWidth
+        maxWidth="md"
+      >
         <DialogTitle>{t("Add Car")}</DialogTitle>
         <DialogContent>
           <CarForm onSubmit={handleCarSubmit} brandData={brandsData} />
@@ -235,7 +243,9 @@ const Cars = () => {
         open={openEdit}
         brandData={brandsData}
         onSubmit={handleEditCar}
-        onClose={() => setOpenEdit(false)}
+        onClose={() => {
+          setOpenEdit(false);
+        }}
         id={selectedCarId}
       />
     </Box>

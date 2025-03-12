@@ -13,10 +13,13 @@ import {
   CircularProgress,
   Box,
   IconButton,
+  Typography,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import { useCar } from "../../services/hooks/useCards";
 import { editCar } from "../../services/apis/carsServices";
+import { CarCategory } from "../../types/e-nums";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
   const { data: car, isLoading } = useCar(id);
@@ -24,6 +27,9 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
   const [loading, setLoading] = useState(false);
   const [deletedImages, setDeletedImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
+  const [imageError, setImageError] = useState(false);
+
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (car) {
@@ -46,7 +52,14 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
   if (isLoading) {
     return (
       <Dialog open={open} onClose={onClose} fullWidth>
-        <DialogContent sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 200 }}>
+        <DialogContent
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: 200,
+          }}
+        >
           <CircularProgress />
         </DialogContent>
       </Dialog>
@@ -67,15 +80,50 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
       currentImages: prev.currentImages.filter((_, i) => i !== index),
     }));
   };
-
   const handleImageUpload = (event) => {
-    const files = event.target.files;
-    if (files.length) {
-      setSelectedImages((prev) => [...prev, ...files]);
-    }
+    const files = Array.from(event.target.files);
+    setSelectedImages((prev) => [...prev, ...files]);
   };
 
+  const handleColorChange = (index, field, value) => {
+    setFormData((prev) => {
+      const colors = [...prev.colors];
+      colors[index] = { ...colors[index], [field]: value };
+      return { ...prev, colors };
+    });
+  };
+
+  const handleFeatureChange = (index, field, value) => {
+    setFormData((prev) => {
+      const features = [...prev.features];
+      features[index] = { ...features[index], [field]: value };
+      return { ...prev, features };
+    });
+  };
+
+  const addNewColor = () => {
+    setFormData((prev) => ({
+      ...prev,
+      colors: [...prev.colors, { color: "", isAvailable: false }],
+    }));
+  };
+
+  const addNewFeature = () => {
+    setFormData((prev) => ({
+      ...prev,
+      features: [...prev.features, { name: "", value: "" }],
+    }));
+  };
+
+
   const handleFormSubmit = () => {
+    if (formData.currentImages.length === 0 && selectedImages.length === 0) {
+      setImageError(true);
+      return;
+    }
+
+    setImageError(false);
+
     const formDataToSend = new FormData();
     formDataToSend.append("id", id);
     formDataToSend.append("brandId", formData.brandId);
@@ -89,7 +137,10 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
 
     formData.colors.forEach((color, index) => {
       formDataToSend.append(`colors[${index}].color`, color.color);
-      formDataToSend.append(`colors[${index}].isAvailable`, color.isAvailable);
+      formDataToSend.append(
+        `colors[${index}].isAvailable`,
+        color.isAvailable ? "true" : "false"
+      );
     });
 
     formData.features.forEach((feature, index) => {
@@ -98,7 +149,7 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
     });
 
     selectedImages.forEach((image, index) => {
-      formDataToSend.append(`images[${index}]`, image);
+      formDataToSend.append(`addImages[${index}]`, image);
     });
 
     deletedImages.forEach((image, index) => {
@@ -107,15 +158,9 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
 
     setLoading(true);
     onSubmit(formDataToSend)
-      .then(() => {
-        onClose();
-      })
-      .catch((error) => {
-        console.error("Failed to update car:", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .then(() => onClose())
+      .catch((error) => console.error("Failed to update car:", error))
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -123,12 +168,30 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
       <DialogTitle>Edit Car</DialogTitle>
       <DialogContent>
         <Box sx={{ display: "flex", gap: 1, overflowX: "auto", mb: 2 }}>
+          {imageError && (
+            <Typography color="error" sx={{ mt: 1 }}>
+              Please upload at least one image.
+            </Typography>
+          )}
+
           {formData.currentImages.map((img, index) => (
-            <Box key={index} sx={{ position: "relative", display: "inline-block" }}>
-              <img src={img} alt={`Car ${index + 1}`} style={{ width: "120px", height: "80px", borderRadius: 4 }} />
+            <Box
+              key={index}
+              sx={{ position: "relative", display: "inline-block" }}
+            >
+              <img
+                src={img}
+                alt={`Car ${index + 1}`}
+                style={{ width: "120px", height: "80px", borderRadius: 4 }}
+              />
               <IconButton
                 size="small"
-                sx={{ position: "absolute", top: 2, right: 2, background: "rgba(0,0,0,0.5)" }}
+                sx={{
+                  position: "absolute",
+                  top: 2,
+                  right: 2,
+                  background: "rgba(0,0,0,0.5)",
+                }}
                 onClick={() => handleDeleteImage(index)}
               >
                 <Delete sx={{ color: "white" }} />
@@ -139,16 +202,41 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
 
         <Button variant="contained" component="label" fullWidth>
           Upload Images
-          <input type="file" multiple hidden accept="image/*" onChange={handleImageUpload} />
+          <input
+            type="file"
+            hidden
+            multiple
+            accept="image/*"
+            onChange={handleImageUpload}
+          />
         </Button>
 
-        <TextField label="Car Name" name="name" value={formData.name} onChange={handleChange} fullWidth margin="normal" />
-        <TextField label="Model" name="model" value={formData.model} onChange={handleChange} fullWidth margin="normal" />
-        <TextField label="Category" name="category" value={formData.category} onChange={handleChange} fullWidth margin="normal" />
+        <Typography fontWeight="bold">Car Name</Typography>
+        <TextField
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
 
+        <Typography fontWeight="bold">Model</Typography>
+        <TextField
+          name="model"
+          value={formData.model}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
+
+        <Typography fontWeight="bold">Brand</Typography>
         <FormControl fullWidth margin="normal">
           <InputLabel>Brand</InputLabel>
-          <Select name="brandId" value={formData.brandId} onChange={handleChange}>
+          <Select
+            name="brandId"
+            value={formData.brandId}
+            onChange={handleChange}
+          >
             {brandData.map((brand) => (
               <MenuItem key={brand.id} value={brand.id}>
                 {brand.name}
@@ -156,33 +244,86 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
             ))}
           </Select>
         </FormControl>
-
         <FormControl fullWidth margin="normal">
-          <InputLabel>Transmission</InputLabel>
-          <Select name="transmission" value={formData.transmission} onChange={handleChange}>
-            <MenuItem value={1}>Manual</MenuItem>
-            <MenuItem value={2}>Automatic</MenuItem>
+          <InputLabel>{t("Category")}</InputLabel>
+          <Select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+          >
+            {Object.entries(CarCategory).map(([key, value]) => (
+              <MenuItem key={key} value={key}>
+                {t(`${value}`)}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
+        <Typography fontWeight="bold">Colors</Typography>
+        {formData.colors.map((color, index) => (
+          <Box key={index} sx={{ display: "flex", gap: 1, mb: 2 }}>
+            <TextField
+              label="Color"
+              value={color.color}
+              onChange={(e) =>
+                handleColorChange(index, "color", e.target.value)
+              }
+              fullWidth
+            />
+            <Select
+              value={color.isAvailable.toString()}
+              onChange={(e) =>
+                handleColorChange(
+                  index,
+                  "isAvailable",
+                  e.target.value === "true"
+                )
+              }
+            >
+              <MenuItem value="true">Available</MenuItem>
+              <MenuItem value="false">Not Available</MenuItem>
+            </Select>
+          </Box>
+        ))}
+        <Button onClick={addNewColor} variant="outlined">
+          Add Color
+        </Button>
 
-        <TextField label="Price" name="price" type="number" value={formData.price} onChange={handleChange} fullWidth margin="normal" />
-
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Status</InputLabel>
-          <Select name="status" value={formData.status} onChange={handleChange}>
-            <MenuItem value={1}>New</MenuItem>
-            <MenuItem value={2}>Used</MenuItem>
-          </Select>
-        </FormControl>
-
-        <TextField label="Description" name="description" value={formData.description} onChange={handleChange} fullWidth margin="normal" multiline rows={3} />
+        <Typography fontWeight="bold">Features</Typography>
+        {formData.features.map((feature, index) => (
+          <Box key={index} sx={{ display: "flex", gap: 1, mb: 2 }}>
+            <TextField
+              label="Feature Name"
+              value={feature.name}
+              onChange={(e) =>
+                handleFeatureChange(index, "name", e.target.value)
+              }
+              fullWidth
+            />
+            <TextField
+              label="Feature Value"
+              value={feature.value}
+              onChange={(e) =>
+                handleFeatureChange(index, "value", e.target.value)
+              }
+              fullWidth
+            />
+          </Box>
+        ))}
+        <Button onClick={addNewFeature} variant="outlined">
+          Add Feature
+        </Button>
       </DialogContent>
 
       <DialogActions>
         <Button onClick={onClose} color="secondary" disabled={loading}>
           Close
         </Button>
-        <Button onClick={handleFormSubmit} variant="contained" color="primary" disabled={loading}>
+        <Button
+          onClick={handleFormSubmit}
+          variant="contained"
+          color="primary"
+          disabled={loading}
+        >
           {loading ? <CircularProgress size={24} /> : "Save"}
         </Button>
       </DialogActions>

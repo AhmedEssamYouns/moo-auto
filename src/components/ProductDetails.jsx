@@ -9,13 +9,17 @@ import { useLanguage } from "../contexts/LanguageContext";
 
 const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
   const shareUrl = `${baseUrl}/cars/Shared/${product.id}`;
-const {language}=useLanguage()
+  console.log("product", JSON.stringify(product, null, 8));
+  const { language } = useLanguage();
   const handleShare = async () => {
     if (navigator.share && isMobile) {
       try {
         await navigator.share({
           title: product.name,
-          text: language == "en" ? `Check out this car: ${product.name} - ${product.model} : ${product.description}` : `تحقق من هذه السيارة: ${product.name} - ${product.model} : ${product.description}`,
+          text:
+            language == "en"
+              ? `Check out this car: ${product.name} - ${product.model} : ${product.description}`
+              : `تحقق من هذه السيارة: ${product.name} - ${product.model} : ${product.description}`,
           url: shareUrl,
         });
       } catch (error) {
@@ -42,7 +46,7 @@ const {language}=useLanguage()
           ...(isMobile
             ? { bottom: 8, right: 20, position: "fixed" }
             : { top: 100, right: 100 }),
-          borderRadius:  isMobile ? "50%" : "10%",
+          borderRadius: isMobile ? "50%" : "10%",
           width: isMobile ? 56 : "150px",
           height: isMobile ? 56 : "auto",
           minWidth: isMobile ? "auto" : "64px",
@@ -59,8 +63,14 @@ const {language}=useLanguage()
       {/* Dynamic Meta Tags */}
       <Helmet>
         <title>{`${product.name} - ${product.model}`}</title>
-        <meta property="og:title" content={`${product.name} - ${product.model}`} />
-        <meta property="og:description" content={product.description.substring(0, 150)} />
+        <meta
+          property="og:title"
+          content={`${product.name} - ${product.model}`}
+        />
+        <meta
+          property="og:description"
+          content={product.description.substring(0, 150)}
+        />
         <meta property="og:image" content={product.images[0]} />
         <meta property="og:url" content={shareUrl} />
         <meta property="og:type" content="product" />
@@ -116,6 +126,108 @@ const {language}=useLanguage()
           {product.description}
         </Typography>
       </Box>
+
+      {product.features && product.features.length > 0 && (
+        <Box
+          sx={{
+            maxWidth: "700px",
+            mt: 2,
+            px: 2,
+            py: 2,
+            bgcolor: isDarkMode ? "#333" : "#FFF",
+            borderRadius: 2,
+            boxShadow: 2,
+          }}
+        >
+          <Typography variant="h6" fontWeight="bold" mb={2}>
+            {t("features")}
+          </Typography>
+
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+            {product.features.map((feature, index) => (
+              <Chip
+                key={index}
+                label={
+                  <Typography variant="body2">
+                    <strong>{feature.name}</strong>: {feature.value}
+                  </Typography>
+                }
+                sx={{
+                  bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
+                  color: isDarkMode ? "white" : "black",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  px: 1.5,
+                  py: 0.5,
+                }}
+              />
+            ))}
+          </Box>
+        </Box>
+      )}
+      {product.colors && product.colors.length > 0 && (
+        <Box
+          sx={{
+            maxWidth: "700px",
+            mt: 2,
+            px: 3,
+            py: 2,
+            bgcolor: isDarkMode ? "#1e1e1e" : "#FFF",
+            borderRadius: 2,
+            boxShadow: 4,
+          }}
+        >
+          <Typography variant="h6" fontWeight="bold" mb={2}>
+            {t("colors")}
+          </Typography>
+
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5 }}>
+            {product.colors.map((color, index) => (
+              <Box
+                key={index}
+                sx={{
+                  bgcolor: color.color || (isDarkMode ? "#424242" : "#E0E0E0"),
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  px: 2,
+                  py: 1,
+                  borderRadius: 2,
+                  border: `2px solid ${color.isAvailable ? "#000" : "#ccc"}`,
+                  opacity: color.isAvailable ? 1 : 0.5,
+                  textDecoration: color.isAvailable ? "none" : "line-through",
+                  cursor: color.isAvailable ? "pointer" : "not-allowed",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    boxShadow: color.isAvailable
+                      ? "0px 4px 10px rgba(0, 0, 0, 0.2)"
+                      : "none",
+                  },
+                }}
+              >
+                {/* <Box
+                  sx={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: "50%",
+                    bgcolor: color.color,
+                    border: "1px solid #000",
+                  }}
+                /> */}
+                <Typography
+                  variant="body2"
+                  fontWeight="500"
+                  sx={{
+                    color: isDarkMode ? "white" : "black",
+                  }}
+                >
+                  {color.color}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 };

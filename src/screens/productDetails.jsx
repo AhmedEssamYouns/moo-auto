@@ -16,7 +16,6 @@ const ProductScreen = () => {
   const { t } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
   const { data: product ,isLoading} = useCar(id);
-
   if (isLoading) {
     return <Box minHeight={"70vh"} display={"flex"} justifyContent={"center"} alignItems={"center"}><CircularProgress color="primary" size={50} thickness={4} /></Box>;
   }
