@@ -1,1 +1,1 @@
-export const baseUrl = "https://almosallmy.runasp.net";
+export const baseUrl = "https://auto.almosallamy-automotive.com";

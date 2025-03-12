@@ -1,13 +1,30 @@
 import axios from "axios";
 import { baseUrl } from "../utils/baseUrl";
+import refreshToken from "./apis/refreshtoken";
 import { Alert } from "@mui/material";
 
 const apiService = axios.create({
   baseURL: baseUrl,
 });
 
+// Flag to prevent multiple refresh requests at the same time
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+  failedQueue.forEach((prom) => {
+    if (token) {
+      prom.resolve(token);
+    } else {
+      prom.reject(error);
+    }
+  });
+  failedQueue = [];
+};
+
+// Request Interceptor
 apiService.interceptors.request.use(
-  (config) => {
+  async (config) => {
     if (config.isAuth === true) {
       const token = localStorage.getItem("token");
       if (token) config.headers.Authorization = `Bearer ${token}`;
@@ -25,18 +42,51 @@ apiService.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Response Interceptor
 apiService.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      alert("Session expired, please login again");
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("refreshToken");
-      setTimeout(() => {
-        window.location.href = "/login"; // Redirect using JavaScrip
-      }, 500);
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        // If token refresh is already in progress, queue the failed request
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return axios(originalRequest);
+          })
+          .catch((err) => Promise.reject(err));
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      try {
+        const data = await refreshToken(); // Fetch new tokens
+        localStorage.setItem("token", data.accessToken);
+        localStorage.setItem("refreshToken", data.refreshToken);
+
+        apiService.defaults.headers.Authorization = `Bearer ${data.accessToken}`;
+        processQueue(null, data.accessToken);
+
+        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+        return axios(originalRequest);
+      } catch (err) {
+        processQueue(err, null);
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("user");
+        Alert("error", err.message);
+        window.location.href = "/login"; // Redirect to login page
+        return Promise.reject(err);
+      } finally {
+        isRefreshing = false;
+      }
     }
+
     return Promise.reject(error);
   }
 );

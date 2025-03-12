@@ -17,22 +17,28 @@ import {
 import { Delete } from "@mui/icons-material";
 import { useCar } from "../../services/hooks/useCards";
 import { editCar } from "../../services/apis/carsServices";
-const CarEditForm = ({ open, onClose, id, brandData }) => {
+
+const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
   const { data: car, isLoading } = useCar(id);
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [deletedImages, setDeletedImages] = useState([]);
+  const [selectedImages, setSelectedImages] = useState([]);
 
   useEffect(() => {
     if (car) {
       setFormData({
-        name: car.name,
-        status: car.status,
-        brandId: car.brandId,
-        transmission: car.transmission,
-        price: car.price,
-        description: car.description,
+        name: car.name || "",
+        status: car.status || "",
+        brandId: car.brandId || "",
+        transmission: car.transmission || "",
+        price: car.price || "",
+        description: car.description || "",
+        model: car.model || "",
+        category: car.category || "",
+        colors: car.colors || [],
+        features: car.features || [],
         currentImages: car.images || [],
-        addImages: [],
       });
     }
   }, [car]);
@@ -55,6 +61,7 @@ const CarEditForm = ({ open, onClose, id, brandData }) => {
   };
 
   const handleDeleteImage = (index) => {
+    setDeletedImages((prev) => [...prev, formData.currentImages[index]]);
     setFormData((prev) => ({
       ...prev,
       currentImages: prev.currentImages.filter((_, i) => i !== index),
@@ -64,47 +71,59 @@ const CarEditForm = ({ open, onClose, id, brandData }) => {
   const handleImageUpload = (event) => {
     const files = event.target.files;
     if (files.length) {
-      const newImages = Array.from(files).map((file) => URL.createObjectURL(file));
-      setFormData((prev) => ({
-        ...prev,
-        addImages: [...prev.addImages, ...newImages],
-      }));
+      setSelectedImages((prev) => [...prev, ...files]);
     }
   };
 
-  const isFormValid = () => {
-    return (
-      formData.name.trim() &&
-      formData.status &&
-      formData.brandId &&
-      formData.transmission &&
-      formData.price &&
-      formData.description.trim() &&
-      (formData.currentImages.length > 0 || formData.addImages.length > 0)
-    );
-  };
+  const handleFormSubmit = () => {
+    const formDataToSend = new FormData();
+    formDataToSend.append("id", id);
+    formDataToSend.append("brandId", formData.brandId);
+    formDataToSend.append("transmission", formData.transmission);
+    formDataToSend.append("price", formData.price);
+    formDataToSend.append("model", formData.model);
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("status", formData.status);
+    formDataToSend.append("description", formData.description);
+    formDataToSend.append("category", formData.category);
 
-  const handleSave = async () => {
-    if (!isFormValid()) return;
+    formData.colors.forEach((color, index) => {
+      formDataToSend.append(`colors[${index}].color`, color.color);
+      formDataToSend.append(`colors[${index}].isAvailable`, color.isAvailable);
+    });
+
+    formData.features.forEach((feature, index) => {
+      formDataToSend.append(`features[${index}].name`, feature.name);
+      formDataToSend.append(`features[${index}].value`, feature.value);
+    });
+
+    selectedImages.forEach((image, index) => {
+      formDataToSend.append(`images[${index}]`, image);
+    });
+
+    deletedImages.forEach((image, index) => {
+      formDataToSend.append(`deletedImages[${index}]`, image);
+    });
+
     setLoading(true);
-
-    try {
-      await editCar(id, formData);
-      onClose();
-    } catch (error) {
-      console.error("Failed to update car:", error);
-    } finally {
-      setLoading(false);
-    }
+    onSubmit(formDataToSend)
+      .then(() => {
+        onClose();
+      })
+      .catch((error) => {
+        console.error("Failed to update car:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle>Edit Car</DialogTitle>
       <DialogContent>
-        {/* Images Section */}
         <Box sx={{ display: "flex", gap: 1, overflowX: "auto", mb: 2 }}>
-          {[...formData.currentImages, ...formData.addImages].map((img, index) => (
+          {formData.currentImages.map((img, index) => (
             <Box key={index} sx={{ position: "relative", display: "inline-block" }}>
               <img src={img} alt={`Car ${index + 1}`} style={{ width: "120px", height: "80px", borderRadius: 4 }} />
               <IconButton
@@ -118,16 +137,15 @@ const CarEditForm = ({ open, onClose, id, brandData }) => {
           ))}
         </Box>
 
-        {/* Image Upload */}
         <Button variant="contained" component="label" fullWidth>
           Upload Images
           <input type="file" multiple hidden accept="image/*" onChange={handleImageUpload} />
         </Button>
 
-        {/* Form Fields */}
         <TextField label="Car Name" name="name" value={formData.name} onChange={handleChange} fullWidth margin="normal" />
+        <TextField label="Model" name="model" value={formData.model} onChange={handleChange} fullWidth margin="normal" />
+        <TextField label="Category" name="category" value={formData.category} onChange={handleChange} fullWidth margin="normal" />
 
-        {/* Brand Select */}
         <FormControl fullWidth margin="normal">
           <InputLabel>Brand</InputLabel>
           <Select name="brandId" value={formData.brandId} onChange={handleChange}>
@@ -139,7 +157,6 @@ const CarEditForm = ({ open, onClose, id, brandData }) => {
           </Select>
         </FormControl>
 
-        {/* Transmission Select */}
         <FormControl fullWidth margin="normal">
           <InputLabel>Transmission</InputLabel>
           <Select name="transmission" value={formData.transmission} onChange={handleChange}>
@@ -150,7 +167,6 @@ const CarEditForm = ({ open, onClose, id, brandData }) => {
 
         <TextField label="Price" name="price" type="number" value={formData.price} onChange={handleChange} fullWidth margin="normal" />
 
-        {/* Status Select */}
         <FormControl fullWidth margin="normal">
           <InputLabel>Status</InputLabel>
           <Select name="status" value={formData.status} onChange={handleChange}>
@@ -166,7 +182,7 @@ const CarEditForm = ({ open, onClose, id, brandData }) => {
         <Button onClick={onClose} color="secondary" disabled={loading}>
           Close
         </Button>
-        <Button onClick={handleSave} variant="contained" color="primary" disabled={!isFormValid() || loading}>
+        <Button onClick={handleFormSubmit} variant="contained" color="primary" disabled={loading}>
           {loading ? <CircularProgress size={24} /> : "Save"}
         </Button>
       </DialogActions>

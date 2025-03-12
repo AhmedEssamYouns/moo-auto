@@ -11,9 +11,10 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  TextField,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useBrands, useCars } from "../../services/hooks/useCards";
+import { useBrands, useCars, useSearch } from "../../services/hooks/useCards";
 import { useLanguage } from "../../contexts/LanguageContext";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import LayersIcon from "@mui/icons-material/Layers";
@@ -21,7 +22,7 @@ import AddIcon from "@mui/icons-material/Add";
 import Filters from "../../components/filters";
 import AdminProductCard from "../components/carCard";
 import CarEditForm from "../components/editCar";
-import { addCar, deleteCar } from "../../services/apis/carsServices";
+import { addCar, deleteCar, editCar } from "../../services/apis/carsServices";
 import CarForm from "../components/addCar";
 
 const Cars = () => {
@@ -32,7 +33,7 @@ const Cars = () => {
   const [openAddCar, setOpenAddCar] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [selectedCarId, setSelectedCarId] = useState(null);
-
+  const [searchQuery, setSearchQuery] = useState(""); // New: Search Query State
   const [filters, setFilters] = useState({
     MinPrice: null,
     MaxPrice: null,
@@ -46,12 +47,10 @@ const Cars = () => {
     CarBrand: null,
   });
 
+  // Fetch cars based on filters
   const { data, isLoading, error, refetch } = useCars(filters);
-  const {
-    data: brandsData,
-    isLoading: brandsLoading,
-    error: brandsError,
-  } = useBrands();
+  const { data: brandsData, isLoading: brandsLoading } = useBrands();
+  const { data: searchData, refetch: searchCars } = useSearch(searchQuery);
 
   const handlePageChange = (_, value) => {
     setCurrentPage(value);
@@ -60,11 +59,14 @@ const Cars = () => {
   };
 
   const handleApplyFilters = (newFilters) => {
-    setFilters((prev) => ({
-      ...prev,
-      ...newFilters,
-      PageNumber: 1,
-    }));
+    setFilters({ ...filters, ...newFilters, PageNumber: 1 });
+  };
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+    if (e.target.value.trim() !== "") {
+      searchCars(); // Trigger search request
+    }
   };
 
   const handleCarSubmit = async (formData) => {
@@ -79,18 +81,35 @@ const Cars = () => {
     }
   };
 
+  const handleEditCar = async (formData) => {
+    try {
+      await editCar(formData);
+      alert("Car edited successfully!");
+      setOpenEdit(false);
+      refetch();
+    } catch (error) {
+      console.error("Error editing car:", error);
+      alert("Failed to edit car.");
+    }
+  };
+
+  const handleDeleteCar = async (id) => {
+    if (window.confirm(t("Are you sure you want to delete this car?"))) {
+      try {
+        await deleteCar(id);
+        alert("Car deleted successfully!");
+        refetch();
+      } catch (error) {
+        console.error("Error deleting car:", error);
+        alert("Failed to delete car.");
+      }
+    }
+  };
+
   const handleEdit = (id) => {
     setSelectedCarId(id);
     setOpenEdit(true);
   };
-
-  const handleCloseEdit = () => {
-    setOpenEdit(false);
-    setSelectedCarId(null);
-  };
-
-  const handleOpenAddCar = () => setOpenAddCar(true);
-  const handleCloseAddCar = () => setOpenAddCar(false);
 
   const isMobile = useMediaQuery("(max-width: 1000px)");
 
@@ -127,7 +146,6 @@ const Cars = () => {
             </span>
           </Typography>
         </Box>
-
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <LayersIcon color="primary" fontSize="medium" />
           <Typography variant="h6" fontWeight="bold">
@@ -138,24 +156,28 @@ const Cars = () => {
             / {data?.totalPages || 1}
           </Typography>
         </Box>
-
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleOpenAddCar}
-        >
-          {t("Add Car")}
-        </Button>
       </Box>
 
+      {/* Search Bar */}
+      <TextField
+        fullWidth
+        variant="outlined"
+        placeholder={t("Search cars...")}
+        value={searchQuery}
+        onChange={handleSearch}
+        sx={{ mb: 3, maxWidth: 500 }}
+      />
+
+      <Button
+        variant="contained"
+        startIcon={<AddIcon />}
+        onClick={() => setOpenAddCar(true)}
+      >
+        {t("Add Car")}
+      </Button>
+
       {/* Filters */}
-      {brandsLoading ? (
-        <Typography textAlign="center">{t("Loading brands...")}</Typography>
-      ) : brandsError ? (
-        <Typography color="error" textAlign="center">
-          {t("Failed to load brands")}
-        </Typography>
-      ) : (
+      {!brandsLoading && (
         <Filters
           filters={filters}
           brandsData={brandsData}
@@ -165,53 +187,44 @@ const Cars = () => {
 
       {/* Cars List */}
       {isLoading ? (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-          <CircularProgress />
-        </Box>
+        <CircularProgress sx={{ mt: 4 }} />
       ) : error ? (
-        <Typography color="black" textAlign="center">
-          {t("NoCarsFound")}
-        </Typography>
+        <Typography color="error">{t("NoCarsFound")}</Typography>
       ) : (
         <>
           <Grid container spacing={2}>
-            {data?.items?.map((car) => (
+            {(searchQuery ? searchData?.items : data?.items)?.map((car) => (
               <Grid item xs={12} key={car.id}>
                 <AdminProductCard
-                  onEdit={() => handleEdit(car.id)}
-                  onDelete={() => {
-                    if (window.confirm(t("Are you sure you want to delete this car?"))) {
-                      deleteCar(car.id);
-                      setTimeout(() => {
-                        window.location.reload();
-                      }, 500);
-                    }
-                  }}
                   car={car}
+                  onEdit={() => handleEdit(car.id)}
+                  onDelete={() => handleDeleteCar(car.id)}
                 />
               </Grid>
             ))}
           </Grid>
 
-          <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-            <Pagination
-              count={data?.totalPages}
-              page={currentPage}
-              onChange={handlePageChange}
-              color="primary"
-            />
-          </Box>
+          {!searchQuery && (
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+              <Pagination
+                count={data?.totalPages}
+                page={currentPage}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Box>
+          )}
         </>
       )}
 
       {/* Add Car Modal */}
-      <Dialog open={openAddCar} onClose={handleCloseAddCar} fullWidth maxWidth="md">
+      <Dialog open={openAddCar} onClose={() => setOpenAddCar(false)} fullWidth maxWidth="md">
         <DialogTitle>{t("Add Car")}</DialogTitle>
         <DialogContent>
           <CarForm onSubmit={handleCarSubmit} brandData={brandsData} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseAddCar} color="secondary">
+          <Button onClick={() => setOpenAddCar(false)} color="secondary">
             {t("Cancel")}
           </Button>
         </DialogActions>
@@ -221,7 +234,8 @@ const Cars = () => {
       <CarEditForm
         open={openEdit}
         brandData={brandsData}
-        onClose={handleCloseEdit}
+        onSubmit={handleEditCar}
+        onClose={() => setOpenEdit(false)}
         id={selectedCarId}
       />
     </Box>
