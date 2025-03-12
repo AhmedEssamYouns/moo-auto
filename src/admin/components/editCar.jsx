@@ -28,7 +28,7 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
   const [deletedImages, setDeletedImages] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [imageError, setImageError] = useState(false);
-
+  const [previewImages, setPreviewImages] = useState([]);
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -46,6 +46,7 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
         features: car.features || [],
         currentImages: car.images || [],
       });
+      setPreviewImages(car.images || []);
     }
   }, [car]);
 
@@ -74,17 +75,10 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
   };
 
   const handleDeleteImage = (index) => {
-    setDeletedImages((prev) => [...prev, formData.currentImages[index]]);
-    setFormData((prev) => ({
-      ...prev,
-      currentImages: prev.currentImages.filter((_, i) => i !== index),
-    }));
+    setDeletedImages((prev) => [...prev, previewImages[index]]);
+    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
   };
-  const handleImageUpload = (event) => {
-    const files = Array.from(event.target.files);
-    setSelectedImages((prev) => [...prev, ...files]);
-  };
-
+ 
   const handleColorChange = (index, field, value) => {
     setFormData((prev) => {
       const colors = [...prev.colors];
@@ -116,8 +110,21 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
   };
 
 
+  
+  const handleImageUpload = (event) => {
+    const files = Array.from(event.target.files);
+    if (files.length === 0) return;
+
+    const newImagePreviews = files.map((file) => URL.createObjectURL(file));
+
+    setSelectedImages((prev) => [...prev, ...files]);
+    setPreviewImages((prev) => [...prev, ...newImagePreviews]);
+
+    event.target.value = ""; // Reset input to allow re-uploading the same image
+  };
+
   const handleFormSubmit = () => {
-    if (formData.currentImages.length === 0 && selectedImages.length === 0) {
+    if (previewImages.length === 0) {
       setImageError(true);
       return;
     }
@@ -174,16 +181,15 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
             </Typography>
           )}
 
-          {formData.currentImages.map((img, index) => (
-            <Box
-              key={index}
-              sx={{ position: "relative", display: "inline-block" }}
-            >
-              <img
-                src={img}
-                alt={`Car ${index + 1}`}
-                style={{ width: "120px", height: "80px", borderRadius: 4 }}
-              />
+{imageError && (
+            <Typography color="error" sx={{ mt: 1 }}>
+              Please upload at least one image.
+            </Typography>
+          )}
+
+          {previewImages.map((img, index) => (
+            <Box key={index} sx={{ position: "relative", display: "inline-block" }}>
+              <img src={img} alt={`Car ${index + 1}`} style={{ width: "120px", height: "80px", borderRadius: 4 }} />
               <IconButton
                 size="small"
                 sx={{
@@ -202,13 +208,7 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
 
         <Button variant="contained" component="label" fullWidth>
           Upload Images
-          <input
-            type="file"
-            hidden
-            multiple
-            accept="image/*"
-            onChange={handleImageUpload}
-          />
+          <input type="file" hidden multiple accept="image/*" onChange={handleImageUpload} />
         </Button>
 
         <Typography fontWeight="bold">Car Name</Typography>
