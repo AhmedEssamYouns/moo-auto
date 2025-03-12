@@ -22,7 +22,7 @@ import { CarCategory } from "../../types/e-nums";
 import { useLanguage } from "../../contexts/LanguageContext";
 
 const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
-  const { data: car, isLoading } = useCar(id);
+  const { data: car, isLoading ,refetch} = useCar(id);
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [deletedImages, setDeletedImages] = useState([]);
@@ -30,7 +30,19 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
   const [imageError, setImageError] = useState(false);
   const [previewImages, setPreviewImages] = useState([]);
   const { t } = useLanguage();
-
+useEffect(() => {
+  refetch();
+}, []);
+  useEffect(() => {
+    if (!open) {
+      setFormData(null);
+      setDeletedImages([]);
+      setPreviewImages([]);
+      setSelectedImages([]);
+      setImageError(false);
+      refetch();
+    }
+  }, [open]);
   useEffect(() => {
     if (car) {
       setFormData({
@@ -78,7 +90,7 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
     setDeletedImages((prev) => [...prev, previewImages[index]]);
     setPreviewImages((prev) => prev.filter((_, i) => i !== index));
   };
- 
+
   const handleColorChange = (index, field, value) => {
     setFormData((prev) => {
       const colors = [...prev.colors];
@@ -109,8 +121,6 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
     }));
   };
 
-
-  
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
     if (files.length === 0) return;
@@ -181,15 +191,22 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
             </Typography>
           )}
 
-{imageError && (
+          {imageError && (
             <Typography color="error" sx={{ mt: 1 }}>
               Please upload at least one image.
             </Typography>
           )}
 
           {previewImages.map((img, index) => (
-            <Box key={index} sx={{ position: "relative", display: "inline-block" }}>
-              <img src={img} alt={`Car ${index + 1}`} style={{ width: "120px", height: "80px", borderRadius: 4 }} />
+            <Box
+              key={index}
+              sx={{ position: "relative", display: "inline-block" }}
+            >
+              <img
+                src={img}
+                alt={`Car ${index + 1}`}
+                style={{ width: "120px", height: "80px", borderRadius: 4 }}
+              />
               <IconButton
                 size="small"
                 sx={{
@@ -208,7 +225,13 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
 
         <Button variant="contained" component="label" fullWidth>
           Upload Images
-          <input type="file" hidden multiple accept="image/*" onChange={handleImageUpload} />
+          <input
+            type="file"
+            hidden
+            multiple
+            accept="image/*"
+            onChange={handleImageUpload}
+          />
         </Button>
 
         <Typography fontWeight="bold">Car Name</Typography>

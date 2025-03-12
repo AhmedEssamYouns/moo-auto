@@ -83,6 +83,9 @@ const Login = () => {
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("refreshToken", data.refreshToken);
+      if(data.roles[0]){
+        localStorage.setItem("role", data.roles[0]);
+      }
       localStorage.setItem(
         "user",
         JSON.stringify({
