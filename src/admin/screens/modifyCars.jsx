@@ -51,7 +51,9 @@ const Cars = () => {
   const { data, isLoading, error, refetch } = useCars(filters);
   const { data: brandsData, isLoading: brandsLoading } = useBrands();
   const { data: searchData, refetch: searchCars } = useSearch(searchQuery);
-
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isOwner = user?.roles.includes("Owner");
+  const isEditor = user?.roles.includes("Editor");
   const handlePageChange = (_, value) => {
     setCurrentPage(value);
     setFilters((prev) => ({ ...prev, PageNumber: value }));
@@ -167,7 +169,8 @@ const Cars = () => {
         onChange={handleSearch}
         sx={{ mb: 3, maxWidth: 500 }}
       />
-
+{isOwner || isEditor && (
+  
       <Button
         variant="contained"
         startIcon={<AddIcon />}
@@ -175,6 +178,7 @@ const Cars = () => {
       >
         {t("Add Car")}
       </Button>
+)}
 
       {/* Filters */}
       {!brandsLoading && (

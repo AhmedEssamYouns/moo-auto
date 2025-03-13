@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import {
-  TextField,
   Button,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   Container,
   Typography,
   CircularProgress,
@@ -13,91 +8,73 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  List,
-  ListItem,
-  ListItemText,
-  FormHelperText,
-  Box,
-  Alert,
 } from "@mui/material";
-import { addUser } from "../services/adminServices";
 import { useUsers } from "../hooks/useAdmin";
-
-const rolesList = ["Admin", "Editor", "Owner"];
-
-const passwordRules = [
-  "At least 8 characters",
-  "At least one uppercase letter",
-  "At least one number",
-  "At least one special character",
-];
-
-const passwordRegex =
-  /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+import UserList from "../components/UserList";
+import UserForm from "../components/UserForm";
+import EditUserDialog from "../components/edituser";
+import { addUser, deleteUser } from "../services/adminServices";
 
 const ModifyUserScreen = () => {
   const { data: users, isLoading, error, refetch } = useUsers();
   const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    displayName: "",
-    phoneNumber: "",
-    password: "",
-    roles: [],
-  });
-  const [errors, setErrors] = useState({});
+  const [editUser, setEditUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [passwordTouched, setPasswordTouched] = useState(false);
 
-  const validateForm = () => {
-    let newErrors = {};
-    if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.displayName)
-      newErrors.displayName = "Display name is required";
-    if (!formData.phoneNumber)
-      newErrors.phoneNumber = "Phone number is required";
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (!passwordRegex.test(formData.password)) {
-      newErrors.password = "Password does not meet requirements";
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log("admin", user);
+
+  // Check if the logged-in user is an owner and prevent self-edit/delete
+  const isOwner = user?.roles.includes("Owner");
+
+  if(!isOwner){
+    return (
+      <Container maxWidth="lg">
+        <Typography variant="h5" fontWeight="bold" gutterBottom>
+          Users
+        </Typography>
+        <Typography color="error">You are not authorized to access this page.</Typography>
+      </Container>
+    );
+  }
+
+  const handleDeleteUser = async (id) => {
+    if (user.id === id) {
+      alert("You cannot delete your own account.");
+      return;
     }
-    if (formData.roles.length === 0) newErrors.roles = "Role is required";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    if (!window.confirm("Are you sure you want to delete this user?")) return;
+    try {
+      await deleteUser(id);
+      refetch();
+    } catch (error) {
+      console.error("Failed to delete user", error);
+    }
   };
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-
-    if (name === "password") setPasswordTouched(true);
-  };
-
-  const handleRoleChange = (event) => {
-    setFormData((prev) => ({ ...prev, roles: [event.target.value] }));
-  };
-
-  const handleSubmit = async () => {
-    if (!validateForm()) return;
-
+  const handleSubmit = async (formData) => {
     setLoading(true);
     try {
       await addUser(formData);
       setOpen(false);
       refetch();
     } catch (err) {
-      alert(err.response.data.detail);
+      alert(err.response?.data?.detail);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleEditSuccess = () => {
+    setEditUser(null);
+    refetch();
+  };
+
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="lg">
       <Typography variant="h5" fontWeight="bold" gutterBottom>
         Users
       </Typography>
-
       <Button
         variant="contained"
         color="primary"
@@ -112,105 +89,19 @@ const ModifyUserScreen = () => {
       ) : error || !users || users.length === 0 ? (
         <Typography color="error">No users found</Typography>
       ) : (
-        <List>
-          {users.map((user) => (
-            <ListItem key={user.id}>
-              <ListItemText
-                primary={user.displayName}
-                secondary={`${user.email} - ${user.roles.join(", ")}`}
-              />
-            </ListItem>
-          ))}
-        </List>
+        <UserList
+          users={users}
+          onDelete={handleDeleteUser}
+          onEdit={setEditUser}
+          isOwner={isOwner}
+        />
       )}
 
+      {/* Add User Dialog */}
       <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>Modify User</DialogTitle>
+        <DialogTitle>Add User</DialogTitle>
         <DialogContent>
-          <TextField
-            fullWidth
-            label="Email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            margin="normal"
-            error={!!errors.email}
-            helperText={errors.email}
-          />
-          <TextField
-            fullWidth
-            label="Display Name"
-            name="displayName"
-            value={formData.displayName}
-            onChange={handleChange}
-            margin="normal"
-            error={!!errors.displayName}
-            helperText={errors.displayName}
-          />
-          <TextField
-            fullWidth
-            label="Phone Number"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            margin="normal"
-            error={!!errors.phoneNumber}
-            helperText={errors.phoneNumber}
-          />
-
-          <FormControl fullWidth margin="normal" error={!!errors.roles}>
-            <InputLabel>Role</InputLabel>
-            <Select
-              name="roles"
-              value={formData.roles[0] || ""}
-              onChange={handleRoleChange}
-            >
-              {rolesList.map((role) => (
-                <MenuItem key={role} value={role}>
-                  {role}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText>{errors.roles}</FormHelperText>
-          </FormControl>
-          <TextField
-            fullWidth
-            type="password"
-            label="Password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            margin="normal"
-            error={!!errors.password}
-            helperText={errors.password}
-          />
-
-          {/* Password rules UI */}
-          <Box mt={1}>
-            <Typography variant="body2" color="textSecondary">
-              Password must contain:
-            </Typography>
-            {passwordRules.map((rule, index) => {
-              const isValid = new RegExp(passwordRegex.source).test(
-                formData.password
-              );
-              return (
-                <Typography
-                  key={index}
-                  variant="body2"
-                  color={
-                    passwordTouched
-                      ? isValid
-                        ? "success.main"
-                        : "error.main"
-                      : "textSecondary"
-                  }
-                >
-                  • {rule}
-                </Typography>
-              );
-            })}
-          </Box>
+          <UserForm onSubmit={handleSubmit} loading={loading} />
         </DialogContent>
         <DialogActions>
           <Button
@@ -220,16 +111,19 @@ const ModifyUserScreen = () => {
           >
             Cancel
           </Button>
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            color="primary"
-            disabled={loading}
-          >
-            {loading ? <CircularProgress size={24} /> : "Save"}
-          </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Edit User Dialog */}
+      {editUser && (
+        <EditUserDialog
+          isOwner={isOwner ? user.id : false}
+          open={!!editUser}
+          onClose={() => setEditUser(null)}
+          user={editUser}
+          onEditSuccess={handleEditSuccess}
+        />
+      )}
     </Container>
   );
 };

@@ -31,6 +31,16 @@ const sidebarItems = [
 const Sidebar = ({ open, toggleDrawer }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery("(max-width: 1000px)");
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log("admin", user);
+
+  // Check if the logged-in user is an owner
+  const isOwner = user?.roles.includes("Owner");
+  
+  // Filter sidebar items to show "Modify Admins" only if the user is an owner
+  const filteredSidebarItems = sidebarItems.filter(item => 
+    item.text !== "Modify Admins" || isOwner
+  );
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -64,7 +74,7 @@ const Sidebar = ({ open, toggleDrawer }) => {
         </Toolbar>
 
         <List>
-          {sidebarItems.map((item) => (
+          {filteredSidebarItems.map((item) => (
             <ListItem
               button
               key={item.text}

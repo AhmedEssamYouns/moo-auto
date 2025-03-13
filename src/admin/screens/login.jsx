@@ -83,7 +83,7 @@ const Login = () => {
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("refreshToken", data.refreshToken);
-      if(data.roles[0]){
+      if (data.roles[0]) {
         localStorage.setItem("role", data.roles[0]);
       }
       localStorage.setItem(
@@ -92,6 +92,9 @@ const Login = () => {
           id: data.id,
           email: data.email,
           userName: data.userName,
+          displayName: data.displayName,
+          phoneNumber: data.phoneNumber,
+          roles: data.roles,
         })
       );
 
@@ -119,9 +122,8 @@ const Login = () => {
       <Box sx={{ width: "100%" }}>
         <img
           src={logo}
-          
           alt="Admin Logo"
-          style={{ width: "100%", height: "auto",borderRadius:"22px" }}
+          style={{ width: "100%", height: "auto", borderRadius: "22px" }}
         />
       </Box>
       <Paper

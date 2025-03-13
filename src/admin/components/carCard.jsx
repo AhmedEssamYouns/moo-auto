@@ -18,6 +18,11 @@ const AdminProductCard = ({ car, onEdit, onDelete }) => {
   const isDarkMode = theme.palette.mode === "dark";
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isOwner = user?.roles.includes("Owner");
+  const isEditor = user?.roles.includes("Editor");
+  const isAdmin = user?.roles.includes("Admin");
+
   return (
     <Card
       sx={{
@@ -98,12 +103,21 @@ const AdminProductCard = ({ car, onEdit, onDelete }) => {
 
       {/* Action Buttons */}
       <Box sx={{ display: "flex", flexDirection: "column", p: 2, gap: 1 }}>
-        <Button variant="contained" color="primary" onClick={() => onEdit(car.id)} startIcon={<EditIcon />}>
-          Edit
-        </Button>
-        <Button variant="contained" color="error" onClick={() => onDelete(car.id)} startIcon={<DeleteIcon />}>
-          Delete
-        </Button>
+        {isOwner && (
+          <>
+            <Button variant="contained" color="primary" onClick={() => onEdit(car.id)} startIcon={<EditIcon />}>
+              Edit
+            </Button>
+            <Button variant="contained" color="error" onClick={() => onDelete(car.id)} startIcon={<DeleteIcon />}>
+              Delete
+            </Button>
+          </>
+        )}
+        {isEditor && !isOwner && (
+          <Button variant="contained" color="primary" onClick={() => onEdit(car.id)} startIcon={<EditIcon />}>
+            Edit
+          </Button>
+        )}
       </Box>
 
       {/* Snackbar for Copy Success */}

@@ -62,6 +62,11 @@ const ModifyBrands = () => {
   const handleFileChange = (e) => {
     setBrandImage(e.target.files[0]);
   };
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isOwner = user?.roles.includes("Owner");
+  const isEditor = user?.roles.includes("Editor");
+  const isAdmin = user?.roles.includes("Admin");
+
 
   const handleAddOrUpdateBrand = async () => {
     setLoading(true);
@@ -98,6 +103,7 @@ const ModifyBrands = () => {
             Modify Brands
           </Typography>
         </Grid>
+        {isOwner || isEditor  && (
         <Grid item xs={12} sm={6} textAlign="right">
           <Button
             variant="contained"
@@ -108,6 +114,7 @@ const ModifyBrands = () => {
             {loading ? <CircularProgress size={24} /> : "Add Brand"}
           </Button>
         </Grid>
+        )}
       </Grid>
 
       <TableContainer component={Paper} sx={{ mt: 2, overflowX: "auto" }}>
@@ -138,6 +145,7 @@ const ModifyBrands = () => {
                   />
                 </TableCell>
                 <TableCell>{brand.name}</TableCell>
+                {isOwner || isEditor && (
                 <TableCell>
                   <Button
                     size="small"
@@ -151,6 +159,8 @@ const ModifyBrands = () => {
                       "Edit"
                     )}
                   </Button>
+                  {isOwner && (
+                    
                   <Button
                     size="small"
                     color="error"
@@ -164,7 +174,11 @@ const ModifyBrands = () => {
                       "Delete"
                     )}
                   </Button>
+                  )}
+
                 </TableCell>
+                )}
+
               </TableRow>
             ))}
           </TableBody>
