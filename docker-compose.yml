@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    restart: always
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=your-email@example.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: react-app
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.main.rule=Host(`al-muslmi.com`)"
+      - "traefik.http.routers.admin.rule=Host(`admin.al-muslmi.com`)"
+      - "traefik.http.services.react-app.loadbalancer.server.port=80"
