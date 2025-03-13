@@ -6,7 +6,6 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import ShareIcon from "@mui/icons-material/Share";
 import { baseUrl } from "../utils/baseUrl";
 import { useLanguage } from "../contexts/LanguageContext";
-
 const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
   const shareUrl = `${baseUrl}/cars/Shared/${product.id}`;
   console.log("product", JSON.stringify(product, null, 8));
