@@ -169,7 +169,7 @@ const Cars = () => {
         onChange={handleSearch}
         sx={{ mb: 3, maxWidth: 500 }}
       />
-{isOwner || isEditor && (
+{(isOwner || isEditor) && (
   
       <Button
         variant="contained"

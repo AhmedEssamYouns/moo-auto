@@ -28,13 +28,13 @@ import { getProviders } from "../admin/services/adminServices";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 const InstallmentServicesScreen = () => {
-  const { t } = useLanguage();
+  const { t,language } = useLanguage();
   const [providers, setProviders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [success, setSuccess] = useState(false);
   const [monthFilter, setMonthFilter] = useState([6, 36]); // Default filter range (6 to 36 months)
-  const [interestFilter, setInterestFilter] = useState(""); // Filter for interest
-  const [feeFilter, setFeeFilter] = useState(""); // Filter for processing fee
+  const [interestFilter, setInterestFilter] = useState(0); // Default interest filter
+  const [feeFilter, setFeeFilter] = useState(0); // Default processing fee filter
 
   // Fetch Providers and Installment Plans from API
   useEffect(() => {
@@ -60,13 +60,13 @@ const InstallmentServicesScreen = () => {
   };
 
   // Handle Interest Filter Change
-  const handleInterestFilterChange = (event) => {
-    setInterestFilter(event.target.value);
+  const handleInterestFilterChange = (event, newValue) => {
+    setInterestFilter(newValue);
   };
 
   // Handle Fee Filter Change
-  const handleFeeFilterChange = (event) => {
-    setFeeFilter(event.target.value);
+  const handleFeeFilterChange = (event, newValue) => {
+    setFeeFilter(newValue);
   };
 
   // Filter providers based on the search term and month range
@@ -80,8 +80,8 @@ const InstallmentServicesScreen = () => {
       (plan) =>
         plan.months >= monthFilter[0] &&
         plan.months <= monthFilter[1] &&
-        (interestFilter ? plan.interest === interestFilter : true) &&
-        (feeFilter ? plan.processingFee === feeFilter : true)
+        plan.interest >= interestFilter &&
+        plan.processingFee <= feeFilter
     );
   };
 
@@ -125,40 +125,52 @@ const InstallmentServicesScreen = () => {
       />
 
       {/* Interest Filter */}
-      <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel>{t("Filter by Interest (%)")}</InputLabel>
-        <Select
-          value={interestFilter}
-          onChange={handleInterestFilterChange}
-          label={t("Filter by Interest (%)")}
-        >
-          <MenuItem value="">{t("All")}</MenuItem>
-          <MenuItem value={5}>5%</MenuItem>
-          <MenuItem value={10}>10%</MenuItem>
-          <MenuItem value={15}>15%</MenuItem>
-        </Select>
-      </FormControl>
+      <Typography variant="h6" gutterBottom>
+        {t("Filter by Interest (%)")}
+      </Typography>
+      <Slider
+        value={interestFilter}
+        onChange={handleInterestFilterChange}
+        valueLabelDisplay="auto"
+        valueLabelFormat={(value) => `${value}%`}
+        min={0}
+        max={20}
+        step={1}
+        marks={[
+          { value: 0, label: "0%" },
+          { value: 5, label: "5%" },
+          { value: 10, label: "10%" },
+          { value: 15, label: "15%" },
+          { value: 20, label: "20%" },
+        ]}
+        sx={{ mb: 3 }}
+      />
 
       {/* Processing Fee Filter */}
-      <FormControl fullWidth sx={{ mb: 3 }}>
-        <InputLabel>{t("Filter by Processing Fee (%)")}</InputLabel>
-        <Select
-          value={feeFilter}
-          onChange={handleFeeFilterChange}
-          label={t("Filter by Processing Fee (%)")}
-        >
-          <MenuItem value="">{t("All")}</MenuItem>
-          <MenuItem value={1}>1%</MenuItem>
-          <MenuItem value={2}>2%</MenuItem>
-          <MenuItem value={3}>3%</MenuItem>
-        </Select>
-      </FormControl>
+      <Typography variant="h6" gutterBottom>
+        {t("Filter by Processing Fee (%)")}
+      </Typography>
+      {/* <Slider
+        value={feeFilter}
+        onChange={handleFeeFilterChange}
+        valueLabelDisplay="auto"
+        valueLabelFormat={(value) => `${value}%`}
+        min={0}
+        max={5}
+        step={0.5}
+        marks={[
+          { value: 0, label: "0%" },
+          { value: 1, label: "1%" },
+          { value: 2, label: "2%" },
+          { value: 3, label: "3%" },
+          { value: 4, label: "4%" },
+          { value: 5, label: "5%" },
+        ]}
+        sx={{ mb: 3 }}
+      /> */}
 
       {/* Table Container */}
-      <TableContainer
-        component={Paper}
-        sx={{ maxHeight: "500px", overflowY: "auto" }}
-      >
+     
         <Table sx={{ minWidth: 650 }} aria-label="installment services table">
           <TableHead>
             <TableRow>
@@ -219,8 +231,8 @@ const InstallmentServicesScreen = () => {
                             <TableBody>
                               {plans.map((plan) => (
                                 <TableRow key={plan.id}>
-                                  <TableCell>
-                                    {t(`${plan.months} Months Plan`)}
+                                  <TableCell dir={language==="en" ? "ltr" : "rtl"}>
+                                    {language==="en" ? `${plan.months} Months Plan` : `${plan.months} اشهر` }
                                   </TableCell>
                                   <TableCell>{plan.months}</TableCell>
                                   <TableCell>{plan.interest}</TableCell>
@@ -238,7 +250,6 @@ const InstallmentServicesScreen = () => {
             )}
           </TableBody>
         </Table>
-      </TableContainer>
 
       {/* Snackbar for success message */}
       <Snackbar
