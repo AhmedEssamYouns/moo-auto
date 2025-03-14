@@ -26,7 +26,7 @@ jobs:
             echo "Dockerfile not found!"
             exit 1
           fi
-          docker build -t registry.almosallamy-automotive.com/almosallamy-react:latest -f Dockerfile .
+          docker build -t registry.almosallamy-automotive.com/almosallamy-react:latest -f ./Dockerfile .
 
       - name: Push the Docker image
         run: docker push registry.almosallamy-automotive.com/almosallamy-react:latest
