@@ -92,7 +92,7 @@ export const getProvidersWithoutPlan = async () => {
 }
 export const addInstallmentPlan = async (providerId, plan) => {
   const response = await apiService.post(
-    `/api/installment-providers`,
+    `/api/installment-plans`,
     plan,
     {
       headers: { "Content-Type": "application/json" },
