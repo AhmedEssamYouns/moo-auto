@@ -1,28 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Grid,
-  Card,
-  CardMedia,
-  CardContent,
   Typography,
-  Chip,
-  IconButton,
-  Button,
+  CircularProgress,
+  TextField,
+  InputAdornment,
   useTheme,
   useMediaQuery,
-  CircularProgress,
 } from "@mui/material";
+import { Search as SearchIcon } from "@mui/icons-material";
 import { useLanguage } from "../contexts/LanguageContext";
 import ProductCard from "./productItem";
 import { useLatestCars } from "../services/hooks/useCards";
 
-const BestSelling = (isChild = false) => {
+const BestSelling = ({ isChild = false, withSearch = true }) => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
   const isTablet = useMediaQuery("(max-width: 1500px)");
-  const { t } = useLanguage(); // Get translation function
+  const { t } = useLanguage();
   const { data: cars, isLoading } = useLatestCars();
+  const [searchTerm, setSearchTerm] = useState("");
+
   if (isLoading) {
     return (
       <Box
@@ -35,10 +34,13 @@ const BestSelling = (isChild = false) => {
       </Box>
     );
   }
+
+  const filteredCars = cars?.filter((car) =>
+    car.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    
-    <Box sx={{ p: 4,minHeight: "80vh" }}>
-      <>
+    <Box sx={{ p: 4, minHeight: "80vh" }}>
       <Typography
         variant="h4"
         sx={{
@@ -50,14 +52,38 @@ const BestSelling = (isChild = false) => {
       >
         {t("NewArrivals")}
       </Typography>
-      <Grid
-        container
-        alignItems={"center"}
-        justifyContent={"center"}
-        spacing={3}
-      >
-        {cars?.length > 0 ? (
-          cars.map((car) => (
+
+      {withSearch && (
+        <Box display="flex" justifyContent="center" mb={3}>
+          <TextField
+            variant="outlined"
+            placeholder={t("search")}
+            fullWidth
+            sx={{
+              maxWidth: 400,
+              backgroundColor: isDarkMode ? "#1E293B" : "#E3F2FD",
+              borderRadius: 2,
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+                "& fieldset": { border: "none" },
+              },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon color="primary" />
+                </InputAdornment>
+              ),
+            }}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </Box>
+      )}
+
+      <Grid container alignItems="center" justifyContent="center" spacing={3}>
+        {filteredCars?.length > 0 ? (
+          filteredCars.map((car) => (
             <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={car.id}>
               <ProductCard car={car} />
             </Grid>
@@ -68,7 +94,6 @@ const BestSelling = (isChild = false) => {
           </Typography>
         )}
       </Grid>
-      </>
     </Box>
   );
 };

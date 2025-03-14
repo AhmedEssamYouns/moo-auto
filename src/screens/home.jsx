@@ -12,7 +12,8 @@ import {
   Button,
   ButtonBase,
 } from "@mui/material";
-import { ReactComponent as CarSVG } from "../assets/svgs/home.svg";
+import { ReactComponent as CarSVG } from "../assets/svgs/home2.svg";
+import { ReactComponent as CarToyta } from "../assets/svgs/car.svg";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import CategoryIcon from "@mui/icons-material/Category";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
@@ -38,7 +39,6 @@ const HomeScreen = () => {
   const handleClick = () => {
     navigate("/cars-for-sale");
   };
-  
 
   return (
     <Box mb={4}>
@@ -83,15 +83,15 @@ const HomeScreen = () => {
             width: "80%",
             maxWidth: 500,
             opacity: 0,
-            transform: "translateX(100%)",
+            transform: "translateX(-100%)", // Start from left
             animation: "slideIn 0.8s ease-out forwards",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             gap: 2,
             "@keyframes slideIn": {
-              "0%": { opacity: 0, transform: "translateX(100%)" },
-              "100%": { opacity: 1, transform: "translateX(0)" },
+              "0%": { opacity: 0, transform: "translateX(-100%)" }, // Start from left
+              "100%": { opacity: 1, transform: "translateX(0)" }, // Move to normal position
             },
           }}
         >
@@ -140,17 +140,23 @@ const HomeScreen = () => {
         <InfoCard
           bgColor={theme.palette.mode === "dark" ? "#1E293B" : "#E3F2FD"}
           title={t("lookingForCar")}
-          description={t("lookingForCarDesc")}
+          description={
+            <Box display="flex" flexDirection="column" alignItems="center">
+              <Typography>{t("lookingForCarDesc")}</Typography>
+            </Box>
+          }
+          Svg={CarToyta}
           onclick={() => navigate("/cars-for-sale")}
           btn={theme.palette.mode === "dark" ? "#60A5FA" : "#1E40AF"}
           sx={{
-            animation: "slideInLeft 1s ease-out",
-            "@keyframes slideInLeft": {
-              "0%": { transform: "translateX(-100%)", opacity: 0 },
+            animation: "slideInRight 1s ease-out",
+            "@keyframes slideInRight": {
+              "0%": { transform: "translateX(100%)", opacity: 0 },
               "100%": { transform: "translateX(0)", opacity: 1 },
             },
           }}
         />
+
         {/* <InfoCard
           onclick={() => navigate("/cars-for-sale")}
           bgColor={theme.palette.mode === "dark" ? "#3F1D38" : "#FEE2E2"}
@@ -166,7 +172,7 @@ const HomeScreen = () => {
           }}
         /> */}
       </Box>
-      <BestSelling isChild={true} />
+      <BestSelling withSearch={true} isChild={true} />
     </Box>
   );
 };
