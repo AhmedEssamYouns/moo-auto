@@ -9,7 +9,6 @@ import {
   Box,
   useTheme,
   useMediaQuery,
-  Button,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
@@ -32,21 +31,17 @@ const Sidebar = ({ open, toggleDrawer }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery("(max-width: 1000px)");
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log("admin", user);
 
-  // Check if the logged-in user is an owner
   const isOwner = user?.roles.includes("Owner");
-  
-  // Filter sidebar items to show "Modify Admins" only if the user is an owner
-  const filteredSidebarItems = sidebarItems.filter(item => 
-    item.text !== "Modify Admins" || isOwner
+  const filteredSidebarItems = sidebarItems.filter(
+    (item) => item.text !== "Modify Admins" || isOwner
   );
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("user");
-    window.location.href = "/login"; // Redirect to login page
+    window.location.href = "/login";
   };
 
   return (
@@ -55,24 +50,27 @@ const Sidebar = ({ open, toggleDrawer }) => {
       open={isMobile ? open : true}
       onClose={toggleDrawer}
       sx={{
-        width: 250,
+        width: 260,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
-          width: 250,
-          backgroundColor: theme.palette.mode === "dark" ? "#121212" : "#ffffff",
-          color: theme.palette.mode === "dark" ? "#ffffff" : "#000000",
+          width: 260,
+          backgroundColor: "#fff",
+          color: "#000",
           boxShadow: isMobile ? "none" : "2px 0 5px rgba(0,0,0,0.1)",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
+          borderRight: "1px solid #ddd",
         },
       }}
     >
       <Box>
+        {/* Logo */}
         <Toolbar sx={{ display: "flex", justifyContent: "center", p: 2 }}>
-          <img src={logo} alt="Admin Logo" style={{ width: 120, height: "auto" }} />
+          <img src={logo} alt="Admin Logo" style={{ width: 130, height: "auto" }} />
         </Toolbar>
 
+        {/* Sidebar Items */}
         <List>
           {filteredSidebarItems.map((item) => (
             <ListItem
@@ -81,24 +79,38 @@ const Sidebar = ({ open, toggleDrawer }) => {
               component={Link}
               to={item.path}
               sx={{
+                padding: "12px 20px",
                 "&:hover": {
-                  backgroundColor: theme.palette.action.hover,
+                  backgroundColor: "#f5f5f5",
                 },
               }}
             >
-              <ListItemIcon sx={{ color: theme.palette.text.primary }}>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
+              <ListItemIcon sx={{ color: "#000" }}>{item.icon}</ListItemIcon>
+              <ListItemText
+                primary={item.text}
+                sx={{ fontWeight: "bold", color: "#000" }}
+              />
             </ListItem>
           ))}
         </List>
       </Box>
 
-      {/* Logout Button at Bottom */}
-      <ListItem button onClick={handleLogout} sx={{ mb: 2 }}>
-        <ListItemIcon sx={{ color: "red" }}>
+      {/* Logout Button */}
+      <ListItem
+        button
+        onClick={handleLogout}
+        sx={{
+          padding: "12px 20px",
+          "&:hover": { backgroundColor: "#ffe6e6" },
+        }}
+      >
+        <ListItemIcon sx={{ color: "#000" }}>
           <ExitToAppIcon />
         </ListItemIcon>
-        <ListItemText primary="Logout" sx={{ color: "red" }} />
+        <ListItemText
+          primary="Logout"
+          sx={{ fontWeight: "bold", color: "#000" }}
+        />
       </ListItem>
     </Drawer>
   );

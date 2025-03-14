@@ -13,6 +13,8 @@ import {
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import CategoryIcon from "@mui/icons-material/Category";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+
 import TuneIcon from "@mui/icons-material/Tune";
 import { useLanguage } from "../contexts/LanguageContext";
 import PriceRangeDialog from "./PriceRangeDialog";
@@ -145,12 +147,12 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
             />
 
             <FilterItem
-              icon={<CategoryIcon />}
+              icon={<LocalOfferIcon />}
               text={t("allBrands")}
               onClick={() => setOpenDialog(true)}
             />
             <FilterItem
-              icon={<LocalOfferIcon />}
+              icon={<AttachMoneyIcon />}
               text={t("allPrices")}
               onClick={() => setOpenPriceDialog(true)}
             />

@@ -12,6 +12,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Sidebar from "./sideBar";
+import logo from "../../assets/imgs/logo.png";
 
 const AdminLayout = ({ children }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -38,42 +39,48 @@ const AdminLayout = ({ children }) => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      {/* App Bar for Mobile */}
-      <AppBar position="fixed" sx={{ zIndex: 1201 }}>
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          {/* Show Menu Icon on Mobile */}
+      {/* App Bar */}
+      <AppBar position="fixed" sx={{ zIndex: 1201, background: "#fff", boxShadow: "0px 2px 4px rgba(0,0,0,0.1)" }}>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingX: 2 }}>
+          {/* Menu Icon for Mobile */}
           {isMobile && (
-            <IconButton
-              color="inherit"
-              edge="start"
-              onClick={toggleDrawer}
-              sx={{ mr: 2 }}
-            >
+            <IconButton color="primary" edge="start" onClick={toggleDrawer}>
               <MenuIcon />
             </IconButton>
           )}
 
-          <Typography
-            variant="h6"
-            sx={{ cursor: "pointer", color: "inherit", textDecoration: "none" }}
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          >
-            Admin Panel
-          </Typography>
+          {/* Logo and Title */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            <img
+              src={logo}
+              alt="Logo"
+              style={{ height: 50, objectFit: "contain" }}
+            />
+            <Typography
+              variant="h6"
+              sx={{ cursor: "pointer", color: "#333", fontWeight: "bold" }}
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
+            </Typography>
+          </Box>
 
           {/* User Info */}
           {user && (
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography sx={{ mr: 2 }}>{user.userName}</Typography>
-              <IconButton color="inherit" onClick={handleMenuOpen}>
-                <AccountCircleIcon />
+              <Typography sx={{ mr: 2, fontWeight: 500, color: "#333" }}>
+                {user.userName}
+              </Typography>
+              <IconButton color="primary" onClick={handleMenuOpen}>
+                <AccountCircleIcon fontSize="large" />
               </IconButton>
               <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
+                sx={{ mt: 1 }}
               >
-                <MenuItem disabled>{user.email}</MenuItem>
+                <MenuItem disabled sx={{ fontWeight: 500 }}>{user.email}</MenuItem>
+                <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
               </Menu>
             </Box>
           )}

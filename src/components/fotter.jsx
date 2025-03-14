@@ -156,18 +156,18 @@ const Footer = ({ darkMode }) => {
           </Grid>
 
           {/* Right Section - Copyright */}
-          <Grid item xs={12} md={3}>
+          {/* <Grid item xs={12} md={3}>
             <Box sx={{ textAlign: "center", mt: 2 }}>
               <Typography variant="body2">
                 {t(`© ${currentYear} Lama Tech. All Rights Reserved.`)}
               </Typography>
             </Box>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
 
       {/* Bottom Footer Bar */}
-      <Box sx={{ backgroundColor: "#000", color: "#fff", py: 2, mt: 4 }}>
+      {/* <Box sx={{ backgroundColor: "#000", color: "#fff", py: 2, mt: 4 }}>
         <Container>
           <Typography
             variant="body2"
@@ -177,7 +177,7 @@ const Footer = ({ darkMode }) => {
             {`© Created by Lama Tech | ${currentYear} - All Rights Reserved`}
           </Typography>
         </Container>
-      </Box>
+      </Box> */}
     </Box>
   );
 };
