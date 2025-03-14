@@ -17,7 +17,7 @@ jobs:
         run: echo "mypassword" | docker login registry.almosallamy-automotive.com -u "myusername" --password-stdin
 
       - name: Build the Docker image
-        run: docker build -t registry.almosallamy-automotive.com/almosallamy-react:latest .
+        run: docker build -t registry.almosallamy-automotive.com/almosallamy-react:latest -f Dockerfile .
 
       - name: Push the Docker image
         run: docker push registry.almosallamy-automotive.com/almosallamy-react:latest
