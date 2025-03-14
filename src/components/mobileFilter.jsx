@@ -72,7 +72,7 @@ const MobileDrawerFilters = ({
         PaperProps={{ sx: { borderRadius: "20px 20px 0 0", p: 2 } }}
       >
         <Typography variant="h6" sx={{ textAlign: "center", mb: 2 }}>
-          Filter Options
+          {t('filterOptions')}
         </Typography>
 
         {/* Transmission Filter */}

@@ -131,7 +131,7 @@ const ProductsScreen = () => {
         <Typography textAlign="center">{t("Loading brands...")}</Typography>
       ) : brandsError ? (
         <Typography color="error" textAlign="center">
-          {t("Failed to load brands")}
+          {/* {t("Failed to load brands")} */}
         </Typography>
       ) : (
         <Filters
@@ -147,9 +147,7 @@ const ProductsScreen = () => {
           <CircularProgress />
         </Box>
       ) : error ? (
-        <Typography color="black" textAlign="center">
-          {t("NoCarsFound")}
-        </Typography>
+        <Typography textAlign="center">{t("NoCarsFound")}</Typography>
       ) : (
         <>
           {/* Product List */}
