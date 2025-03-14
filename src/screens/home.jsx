@@ -80,11 +80,7 @@ const HomeScreen = () => {
           {/* Big Bold Header */}
           <Typography
             variant="h3"
-            fontFamily={
-              language === "ar"
-                ? "'Marhey', sans-serif"
-                : "'IBM Plex Sans Arabic', sans-serif"
-            }
+            fontFamily={"'IBM Plex Sans Arabic', sans-serif"}
             sx={{
               fontWeight: "bold",
               color: theme.palette.text.primary,
@@ -96,32 +92,34 @@ const HomeScreen = () => {
 
           {/* Car SVG */}
           <Box
-  sx={{
-    width: "80%",
-    maxWidth: 500,
-    opacity: 0,
-    transform:
-      theme.palette.mode === "dark" ? "translateX(-100%)" : "scale(0.8)", // Slide left in dark mode, shrink in light mode
-    animation: theme.palette.mode === "dark"
-      ? "slideIn 0.8s ease-out forwards"
-      : "scaleUp 0.8s ease-out forwards",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 2,
+            sx={{
+              width: "80%",
+              maxWidth: 500,
+              opacity: 0,
+              transform:
+                theme.palette.mode === "dark"
+                  ? "translateX(-100%)"
+                  : "scale(0.8)", // Slide left in dark mode, shrink in light mode
+              animation:
+                theme.palette.mode === "dark"
+                  ? "slideIn 0.8s ease-out forwards"
+                  : "scaleUp 0.8s ease-out forwards",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 2,
 
-    "@keyframes slideIn": {
-      "0%": { opacity: 0, transform: "translateX(-100%)" },
-      "100%": { opacity: 1, transform: "translateX(0)" },
-    },
+              "@keyframes slideIn": {
+                "0%": { opacity: 0, transform: "translateX(-100%)" },
+                "100%": { opacity: 1, transform: "translateX(0)" },
+              },
 
-    "@keyframes scaleUp": {
-      "0%": { opacity: 0, transform: "scale(0.8)" }, // Start small
-      "100%": { opacity: 1, transform: "scale(1)" }, // Grow to normal size
-    },
-  }}
->
-
+              "@keyframes scaleUp": {
+                "0%": { opacity: 0, transform: "scale(0.8)" }, // Start small
+                "100%": { opacity: 1, transform: "scale(1)" }, // Grow to normal size
+              },
+            }}
+          >
             {/* Animated "Explore Now" Button */}
             <Button
               variant="contained"
