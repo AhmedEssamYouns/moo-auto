@@ -41,18 +41,10 @@ const HomeScreen = () => {
   };
 
   return (
-    <Box
-      mb={4}
-      sx={{
-        minHeight: "80vh",
-        overflowY: "scroll",
-        scrollSnapType: "y mandatory",
-      }}
-    >
+    <Box mb={4} sx={{}}>
       <Box
         sx={{
-          minHeight: "80vh",
-          scrollSnapAlign: "start",
+          minHeight: isMobile?"90vh":"80vh",
         }}
       >
         <Box
@@ -205,7 +197,7 @@ const HomeScreen = () => {
         /> */}
         </Box>
       </Box>
-      <Box sx={{ height: "100vh", scrollSnapAlign: "start" }}>
+      <Box >
         <BestSelling withSearch={false} isChild={true} />
       </Box>
     </Box>
