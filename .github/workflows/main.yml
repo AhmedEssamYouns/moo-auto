@@ -1,0 +1,23 @@
+name: Deploy Almosallamy React to Registry
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to private Docker registry
+        run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login registry.almosallamy-automotive.com -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
+
+      - name: Build the Docker image
+        run: docker build -t registry.almosallamy-automotive.com/almosallamy-react:latest .
+
+      - name: Push the Docker image
+        run: docker push registry.almosallamy-automotive.com/almosallamy-react:latest
