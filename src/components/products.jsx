@@ -91,7 +91,12 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
             type="number"
             placeholder={t("minPrice")}
             fullWidth
-            sx={{ maxWidth: 150, backgroundColor: isDarkMode ? "#1E293B" : "#E3F2FD", borderRadius: 2 }}
+            sx={{ maxWidth: 150, backgroundColor: isDarkMode ? "#1E293B" : "#E3F2FD",borderWidth:0,  borderRadius: 2,
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+                "& fieldset": { border: "none" },
+              },
+            }}
             value={minPrice}
             onChange={(e) => setMinPrice(e.target.value)}
           />
@@ -101,7 +106,12 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
             type="number"
             placeholder={t("maxPrice")}
             fullWidth
-            sx={{ maxWidth: 150, backgroundColor: isDarkMode ? "#1E293B" : "#E3F2FD", borderRadius: 2 }}
+            sx={{ maxWidth: 150, backgroundColor: isDarkMode ? "#1E293B" : "#E3F2FD",borderWidth:0,  borderRadius: 2,
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+                "& fieldset": { border: "none" },
+              },
+            }}
             value={maxPrice}
             onChange={(e) => setMaxPrice(e.target.value)}
           />
