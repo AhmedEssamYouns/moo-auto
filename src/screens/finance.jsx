@@ -147,9 +147,9 @@ const InstallmentServicesScreen = () => {
       />
 
       {/* Processing Fee Filter */}
-      <Typography variant="h6" gutterBottom>
+      {/* <Typography variant="h6" gutterBottom>
         {t("Filter by Processing Fee (%)")}
-      </Typography>
+      </Typography> */}
       {/* <Slider
         value={feeFilter}
         onChange={handleFeeFilterChange}
