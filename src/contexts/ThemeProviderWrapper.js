@@ -3,8 +3,8 @@ import { ThemeProvider, createTheme, CssBaseline, TextField } from "@mui/materia
 import { useLanguage } from "./LanguageContext";
 
 const ThemeProviderWrapper = ({ children }) => {
-  const storedMode = localStorage.getItem("darkMode") === "true";
-  const [darkMode, setDarkMode] = useState(storedMode);
+  const storedMode = localStorage.getItem("darkMode");
+  const [darkMode, setDarkMode] = useState(storedMode ? storedMode === "true" : true);
   const { language } = useLanguage();
 
   useEffect(() => {

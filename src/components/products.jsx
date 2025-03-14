@@ -17,7 +17,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import ProductCard from "./productItem";
 import { useLatestCars } from "../services/hooks/useCards";
 
-const BestSelling = (isChild) => {
+const BestSelling = (isChild = false) => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
   const isTablet = useMediaQuery("(max-width: 1500px)");
@@ -38,7 +38,6 @@ const BestSelling = (isChild) => {
   return (
     
     <Box sx={{ p: 4,minHeight: "80vh" }}>
-    {cars?.length > 0 || isChild && (
       <>
       <Typography
         variant="h4"
@@ -70,7 +69,6 @@ const BestSelling = (isChild) => {
         )}
       </Grid>
       </>
-    )}
     </Box>
   );
 };
