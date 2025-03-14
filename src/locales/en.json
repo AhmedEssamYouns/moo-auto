@@ -9,6 +9,8 @@
   "suv": "SUV",
   "hatchback": "Hatchback",
   "coupe": "Coupe",
+  "noCarsFound": "No Cars Found",
+  "noNewCarsFound": "No New Cars Found",
   "convertible": "Convertible",
   "truck": "Truck",
   "electric": "Electric",

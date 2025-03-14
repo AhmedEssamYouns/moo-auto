@@ -17,7 +17,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import ProductCard from "./productItem";
 import { useLatestCars } from "../services/hooks/useCards";
 
-const BestSelling = () => {
+const BestSelling = (isChild) => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
   const isTablet = useMediaQuery("(max-width: 1500px)");
@@ -36,7 +36,10 @@ const BestSelling = () => {
     );
   }
   return (
-    <Box sx={{ p: 4 }}>
+    
+    <Box sx={{ p: 4,minHeight: "80vh" }}>
+    {cars?.length > 0 || isChild && (
+      <>
       <Typography
         variant="h4"
         sx={{
@@ -54,18 +57,20 @@ const BestSelling = () => {
         justifyContent={"center"}
         spacing={3}
       >
-        {cars.length > 0 ? (
+        {cars?.length > 0 ? (
           cars.map((car) => (
             <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={car.id}>
               <ProductCard car={car} />
             </Grid>
           ))
         ) : (
-          <Typography variant="h6" sx={{ textAlign: "center" }}>
-            {t("noCarsFound")}
+          <Typography variant="h6" mt={20} sx={{ textAlign: "center" }}>
+            {t("noNewCarsFound")}
           </Typography>
         )}
       </Grid>
+      </>
+    )}
     </Box>
   );
 };

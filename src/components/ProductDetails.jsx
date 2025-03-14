@@ -5,11 +5,31 @@ import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import ShareIcon from "@mui/icons-material/Share";
 import { baseUrl } from "../utils/baseUrl";
+import DirectionsCarFilledIcon from "@mui/icons-material/DirectionsCarFilled";
+import ElectricCarIcon from "@mui/icons-material/ElectricCar";
+import AirportShuttleIcon from "@mui/icons-material/AirportShuttle";
+import SportsMotorsportsIcon from "@mui/icons-material/SportsMotorsports";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import { useLanguage } from "../contexts/LanguageContext";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import RestoreIcon from "@mui/icons-material/Restore";
 const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
   const shareUrl = `${baseUrl}/cars/Shared/${product.id}`;
   console.log("product", JSON.stringify(product, null, 8));
   const { language } = useLanguage();
+
+  const CarCategory = {
+    1: { name: "Sedan", icon: <DirectionsCarFilledIcon /> },
+    2: { name: "SUV", icon: <AirportShuttleIcon /> },
+    3: { name: "Hatchback", icon: <DirectionsCarFilledIcon /> },
+    4: { name: "Coupe", icon: <DirectionsCarFilledIcon /> },
+    5: { name: "Convertible", icon: <DirectionsCarFilledIcon /> },
+    6: { name: "Truck", icon: <LocalShippingIcon /> },
+    7: { name: "Electric", icon: <ElectricCarIcon /> },
+    8: { name: "Sports", icon: <SportsMotorsportsIcon /> },
+  };
+
+
   const handleShare = async () => {
     if (navigator.share && isMobile) {
       try {
@@ -87,10 +107,10 @@ const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
       <Typography variant="h6" color="#4CAF50" mb={2}>
         {t("price")}: EGP {product.price}
       </Typography>
-
+    
       <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mb: 2 }}>
         <Chip
-          icon={<LocalGasStationIcon />}
+          icon={product.status === 1 ? <CheckCircleIcon /> : <RestoreIcon />}
           label={t(product.status == 1 ? "new" : "used")}
           sx={{
             bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
@@ -105,6 +125,18 @@ const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
             color: isDarkMode ? "white" : "black",
           }}
         />
+          {product.category && CarCategory[product.category] && (
+        <Box sx={{ display: "flex", gap: 1, mb: 2, alignItems: "center" }}>
+          <Chip
+            icon={CarCategory[product.category].icon}
+            label={t(`${CarCategory[product.category].name}`)}
+            sx={{
+              bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
+              color: isDarkMode ? "white" : "black",
+            }}
+          />
+        </Box>
+      )}
       </Box>
 
       <Box
