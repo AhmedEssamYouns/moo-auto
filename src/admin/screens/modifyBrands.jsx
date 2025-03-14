@@ -103,7 +103,7 @@ const ModifyBrands = () => {
             Modify Brands
           </Typography>
         </Grid>
-        {isOwner || isEditor  && (
+        {(isOwner || isEditor)  && (
         <Grid item xs={12} sm={6} textAlign="right">
           <Button
             variant="contained"
@@ -145,7 +145,7 @@ const ModifyBrands = () => {
                   />
                 </TableCell>
                 <TableCell>{brand.name}</TableCell>
-                {isOwner || isEditor && (
+                {(isOwner || isEditor) && (
                 <TableCell>
                   <Button
                     size="small"
