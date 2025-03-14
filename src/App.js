@@ -19,7 +19,7 @@ const App = () => {
   const [showLottie, setShowLottie] = useState(true);
 
   // Check if the current subdomain is "admin"
-  const isAdmin = window.location.hostname.startsWith("admin.");
+  const isAdmin = window.location.hostname.startsWith("dashboard.");
 
   useEffect(() => {
     document.fonts.ready.then(() => setFontsLoaded(true));
