@@ -13,11 +13,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Debug:List files in the workspace
+        run: ls -la
+     
       - name: Log in to private Docker registry
-        run: echo "mypassword" | docker login registry.almosallamy-automotive.com -u "myusername" --password-stdin
+        run: |
+          echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login registry.almosallamy-automotive.com -u "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
 
       - name: Build the Docker image
-        run: docker build -t registry.almosallamy-automotive.com/almosallamy-react:latest -f Dockerfile .
+        run: |
+          if [ ! -f Dockerfile ]; then
+            echo "Dockerfile not found!"
+            exit 1
+          fi
+          docker build -t registry.almosallamy-automotive.com/almosallamy-react:latest -f Dockerfile .
 
       - name: Push the Docker image
         run: docker push registry.almosallamy-automotive.com/almosallamy-react:latest
