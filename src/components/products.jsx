@@ -21,6 +21,8 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
   const { t } = useLanguage();
   const { data: cars, isLoading } = useLatestCars();
   const [searchTerm, setSearchTerm] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
   if (isLoading) {
     return (
@@ -35,9 +37,14 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
     );
   }
 
-  const filteredCars = cars?.filter((car) =>
-    car.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredCars = cars?.filter((car) => {
+    const matchesSearch = car.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const price = car.price || 0; // Ensure price exists
+    const matchesPrice =
+      (minPrice === "" || price >= Number(minPrice)) &&
+      (maxPrice === "" || price <= Number(maxPrice));
+    return matchesSearch && matchesPrice;
+  });
 
   return (
     <Box sx={{ p: 4, minHeight: "80vh" }}>
@@ -54,13 +61,13 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
       </Typography>
 
       {withSearch && (
-        <Box display="flex" justifyContent="center" mb={3}>
+        <Box display="flex" justifyContent="center" gap={2} mb={3} flexWrap="wrap">
           <TextField
             variant="outlined"
             placeholder={t("search")}
             fullWidth
             sx={{
-              maxWidth: 400,
+              maxWidth: 300,
               backgroundColor: isDarkMode ? "#1E293B" : "#E3F2FD",
               borderRadius: 2,
               "& .MuiOutlinedInput-root": {
@@ -77,6 +84,26 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
             }}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+          />
+
+          <TextField
+            variant="outlined"
+            type="number"
+            placeholder={t("minPrice")}
+            fullWidth
+            sx={{ maxWidth: 150, backgroundColor: isDarkMode ? "#1E293B" : "#E3F2FD", borderRadius: 2 }}
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+          />
+
+          <TextField
+            variant="outlined"
+            type="number"
+            placeholder={t("maxPrice")}
+            fullWidth
+            sx={{ maxWidth: 150, backgroundColor: isDarkMode ? "#1E293B" : "#E3F2FD", borderRadius: 2 }}
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
           />
         </Box>
       )}

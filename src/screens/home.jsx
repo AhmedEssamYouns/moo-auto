@@ -41,123 +41,157 @@ const HomeScreen = () => {
   };
 
   return (
-    <Box mb={4}>
+    <Box
+      mb={4}
+      sx={{
+        minHeight: "80vh",
+        overflowY: "scroll",
+        scrollSnapType: "y mandatory",
+      }}
+    >
       <Box
         sx={{
-          pt: 5,
-          pb: 4,
-          px: 2,
-          backgroundColor: theme.palette.background.paper,
-          boxShadow: theme.shadows[3],
-          borderRadius: 6,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          textAlign: "center",
+          minHeight: "80vh",
+          scrollSnapAlign: "start",
         }}
       >
-        {/* Small Header */}
-        <Typography
-          variant="subtitle1"
-          sx={{ color: theme.palette.text.secondary, mb: 1 }}
-        >
-          {t("findCarsNearYou")}
-        </Typography>
-
-        {/* Big Bold Header */}
-        <Typography
-          variant="h3"
-          fontFamily={
-            language === "ar"
-              ? "'Marhey', sans-serif"
-              : "'IBM Plex Sans Arabic', sans-serif"
-          }
-          sx={{ fontWeight: "bold", color: theme.palette.text.primary, mb: 3 }}
-        >
-          {t("findYourDreamCar")}
-        </Typography>
-
-        {/* Car SVG */}
         <Box
           sx={{
-            width: "80%",
-            maxWidth: 500,
-            opacity: 0,
-            transform: "translateX(-100%)", // Start from left
-            animation: "slideIn 0.8s ease-out forwards",
+            pt: 5,
+            pb: 4,
+            px: 2,
+            backgroundColor: theme.palette.background.paper,
+            boxShadow: theme.shadows[3],
+            borderRadius: 6,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: 2,
-            "@keyframes slideIn": {
-              "0%": { opacity: 0, transform: "translateX(-100%)" }, // Start from left
-              "100%": { opacity: 1, transform: "translateX(0)" }, // Move to normal position
-            },
+            textAlign: "center",
           }}
         >
-          {/* Animated "Explore Now" Button */}
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: theme.palette.primary.main,
-              color: "#fff",
-              fontWeight: "bold",
-              px: 3,
-              py: 1,
-              animation: "dance 1.5s infinite ease-in-out",
-              "@keyframes dance": {
-                "0%, 100%": { transform: "scale(1)" },
-                "50%": { transform: "scale(1.1)" },
-              },
-            }}
-            onClick={handleClick}
+          {/* Small Header */}
+          <Typography
+            variant="subtitle1"
+            sx={{ color: theme.palette.text.secondary, mb: 1 }}
           >
-            {t("exploreNow")}
-          </Button>
+            {t("findCarsNearYou")}
+          </Typography>
+
+          {/* Big Bold Header */}
+          <Typography
+            variant="h3"
+            fontFamily={
+              language === "ar"
+                ? "'Marhey', sans-serif"
+                : "'IBM Plex Sans Arabic', sans-serif"
+            }
+            sx={{
+              fontWeight: "bold",
+              color: theme.palette.text.primary,
+              mb: 3,
+            }}
+          >
+            {t("findYourDreamCar")}
+          </Typography>
 
           {/* Car SVG */}
-          <CarSVG
-            width="100%"
-            height="auto"
-            fill={theme.palette.text.primary}
-          />
+          <Box
+  sx={{
+    width: "80%",
+    maxWidth: 500,
+    opacity: 0,
+    transform:
+      theme.palette.mode === "dark" ? "translateX(-100%)" : "scale(0.8)", // Slide left in dark mode, shrink in light mode
+    animation: theme.palette.mode === "dark"
+      ? "slideIn 0.8s ease-out forwards"
+      : "scaleUp 0.8s ease-out forwards",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 2,
+
+    "@keyframes slideIn": {
+      "0%": { opacity: 0, transform: "translateX(-100%)" },
+      "100%": { opacity: 1, transform: "translateX(0)" },
+    },
+
+    "@keyframes scaleUp": {
+      "0%": { opacity: 0, transform: "scale(0.8)" }, // Start small
+      "100%": { opacity: 1, transform: "scale(1)" }, // Grow to normal size
+    },
+  }}
+>
+
+            {/* Animated "Explore Now" Button */}
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: theme.palette.primary.main,
+                color: "#fff",
+                fontWeight: "bold",
+                px: 3,
+                py: 1,
+                animation: "dance 1.5s infinite ease-in-out",
+                "@keyframes dance": {
+                  "0%, 100%": { transform: "scale(1)" },
+                  "50%": { transform: "scale(1.1)" },
+                },
+              }}
+              onClick={handleClick}
+            >
+              {t("exploreNow")}
+            </Button>
+            {theme.palette.mode === "dark" ? (
+              <CarSVG
+                width="100%"
+                height="auto"
+                fill={theme.palette.text.primary}
+              />
+            ) : (
+              <CarToyta
+                width="70%"
+                height="auto"
+                fill={theme.palette.text.primary}
+              />
+            )}
+          </Box>
         </Box>
-      </Box>
 
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 2,
-          alignItems: "center",
-          justifyContent: "center",
-          mt: 4,
-          width: "100%",
-          mx: "auto",
-          textAlign: "center",
-        }}
-      >
-        <InfoCard
-          bgColor={theme.palette.mode === "dark" ? "#1E293B" : "#E3F2FD"}
-          title={t("lookingForCar")}
-          description={
-            <Box display="flex" flexDirection="column" alignItems="center">
-              <Typography>{t("lookingForCarDesc")}</Typography>
-            </Box>
-          }
-          Svg={CarToyta}
-          onclick={() => navigate("/cars-for-sale")}
-          btn={theme.palette.mode === "dark" ? "#60A5FA" : "#1E40AF"}
+        <Box
           sx={{
-            animation: "slideInRight 1s ease-out",
-            "@keyframes slideInRight": {
-              "0%": { transform: "translateX(100%)", opacity: 0 },
-              "100%": { transform: "translateX(0)", opacity: 1 },
-            },
+            pb: 4,
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 2,
+            alignItems: "center",
+            justifyContent: "center",
+            mt: 4,
+            width: "100%",
+            mx: "auto",
+            textAlign: "center",
           }}
-        />
+        >
+          <InfoCard
+            bgColor={theme.palette.mode === "dark" ? "#1E293B" : "#E3F2FD"}
+            title={t("lookingForCar")}
+            description={
+              <Box display="flex" flexDirection="column" alignItems="center">
+                <Typography>{t("lookingForCarDesc")}</Typography>
+              </Box>
+            }
+            Svg={CarToyta}
+            onclick={() => navigate("/cars-for-sale")}
+            btn={theme.palette.mode === "dark" ? "#60A5FA" : "#1E40AF"}
+            sx={{
+              animation: "slideInRight 1s ease-out",
+              "@keyframes slideInRight": {
+                "0%": { transform: "translateX(100%)", opacity: 0 },
+                "100%": { transform: "translateX(0)", opacity: 1 },
+              },
+            }}
+          />
 
-        {/* <InfoCard
+          {/* <InfoCard
           onclick={() => navigate("/cars-for-sale")}
           bgColor={theme.palette.mode === "dark" ? "#3F1D38" : "#FEE2E2"}
           title={t("lookingToSellCar")}
@@ -171,8 +205,11 @@ const HomeScreen = () => {
             },
           }}
         /> */}
+        </Box>
       </Box>
-      <BestSelling withSearch={true} isChild={true} />
+      <Box sx={{ height: "100vh", scrollSnapAlign: "start" }}>
+        <BestSelling withSearch={false} isChild={true} />
+      </Box>
     </Box>
   );
 };
