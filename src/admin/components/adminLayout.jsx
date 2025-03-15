@@ -80,7 +80,6 @@ const AdminLayout = ({ children }) => {
                 sx={{ mt: 1 }}
               >
                 <MenuItem disabled sx={{ fontWeight: 500 }}>{user.email}</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
               </Menu>
             </Box>
           )}
