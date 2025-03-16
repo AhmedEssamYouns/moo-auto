@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Home Page -->
+  <url>
+    <loc>https://almosallamy-automotive.com/</loc>
+    <lastmod>2025-03-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <!-- About Us Page -->
+  <url>
+    <loc>https://almosallamy-automotive.com/about-us</loc>
+    <lastmod>2025-03-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- Cars for Sale Page -->
+  <url>
+    <loc>https://almosallamy-automotive.com/cars-for-sale</loc>
+    <lastmod>2025-03-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- Request a Car Page -->
+  <url>
+    <loc>https://almosallamy-automotive.com/request-car</loc>
+    <lastmod>2025-03-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <!-- New Arrivals Page -->
+  <url>
+    <loc>https://almosallamy-automotive.com/new-arrivals</loc>
+    <lastmod>2025-03-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- Financing Page -->
+  <url>
+    <loc>https://almosallamy-automotive.com/financing</loc>
+    <lastmod>2025-03-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+</urlset>
