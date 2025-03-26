@@ -9,16 +9,19 @@ RUN npm install --legacy-peer-deps
 # Copy the entire project
 COPY . .
 
-# Build the project
+# Prevent React from generating source maps (hides JSX source)
 ENV CI=true
+ENV GENERATE_SOURCEMAP=false
+
+# Build the React project
 RUN npm run build
 
-# Install JavaScript Obfuscator
-RUN npm install -g javascript-obfuscator
+# Install JavaScript Minifier and Obfuscator
+RUN npm install -g terser javascript-obfuscator
 
 # Minify and Obfuscate JavaScript
 RUN find build/static/js -type f -name "*.js" -exec terser {} --compress --mangle --output {} \;
-RUN find build/static/js -type f -name "*.js" -exec javascript-obfuscator {} --output {} \;
+RUN find build/static/js -type f -name "*.js" -exec javascript-obfuscator --compact true --output {} \;
 
 # Serve with Nginx
 FROM nginx:alpine
