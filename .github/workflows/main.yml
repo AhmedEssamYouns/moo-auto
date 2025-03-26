@@ -32,8 +32,7 @@ jobs:
 
       - name: Log in to private Docker registry
         run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login registry.almosallamy-automotive.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
+          echo "mypassword" | docker login registry.almosallamy-automotive.com -u "myusername" --password-stdin
       - name: Build the Docker image
         run: |
           if [ ! -f Dockerfile ]; then
