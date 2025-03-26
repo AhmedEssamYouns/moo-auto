@@ -244,9 +244,11 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
         />
         <Typography fontWeight="bold">Description</Typography>
         <TextField
+          sx={{ whiteSpace: "pre-wrap" }}
           name="description"
           value={formData.description}
           onChange={handleChange}
+          multiline
           fullWidth
           margin="normal"
         />
