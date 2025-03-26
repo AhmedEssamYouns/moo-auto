@@ -10,13 +10,15 @@ RUN npm install --legacy-peer-deps
 COPY . .
 
 # Build the project
+ENV CI=true
 RUN npm run build
 
 # Install JavaScript Obfuscator
 RUN npm install -g javascript-obfuscator
 
-# Obfuscate JavaScript and JSX files in the build folder
-RUN find build/static/js -type f \( -name "*.js" -o -name "*.jsx" \) -exec javascript-obfuscator {} --output {} \;
+# Minify and Obfuscate JavaScript
+RUN find build/static/js -type f -name "*.js" -exec terser {} --compress --mangle --output {} \;
+RUN find build/static/js -type f -name "*.js" -exec javascript-obfuscator {} --output {} \;
 
 # Serve with Nginx
 FROM nginx:alpine
