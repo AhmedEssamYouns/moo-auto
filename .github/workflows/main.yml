@@ -13,8 +13,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Debug: List files in the workspace
-        run: ls -la
+      - name: Debug - List files in the workspace
+        run: ls -la  # <-- Correct indentation and syntax
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
