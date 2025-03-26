@@ -1,15 +1,20 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { ThemeProvider, createTheme, CssBaseline, TextField } from "@mui/material";
 import { useLanguage } from "./LanguageContext";
+const isAdmin = window.location.hostname.startsWith("dashboard.");
 
 const ThemeProviderWrapper = ({ children }) => {
   const storedMode = localStorage.getItem("darkMode");
-  const [darkMode, setDarkMode] = useState(storedMode ? storedMode === "true" : true);
+  const [darkMode, setDarkMode] = useState(
+    isAdmin ? false : storedMode ? storedMode === "true" : true
+  );
   const { language } = useLanguage();
 
   useEffect(() => {
-    localStorage.setItem("darkMode", darkMode);
-  }, [darkMode]);
+    if (!isAdmin) {
+      localStorage.setItem("darkMode", darkMode);
+    }
+  }, [darkMode, isAdmin]);
 
   const theme = useMemo(
     () =>

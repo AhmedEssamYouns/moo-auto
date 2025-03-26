@@ -14,6 +14,18 @@ import {
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+
+const CATEGORY_OPTIONS = [
+  { label: "Sedan", value: 1 },
+  { label: "SUV", value: 2 },
+  { label: "Hatchback", value: 3 },
+  { label: "Coupe", value: 4 },
+  { label: "Convertible", value: 5 },
+  { label: "Truck", value: 6 },
+  { label: "Electric", value: 7 },
+  { label: "Sports", value: 8 },
+];
+
 const CarForm = ({ onSubmit, brandData }) => {
   const { control, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
@@ -171,13 +183,22 @@ const CarForm = ({ onSubmit, brandData }) => {
         />
       </FormControl>
 
-      <Controller
-        name="category"
-        control={control}
-        render={({ field }) => (
-          <TextField {...field} label="Category" type="number" fullWidth required />
-        )}
-      />
+      <FormControl fullWidth>
+  <InputLabel>Category</InputLabel>
+  <Controller
+    name="category"
+    control={control}
+    render={({ field }) => (
+      <Select {...field} fullWidth required>
+        {CATEGORY_OPTIONS.map((category) => (
+          <MenuItem key={category.value} value={category.value}>
+            {category.label}
+          </MenuItem>
+        ))}
+      </Select>
+    )}
+  />
+</FormControl>
 
       <Typography variant="h6">Colors</Typography>
       {colorFields.map((color, index) => (
