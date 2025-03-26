@@ -155,7 +155,7 @@ const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
         <Typography variant="h6" fontWeight="bold">
           {t("overview")}
         </Typography>
-        <Typography variant="body1" color={isDarkMode ? "#ddd" : "#333"}>
+        <Typography variant="body1" color={isDarkMode ? "#ddd" : "#333"}sx={{ whiteSpace: "pre-line"}}>
           {product.description}
         </Typography>
       </Box>

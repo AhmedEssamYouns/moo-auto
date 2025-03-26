@@ -22,6 +22,7 @@ const ProductImages = ({ product, activeIndex, setActiveIndex, isMobile, isDarkM
         position: "relative",
       }}
     >
+      {/* Main Image Slider */}
       <Box
         sx={{
           width: "100%",
@@ -59,7 +60,7 @@ const ProductImages = ({ product, activeIndex, setActiveIndex, isMobile, isDarkM
             transform: "translateY(-50%)",
             backgroundColor: "rgba(0, 0, 0, 0.5)",
             color: "white",
-            '&:hover': { backgroundColor: "rgba(0, 0, 0, 0.7)" },
+            "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" },
           }}
         >
           <ArrowBackIos />
@@ -75,7 +76,7 @@ const ProductImages = ({ product, activeIndex, setActiveIndex, isMobile, isDarkM
             transform: "translateY(-50%)",
             backgroundColor: "rgba(0, 0, 0, 0.5)",
             color: "white",
-            '&:hover': { backgroundColor: "rgba(0, 0, 0, 0.7)" },
+            "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" },
           }}
         >
           <ArrowForwardIos />
@@ -85,11 +86,9 @@ const ProductImages = ({ product, activeIndex, setActiveIndex, isMobile, isDarkM
       {/* Dots Indicator */}
       <Box
         sx={{
-          position: "absolute",
-          bottom: 10,
-          left: "50%",
-          transform: "translateX(-50%)",
           display: "flex",
+          justifyContent: "center",
+          mt: 2,
           gap: 1,
         }}
       >
@@ -106,6 +105,40 @@ const ProductImages = ({ product, activeIndex, setActiveIndex, isMobile, isDarkM
           />
         ))}
       </Box>
+
+      {/* Thumbnail Images */}
+      {!isMobile && (
+        
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          mt: 2,
+          gap: 1,
+        }}
+      >
+        {product.images.map((img, index) => (
+          <Box
+            key={index}
+            component="img"
+            src={img}
+            alt={product.name}
+            onClick={() => setActiveIndex(index)}
+            sx={{
+              width: 80,
+              height: 60,
+              objectFit: "cover",
+              borderRadius: 1,
+              cursor: "pointer",
+              border: activeIndex === index ? "2px solid #1976D2" : "none",
+              transition: "border 0.3s",
+            }}
+          />
+        ))}
+      </Box>
+      )}
+
     </Box>
   );
 };
