@@ -242,6 +242,22 @@ useEffect(() => {
           fullWidth
           margin="normal"
         />
+        <Typography fontWeight="bold">Description</Typography>
+        <TextField
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
+        <Typography fontWeight="bold">Price</Typography>
+        <TextField
+          name="price"
+          value={formData.price}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
 
         <Typography fontWeight="bold">Model</Typography>
         <TextField
