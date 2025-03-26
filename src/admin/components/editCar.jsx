@@ -22,7 +22,7 @@ import { CarCategory } from "../../types/e-nums";
 import { useLanguage } from "../../contexts/LanguageContext";
 
 const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
-  const { data: car, isLoading ,refetch} = useCar(id);
+  const { data: car, isLoading, refetch } = useCar(id);
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [deletedImages, setDeletedImages] = useState([]);
@@ -30,9 +30,9 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
   const [imageError, setImageError] = useState(false);
   const [previewImages, setPreviewImages] = useState([]);
   const { t } = useLanguage();
-useEffect(() => {
-  refetch();
-}, []);
+  useEffect(() => {
+    refetch();
+  }, []);
   useEffect(() => {
     if (!open) {
       setFormData(null);
@@ -252,6 +252,7 @@ useEffect(() => {
         />
         <Typography fontWeight="bold">Price</Typography>
         <TextField
+          multiline
           name="price"
           value={formData.price}
           onChange={handleChange}

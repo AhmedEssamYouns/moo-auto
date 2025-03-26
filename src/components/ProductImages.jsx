@@ -1,8 +1,17 @@
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
+import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import SwipeableViews from "react-swipeable-views";
 
 const ProductImages = ({ product, activeIndex, setActiveIndex, isMobile, isDarkMode }) => {
+  const handleNext = () => {
+    setActiveIndex((prevIndex) => (prevIndex + 1) % product.images.length);
+  };
+
+  const handlePrev = () => {
+    setActiveIndex((prevIndex) => (prevIndex - 1 + product.images.length) % product.images.length);
+  };
+
   return (
     <Box
       sx={{
@@ -10,6 +19,7 @@ const ProductImages = ({ product, activeIndex, setActiveIndex, isMobile, isDarkM
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        position: "relative",
       }}
     >
       <Box
@@ -39,55 +49,59 @@ const ProductImages = ({ product, activeIndex, setActiveIndex, isMobile, isDarkM
           ))}
         </SwipeableViews>
 
-        <Box
+        {/* Left Arrow Button */}
+        <IconButton
+          onClick={handlePrev}
           sx={{
             position: "absolute",
-            bottom: 10,
-            left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex",
-            gap: 1,
+            top: "50%",
+            left: 10,
+            transform: "translateY(-50%)",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            color: "white",
+            '&:hover': { backgroundColor: "rgba(0, 0, 0, 0.7)" },
           }}
         >
-          {product.images.map((_, index) => (
-            <Box
-              key={index}
-              sx={{
-                width: activeIndex === index ? 20 : 10,
-                height: 10,
-                borderRadius: 5,
-                backgroundColor: activeIndex === index ? "#1976D2" : "#BDBDBD",
-                transition: "width 0.3s ease-in-out, background-color 0.3s ease-in-out",
-              }}
-            />
-          ))}
-        </Box>
+          <ArrowBackIos />
+        </IconButton>
+
+        {/* Right Arrow Button */}
+        <IconButton
+          onClick={handleNext}
+          sx={{
+            position: "absolute",
+            top: "50%",
+            right: 10,
+            transform: "translateY(-50%)",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            color: "white",
+            '&:hover': { backgroundColor: "rgba(0, 0, 0, 0.7)" },
+          }}
+        >
+          <ArrowForwardIos />
+        </IconButton>
       </Box>
 
+      {/* Dots Indicator */}
       <Box
         sx={{
+          position: "absolute",
+          bottom: 10,
+          left: "50%",
+          transform: "translateX(-50%)",
           display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          mt: 2,
           gap: 1,
         }}
       >
-        {product.images.map((img, index) => (
+        {product.images.map((_, index) => (
           <Box
             key={index}
-            component="img"
-            src={img}
-            alt={product.name}
-            onClick={() => setActiveIndex(index)}
             sx={{
-              width: 80,
-              height: 60,
-              objectFit: "cover",
-              borderRadius: 1,
-              cursor: "pointer",
-              border: activeIndex === index ? "2px solid #1976D2" : "none",
-              transition: "border 0.3s",
+              width: activeIndex === index ? 20 : 10,
+              height: 10,
+              borderRadius: 5,
+              backgroundColor: activeIndex === index ? "#1976D2" : "#BDBDBD",
+              transition: "width 0.3s ease-in-out, background-color 0.3s ease-in-out",
             }}
           />
         ))}

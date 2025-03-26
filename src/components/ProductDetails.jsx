@@ -97,9 +97,11 @@ const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
 
       <Typography
         variant="h4"
+        width={350}
         fontWeight="bold"
         color={isDarkMode ? "white" : "black"}
         mb={2}
+        
       >
         {product.name} - {product.model}
       </Typography>

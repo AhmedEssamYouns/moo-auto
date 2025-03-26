@@ -14,7 +14,6 @@ import {
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-
 const CATEGORY_OPTIONS = [
   { label: "Sedan", value: 1 },
   { label: "SUV", value: 2 },
@@ -43,17 +42,23 @@ const CarForm = ({ onSubmit, brandData }) => {
     },
   });
 
-  const { fields: colorFields, append: addColor, remove: removeColor } =
-    useFieldArray({
-      control,
-      name: "colors",
-    });
+  const {
+    fields: colorFields,
+    append: addColor,
+    remove: removeColor,
+  } = useFieldArray({
+    control,
+    name: "colors",
+  });
 
-  const { fields: featureFields, append: addFeature, remove: removeFeature } =
-    useFieldArray({
-      control,
-      name: "features",
-    });
+  const {
+    fields: featureFields,
+    append: addFeature,
+    remove: removeFeature,
+  } = useFieldArray({
+    control,
+    name: "features",
+  });
 
   const [selectedImages, setSelectedImages] = useState([]);
 
@@ -78,28 +83,27 @@ const CarForm = ({ onSubmit, brandData }) => {
     formData.append("status", data.status);
     formData.append("description", data.description);
     formData.append("category", data.category);
-  
+
     // Append colors properly
     data.colors.forEach((color, index) => {
       formData.append(`colors[${index}].color`, color.color);
       formData.append(`colors[${index}].isAvailable`, color.isAvailable);
     });
-  
+
     // Append features properly
     data.features.forEach((feature, index) => {
       formData.append(`features[${index}].name`, feature.name);
       formData.append(`features[${index}].value`, feature.value);
     });
-  
+
     // Append images with correct format `images[0]`, `images[1]`, etc.
     selectedImages.forEach((image, index) => {
       formData.append(`images[${index}]`, image);
     });
-  
+
     onSubmit(formData);
   };
-  
-  
+
   return (
     <Box
       component="form"
@@ -135,7 +139,13 @@ const CarForm = ({ onSubmit, brandData }) => {
         name="model"
         control={control}
         render={({ field }) => (
-          <TextField {...field} label="Model" type="number" fullWidth required />
+          <TextField
+            {...field}
+            label="Model"
+            type="number"
+            fullWidth
+            required
+          />
         )}
       />
 
@@ -143,7 +153,13 @@ const CarForm = ({ onSubmit, brandData }) => {
         name="price"
         control={control}
         render={({ field }) => (
-          <TextField {...field} label="Price" type="number" fullWidth required />
+          <TextField
+            {...field}
+            label="Price"
+            type="number"
+            fullWidth
+            required
+          />
         )}
       />
 
@@ -151,7 +167,14 @@ const CarForm = ({ onSubmit, brandData }) => {
         name="description"
         control={control}
         render={({ field }) => (
-          <TextField {...field} label="Description" multiline rows={3} fullWidth required />
+          <TextField
+            {...field}
+            label="Description"
+            multiline
+            rows={3}
+            fullWidth
+            required
+          />
         )}
       />
 
@@ -184,21 +207,21 @@ const CarForm = ({ onSubmit, brandData }) => {
       </FormControl>
 
       <FormControl fullWidth>
-  <InputLabel>Category</InputLabel>
-  <Controller
-    name="category"
-    control={control}
-    render={({ field }) => (
-      <Select {...field} fullWidth required>
-        {CATEGORY_OPTIONS.map((category) => (
-          <MenuItem key={category.value} value={category.value}>
-            {category.label}
-          </MenuItem>
-        ))}
-      </Select>
-    )}
-  />
-</FormControl>
+        <InputLabel>Category</InputLabel>
+        <Controller
+          name="category"
+          control={control}
+          render={({ field }) => (
+            <Select {...field} fullWidth required>
+              {CATEGORY_OPTIONS.map((category) => (
+                <MenuItem key={category.value} value={category.value}>
+                  {category.label}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
+        />
+      </FormControl>
 
       <Typography variant="h6">Colors</Typography>
       {colorFields.map((color, index) => (
@@ -206,7 +229,9 @@ const CarForm = ({ onSubmit, brandData }) => {
           <Controller
             name={`colors.${index}.color`}
             control={control}
-            render={({ field }) => <TextField {...field} label="Color" fullWidth required />}
+            render={({ field }) => (
+              <TextField {...field} label="Color" fullWidth required />
+            )}
           />
           <Controller
             name={`colors.${index}.isAvailable`}
@@ -223,7 +248,9 @@ const CarForm = ({ onSubmit, brandData }) => {
           </IconButton>
         </Box>
       ))}
-      <Button onClick={() => addColor({ color: "", isAvailable: true })}>Add Color</Button>
+      <Button onClick={() => addColor({ color: "", isAvailable: true })}>
+        Add Color
+      </Button>
 
       <Typography variant="h6">Features</Typography>
       {featureFields.map((feature, index) => (
@@ -231,31 +258,53 @@ const CarForm = ({ onSubmit, brandData }) => {
           <Controller
             name={`features.${index}.name`}
             control={control}
-            render={({ field }) => <TextField {...field} label="Feature Name" fullWidth required />}
+            render={({ field }) => (
+              <TextField {...field} label="Feature Name" fullWidth required />
+            )}
           />
           <Controller
             name={`features.${index}.value`}
             control={control}
-            render={({ field }) => <TextField {...field} label="Feature Value" fullWidth required />}
+            render={({ field }) => (
+              <TextField {...field} label="Feature Value" fullWidth required />
+            )}
           />
           <IconButton onClick={() => removeFeature(index)} color="error">
             <DeleteIcon />
           </IconButton>
         </Box>
       ))}
-      <Button onClick={() => addFeature({ name: "", value: "" })}>Add Feature</Button>
+      <Button onClick={() => addFeature({ name: "", value: "" })}>
+        Add Feature
+      </Button>
 
       {/* Image Upload */}
       <Box>
         <Button variant="contained" component="label">
           Upload Images
-          <input type="file" hidden multiple accept="image/*" onChange={handleImageChange} />
+          <input
+            type="file"
+            hidden
+            multiple
+            accept="image/*"
+            onChange={handleImageChange}
+          />
         </Button>
         <Box sx={{ display: "flex", gap: 1, mt: 1, flexWrap: "wrap" }}>
           {selectedImages.map((image, index) => (
             <Box key={index} sx={{ position: "relative" }}>
-              <img src={URL.createObjectURL(image)} alt="Car" width={100} height={100} style={{ borderRadius: 5 }} />
-              <Chip label="Remove" onClick={() => removeImage(index)} sx={{ bgcolor: "red", color: "white" }} />
+              <img
+                src={URL.createObjectURL(image)}
+                alt="Car"
+                width={100}
+                height={100}
+                style={{ borderRadius: 5 }}
+              />
+              <Chip
+                label="Remove"
+                onClick={() => removeImage(index)}
+                sx={{ bgcolor: "red", color: "white" }}
+              />
             </Box>
           ))}
         </Box>
