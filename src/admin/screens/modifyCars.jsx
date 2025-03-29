@@ -109,8 +109,14 @@ const Cars = () => {
   };
 
   const handleEdit = (id) => {
-    setSelectedCarId(id);
-    setOpenEdit(true);
+    setOpenEdit(false); // Close first
+    setTimeout(() => {
+      setSelectedCarId(null); // Reset ID
+      setTimeout(() => {
+        setSelectedCarId(id);
+        setOpenEdit(true); // Reopen after resetting
+      }, 50); // Small delay ensures state change is detected
+    }, 50);
   };
 
   const isMobile = useMediaQuery("(max-width: 1000px)");

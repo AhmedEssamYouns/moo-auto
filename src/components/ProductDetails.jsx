@@ -1,6 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { Box, Typography, Chip, Button } from "@mui/material";
+import { Box, Typography, Chip, Button, Paper, Grid } from "@mui/material";
 import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import ShareIcon from "@mui/icons-material/Share";
@@ -159,45 +159,49 @@ const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
           {product.description}
         </Typography>
       </Box>
+      {product.features &&
+    product.features.length > 0 && (
+      <Paper
+      sx={{
+        maxWidth: isMobile ? "100%" : "700px",
+        mt: 2,
+        px: isMobile ? 2 : 3,
+        py: 3,
+        bgcolor: isDarkMode ? "#333" : "#FFF",
+        borderRadius: 2,
+        boxShadow: 3,
+      }}
+    >
+      <Typography variant="h6" fontWeight="bold" mb={2} color={isDarkMode ? "white" : "black"}>
+        {t("features")}
+      </Typography>
 
-      {product.features && product.features.length > 0 && (
-        <Box
-          sx={{
-            maxWidth: "700px",
-            mt: 2,
-            px: 2,
-            py: 2,
-            bgcolor: isDarkMode ? "#333" : "#FFF",
-            borderRadius: 2,
-            boxShadow: 2,
-          }}
-        >
-          <Typography variant="h6" fontWeight="bold" mb={2}>
-            {t("features")}
-          </Typography>
-
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-            {product.features.map((feature, index) => (
-              <Chip
-                key={index}
-                label={
-                  <Typography variant="body2">
-                    <strong>{feature.name}</strong>: {feature.value}
-                  </Typography>
-                }
-                sx={{
-                  bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
-                  color: isDarkMode ? "white" : "black",
-                  fontSize: "14px",
-                  fontWeight: "500",
-                  px: 1.5,
-                  py: 0.5,
-                }}
-              />
-            ))}
-          </Box>
-        </Box>
-      )}
+      <Grid container spacing={2}>
+        {product.features.map((feature, index) => (
+          <Grid item xs={12} sm={6} key={index}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                p: 1.5,
+                bgcolor: isDarkMode ? "#424242" : "#F5F5F5",
+                borderRadius: 1,
+              }}
+            >
+              <Typography variant="body2" fontWeight="bold" color={isDarkMode ? "white" : "black"}>
+                {feature.name}
+              </Typography>
+              <Typography variant="body2" color={isDarkMode ? "#BBB" : "#555"}>
+                {feature.value}
+              </Typography>
+            </Box>
+          </Grid>
+        ))}
+      </Grid>
+    </Paper>
+    )
+}
       {product.colors && product.colors.length > 0 && (
         <Box
           sx={{
@@ -251,7 +255,7 @@ const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
                   variant="body2"
                   fontWeight="500"
                   sx={{
-                    color: isDarkMode ? "white" : "black",
+                    color: color.color == "white" ? "black" : "white",
                   }}
                 >
                   {color.color}

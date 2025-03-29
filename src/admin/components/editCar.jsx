@@ -30,19 +30,25 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
   const [imageError, setImageError] = useState(false);
   const [previewImages, setPreviewImages] = useState([]);
   const { t } = useLanguage();
+
   useEffect(() => {
-    refetch();
-  }, []);
-  useEffect(() => {
-    if (!open) {
-      setFormData(null);
-      setDeletedImages([]);
-      setPreviewImages([]);
-      setSelectedImages([]);
-      setImageError(false);
+    if (id) {
       refetch();
     }
-  }, [open]);
+  }, [id, refetch]);
+  
+ useEffect(() => {
+  if (!open) {
+    setFormData(null);
+    setDeletedImages([]);
+    setPreviewImages([]);
+    setSelectedImages([]);
+    setImageError(false);
+  } else if (id) {
+    refetch();
+  }
+}, [open, id]);
+
   useEffect(() => {
     if (car) {
       setFormData({

@@ -22,10 +22,12 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  useMediaQuery,
 } from "@mui/material";
 import { useLanguage } from "../contexts/LanguageContext";
 import { getProviders } from "../admin/services/adminServices";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import MobileInstallmentList from "./mobileFinance";
 
 const InstallmentServicesScreen = () => {
   const { t, language } = useLanguage();
@@ -43,16 +45,11 @@ const InstallmentServicesScreen = () => {
       try {
         const response = await getProviders();
         setProviders(response);
-
-        // Calculate max months dynamically
         const allMonths = response.flatMap((provider) =>
           provider.installmentPlans.map((plan) => plan.months)
         );
-
         const maxAvailableMonths = Math.max(...allMonths);
         setMaxMonths(maxAvailableMonths);
-
-        // Adjust the default filter range if needed
         setMonthFilter([6, maxAvailableMonths]);
       } catch (error) {
         console.error("Error fetching providers:", error);
@@ -62,32 +59,22 @@ const InstallmentServicesScreen = () => {
     fetchProviders();
   }, []);
 
-  // Handle Search Change
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // Handle Month Filter Change
   const handleMonthFilterChange = (event, newValue) => {
     setMonthFilter(newValue);
   };
 
-  // Handle Interest Filter Change
   const handleInterestFilterChange = (event, newValue) => {
     setInterestFilter(newValue);
   };
 
-  // Handle Fee Filter Change
-  const handleFeeFilterChange = (event, newValue) => {
-    setFeeFilter(newValue);
-  };
-
-  // Filter providers based on the search term and month range
   const filteredProviders = providers.filter((provider) =>
     provider.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Filter installment plans based on month range, interest, and fee
   const filteredPlans = (provider) => {
     return provider.installmentPlans.filter(
       (plan) =>
@@ -98,8 +85,13 @@ const InstallmentServicesScreen = () => {
     );
   };
 
+  const isMobile = useMediaQuery("(max-width: 1000px)");
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
+      {isMobile ? (
+        <MobileInstallmentList  />
+      ): <>
       <Typography variant="h4" fontWeight="bold" mb={3} textAlign="center">
         {t("Installment Services")}
       </Typography>
@@ -155,31 +147,6 @@ const InstallmentServicesScreen = () => {
         sx={{ mb: 3 }}
       />
 
-      {/* Processing Fee Filter */}
-      {/* <Typography variant="h6" gutterBottom>
-        {t("Filter by Processing Fee (%)")}
-      </Typography> */}
-      {/* <Slider
-        value={feeFilter}
-        onChange={handleFeeFilterChange}
-        valueLabelDisplay="auto"
-        valueLabelFormat={(value) => `${value}%`}
-        min={0}
-        max={5}
-        step={0.5}
-        marks={[
-          { value: 0, label: "0%" },
-          { value: 1, label: "1%" },
-          { value: 2, label: "2%" },
-          { value: 3, label: "3%" },
-          { value: 4, label: "4%" },
-          { value: 5, label: "5%" },
-        ]}
-        sx={{ mb: 3 }}
-      /> */}
-
-      {/* Table Container */}
-
       <Table sx={{ minWidth: 650 }} aria-label="installment services table">
         <TableHead>
           <TableRow>
@@ -202,14 +169,11 @@ const InstallmentServicesScreen = () => {
           ) : (
             filteredProviders.map((provider) => {
               const plans = filteredPlans(provider);
-
-              // Skip rendering provider if no plans match filter
               if (plans.length === 0) return null;
 
               return (
                 <TableRow key={provider.id}>
                   <TableCell component="th" scope="row">
-                    {/* Display Provider Image */}
                     <Grid container spacing={2} alignItems="center">
                       <Grid item>
                         <Avatar
@@ -264,7 +228,6 @@ const InstallmentServicesScreen = () => {
         </TableBody>
       </Table>
 
-      {/* Snackbar for success message */}
       <Snackbar
         open={success}
         autoHideDuration={4000}
@@ -276,6 +239,7 @@ const InstallmentServicesScreen = () => {
           )}
         </Alert>
       </Snackbar>
+      </>}
     </Container>
   );
 };
