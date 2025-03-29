@@ -84,7 +84,7 @@ const Footer = ({ darkMode }) => {
                 </Typography>
                 <Box>
                   <a
-                    href="tel:+123456789"
+                    href="tel:+201203333274"
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -93,7 +93,7 @@ const Footer = ({ darkMode }) => {
                     }}
                   >
                     <PhoneInTalk style={{ marginRight: 8 }} />
-                    <Typography>012 03333274</Typography>
+                    <Typography>+20 120 333 3274</Typography>
                   </a>
                   <a
                     href="https://www.instagram.com/almosallamy.automotive/"

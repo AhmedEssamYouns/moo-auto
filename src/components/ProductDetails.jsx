@@ -107,7 +107,7 @@ const ProductDetails = ({ product, t, isMobile, isDarkMode }) => {
       </Typography>
 
       <Typography variant="h6" color="#4CAF50" mb={2}>
-        {t("price")}: EGP {product.price}
+        {t("price")}: EGP {Number(product.price).toLocaleString()}
       </Typography>
     
       <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mb: 2 }}>

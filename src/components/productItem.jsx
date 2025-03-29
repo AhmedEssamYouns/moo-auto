@@ -143,12 +143,12 @@ const ProductCard = ({ car }) => {
             alignItems: "center",
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{ fontWeight: "bold", color: "#4CAF50" }}
-          >
-            EGP{car.price}
-          </Typography>
+     <Typography
+  variant="h6"
+  sx={{ fontWeight: "bold", color: "#4CAF50" }}
+>
+  {car.price > 0 ? `EGP ${Number(car.price).toLocaleString()}` : t("Price Not Available")}
+</Typography>
           <Button
             onClick={() => {
               navigate(`/product/${car.id}`);
