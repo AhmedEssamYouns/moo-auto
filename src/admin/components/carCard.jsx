@@ -88,7 +88,7 @@ const AdminProductCard = ({ car, onEdit, onDelete }) => {
         </Typography>
 
         <Typography variant="h6" sx={{ fontWeight: "bold", color: "#4CAF50", mt: 1 }}>
-          EGP{car.price}
+          EGP {car.price.toLocaleString()}
         </Typography>
 
         <Chip

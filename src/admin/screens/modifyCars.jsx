@@ -70,22 +70,25 @@ const Cars = () => {
       searchCars(); // Trigger search request
     }
   };
-
+const [isAddLoading, setIsAddLoading] = useState(false);
   const handleCarSubmit = async (formData) => {
     try {
+      setIsAddLoading(true);
       await addCar(formData);
       alert("Car added successfully!");
+      setIsAddLoading(false);
       setOpenAddCar(false);
       refetch();
     } catch (error) {
-      console.error("Error adding car:", error);
-      alert("Failed to add car.");
+      setIsAddLoading(false);
+      console.error("Error adding car:", error.response.data.detail);
+      alert(error.response.data.detail);
     }
   };
 
   const handleEditCar = async (formData) => {
     try {
-      await editCar(selectedCarId,formData);
+      await editCar(selectedCarId, formData);
       alert("Car edited successfully!");
       setOpenEdit(false);
       refetch();
@@ -175,16 +178,15 @@ const Cars = () => {
         onChange={handleSearch}
         sx={{ mb: 3, maxWidth: 500 }}
       />
-{(isOwner || isEditor) && (
-  
-      <Button
-        variant="contained"
-        startIcon={<AddIcon />}
-        onClick={() => setOpenAddCar(true)}
-      >
-        {t("Add Car")}
-      </Button>
-)}
+      {(isOwner || isEditor) && (
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => setOpenAddCar(true)}
+        >
+          {t("Add Car")}
+        </Button>
+      )}
 
       {/* Filters */}
       {!brandsLoading && (
@@ -239,7 +241,7 @@ const Cars = () => {
       >
         <DialogTitle>{t("Add Car")}</DialogTitle>
         <DialogContent>
-          <CarForm onSubmit={handleCarSubmit} brandData={brandsData} />
+          <CarForm onSubmit={handleCarSubmit} brandData={brandsData} loading={isAddLoading} />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenAddCar(false)} color="secondary">

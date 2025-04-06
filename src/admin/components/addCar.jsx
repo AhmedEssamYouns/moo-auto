@@ -25,7 +25,7 @@ const CATEGORY_OPTIONS = [
   { label: "Sports", value: 8 },
 ];
 
-const CarForm = ({ onSubmit, brandData }) => {
+const CarForm = ({ onSubmit, brandData ,loading}) => {
   const { control, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       brandId: "",
@@ -310,7 +310,7 @@ const CarForm = ({ onSubmit, brandData }) => {
         </Box>
       </Box>
 
-      <Button type="submit" variant="contained" color="primary">
+      <Button loading={loading} disabled={loading || !selectedImages.length} type="submit" variant="contained" color="primary">
         Submit
       </Button>
     </Box>
