@@ -22,7 +22,7 @@ const App = () => {
   const isAdmin = window.location.hostname.startsWith("dashboard.");
 
   useEffect(() => {
-    setTimeout(() => setShowLottie(false), 1500); // Reduced for better UX
+    setTimeout(() => setShowLottie(false), 10); // Reduced for better UX
   }, []);
 
   const LottieFallback = (

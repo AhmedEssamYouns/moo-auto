@@ -112,7 +112,7 @@ const Navbar = ({ darkMode }) => {
                   { text: t("carsForSale"), path: "/cars-for-sale" },
                   { text: t("newArrivals"), path: "/new-arrivals" },
                   { text: t("requestCar"), path: "/request-car" },
-                  // { text: t("financing"), path: "/financing" },
+                  { text: t("financing"), path: "/financing" },
                 ].map((item) => (
                   <Typography
                     key={item.text}
