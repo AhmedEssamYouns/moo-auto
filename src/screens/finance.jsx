@@ -18,10 +18,6 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   useMediaQuery,
 } from "@mui/material";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -34,19 +30,18 @@ const InstallmentServicesScreen = () => {
   const [providers, setProviders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [success, setSuccess] = useState(false);
-  const [monthFilter, setMonthFilter] = useState([6, 36]); // Default filter range (6 to 36 months)
-  const [interestFilter, setInterestFilter] = useState(0); // Default interest filter
-  const [feeFilter, setFeeFilter] = useState(0); // Default processing fee filter
-
-  const [maxMonths, setMaxMonths] = useState(36); // Default max
+  const [monthFilter, setMonthFilter] = useState([6, 36]);
+  const [interestFilter, setInterestFilter] = useState(0);
+  const [feeFilter, setFeeFilter] = useState(0);
+  const [maxMonths, setMaxMonths] = useState(36);
 
   useEffect(() => {
     const fetchProviders = async () => {
       try {
         const response = await getProviders();
         setProviders(response);
-        const allMonths = response.flatMap((provider) =>
-          provider.installmentPlans.map((plan) => plan.months)
+        const allMonths = response.flatMap((p) =>
+          p.installmentPlans.map((plan) => plan.months)
         );
         const maxAvailableMonths = Math.max(...allMonths);
         setMaxMonths(maxAvailableMonths);
@@ -55,191 +50,183 @@ const InstallmentServicesScreen = () => {
         console.error("Error fetching providers:", error);
       }
     };
-
     fetchProviders();
   }, []);
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleMonthFilterChange = (event, newValue) => {
-    setMonthFilter(newValue);
-  };
-
-  const handleInterestFilterChange = (event, newValue) => {
-    setInterestFilter(newValue);
-  };
+  const handleSearchChange = (e) => setSearchTerm(e.target.value);
+  const handleMonthFilterChange = (e, newValue) => setMonthFilter(newValue);
+  const handleInterestFilterChange = (e, newValue) => setInterestFilter(newValue);
 
   const filteredProviders = providers.filter((provider) =>
     provider.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const filteredPlans = (provider) => {
-    return provider.installmentPlans.filter(
+  const filteredPlans = (provider) =>
+    provider.installmentPlans.filter(
       (plan) =>
         plan.months >= monthFilter[0] &&
         plan.months <= monthFilter[1] &&
         plan.interest >= interestFilter &&
         plan.processingFee <= feeFilter
     );
-  };
 
   const isMobile = useMediaQuery("(max-width: 1000px)");
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
       {isMobile ? (
-        <MobileInstallmentList  />
-      ): <>
-      <Typography variant="h4" fontWeight="bold" mb={3} textAlign="center">
-        {t("Installment Services")}
-      </Typography>
+        <MobileInstallmentList />
+      ) : (
+        <>
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            mb={4}
+            fontFamily="Michroma, sans-serif"
+            textAlign="center"
+          >
+            {t("Installment Services")}
+          </Typography>
 
-      {/* Search Bar */}
-      <TextField
-        fullWidth
-        label={t("Search Providers")}
-        variant="outlined"
-        value={searchTerm}
-        onChange={handleSearchChange}
-        sx={{ mb: 3 }}
-      />
+          <TextField
+            fullWidth
+            label={t("Search Providers")}
+            variant="outlined"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            sx={{ mb: 4 }}
+          />
 
-      {/* Month Slider Filter */}
-      <Typography variant="h6" gutterBottom>
-        {t("Filter by Months")}
-      </Typography>
-      <Slider
-        value={monthFilter}
-        onChange={handleMonthFilterChange}
-        valueLabelDisplay="auto"
-        valueLabelFormat={(value) => `${value}`}
-        min={6}
-        max={maxMonths} // Dynamically set max value
-        step={12}
-        marks={Array.from({ length: (maxMonths - 6) / 6 + 1 }, (_, i) => ({
-          value: 6 + i * 6,
-          label: `${6 + i * 6}`,
-        }))}
-        sx={{ mb: 3 }}
-      />
+          <Typography variant="h6" fontWeight="bold" mb={1}>
+            {t("Filter by Months")}
+          </Typography>
+          <Slider
+            value={monthFilter}
+            onChange={handleMonthFilterChange}
+            valueLabelDisplay="auto"
+            valueLabelFormat={(v) => `${v}`}
+            min={6}
+            max={maxMonths}
+            step={6}
+            marks={Array.from({ length: (maxMonths - 6) / 6 + 1 }, (_, i) => ({
+              value: 6 + i * 6,
+              label: `${6 + i * 6}`,
+            }))}
+            sx={{ mb: 4 }}
+          />
 
-      {/* Interest Filter */}
-      <Typography variant="h6" gutterBottom>
-        {t("Filter by Interest (%)")}
-      </Typography>
-      <Slider
-        value={interestFilter}
-        onChange={handleInterestFilterChange}
-        valueLabelDisplay="auto"
-        valueLabelFormat={(value) => `${value}%`}
-        min={0}
-        max={20}
-        step={1}
-        marks={[
-          { value: 0, label: "0%" },
-          { value: 5, label: "5%" },
-          { value: 10, label: "10%" },
-          { value: 15, label: "15%" },
-          { value: 20, label: "20%" },
-        ]}
-        sx={{ mb: 3 }}
-      />
+          <Typography variant="h6" fontWeight="bold" mb={1}>
+            {t("Filter by Interest (%)")}
+          </Typography>
+          <Slider
+            value={interestFilter}
+            onChange={handleInterestFilterChange}
+            valueLabelDisplay="auto"
+            valueLabelFormat={(v) => `${v}%`}
+            min={0}
+            max={20}
+            step={1}
+            marks={[0, 5, 10, 15, 20].map((v) => ({ value: v, label: `${v}%` }))}
+            sx={{ mb: 4 }}
+          />
 
-      <Table sx={{ minWidth: 650 }} aria-label="installment services table">
-        <TableHead>
-          <TableRow>
-            <TableCell>{t("Provider")}</TableCell>
-            <TableCell>{t("Installment Plan")}</TableCell>
-            <TableCell>{t("Months")}</TableCell>
-            <TableCell>{t("Interest (%)")}</TableCell>
-            <TableCell>{t("Processing Fee (%)")}</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filteredProviders.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={5}>
-                <Typography variant="body1" align="center">
-                  {t("No providers found")}
-                </Typography>
-              </TableCell>
-            </TableRow>
-          ) : (
-            filteredProviders.map((provider) => {
-              const plans = filteredPlans(provider);
-              if (plans.length === 0) return null;
-
-              return (
-                <TableRow key={provider.id}>
-                  <TableCell component="th" scope="row">
-                    <Grid container spacing={2} alignItems="center">
-                      <Grid item>
-                        <Avatar
-                          src={provider.imageUrl}
-                          alt={provider.name}
-                          sx={{ width: 40, height: 40 }}
-                        />
-                      </Grid>
-                      <Grid item>{provider.name}</Grid>
-                    </Grid>
-                  </TableCell>
-                  <TableCell colSpan={4}>
-                    {/* Expandable Section for Installment Plans */}
-                    <Accordion sx={{ mt: 2 }}>
-                      <AccordionSummary expandIcon={<ArrowDropDownIcon />}>
-                        <Typography>{t("View Installment Plans")}</Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <Table>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>{t("Plan")}</TableCell>
-                              <TableCell>{t("Months")}</TableCell>
-                              <TableCell>{t("Interest (%)")}</TableCell>
-                              <TableCell>{t("Processing Fee (%)")}</TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {plans.map((plan) => (
-                              <TableRow key={plan.id}>
-                                <TableCell
-                                  dir={language === "en" ? "ltr" : "rtl"}
-                                >
-                                  {language === "en"
-                                    ? `${plan.months} Months Plan`
-                                    : `${plan.months} اشهر`}
-                                </TableCell>
-                                <TableCell>{plan.months}</TableCell>
-                                <TableCell>{plan.interest}</TableCell>
-                                <TableCell>{plan.processingFee}</TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </AccordionDetails>
-                    </Accordion>
-                  </TableCell>
+          <TableContainer component={Paper} sx={{ borderRadius: 4 }}>
+            <Table>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                  <TableCell sx={{ fontWeight: "bold" }}>{t("Provider")}</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>{t("Installment Plan")}</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>{t("Months")}</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>{t("Interest (%)")}</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>{t("Processing Fee (%)")}</TableCell>
                 </TableRow>
-              );
-            })
-          )}
-        </TableBody>
-      </Table>
+              </TableHead>
+              <TableBody>
+                {filteredProviders.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} align="center">
+                      <Typography variant="body1">{t("No providers found")}</Typography>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredProviders.map((provider) => {
+                    const plans = filteredPlans(provider);
+                    if (plans.length === 0) return null;
 
-      <Snackbar
-        open={success}
-        autoHideDuration={4000}
-        onClose={() => setSuccess(false)}
-      >
-        <Alert severity="success" onClose={() => setSuccess(false)}>
-          {t(
-            "Your application has been submitted successfully. We will contact you soon!"
-          )}
-        </Alert>
-      </Snackbar>
-      </>}
+                    return (
+                      <TableRow key={provider.id}>
+                        <TableCell>
+                          <Grid container alignItems="center" spacing={2}>
+                            <Grid item>
+                              <Avatar
+                                src={provider.imageUrl}
+                                alt={provider.name}
+                                sx={{ width: 40, height: 40 }}
+                              />
+                            </Grid>
+                            <Grid item>
+                              <Typography fontWeight="medium">{provider.name}</Typography>
+                            </Grid>
+                          </Grid>
+                        </TableCell>
+                        <TableCell colSpan={4}>
+                          <Accordion sx={{ mt: 2, borderRadius: 2, boxShadow: 2 }}>
+                            <AccordionSummary expandIcon={<ArrowDropDownIcon />}>
+                              <Typography fontWeight="medium">
+                                {t("View Installment Plans")}
+                              </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                              <Table>
+                                <TableHead>
+                                  <TableRow>
+                                    <TableCell>{t("Plan")}</TableCell>
+                                    <TableCell>{t("Months")}</TableCell>
+                                    <TableCell>{t("Interest (%)")}</TableCell>
+                                    <TableCell>{t("Processing Fee (%)")}</TableCell>
+                                  </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                  {plans.map((plan) => (
+                                    <TableRow key={plan.id}>
+                                      <TableCell
+                                        dir={language === "en" ? "ltr" : "rtl"}
+                                      >
+                                        {language === "en"
+                                          ? `${plan.months} Months Plan`
+                                          : `${plan.months} اشهر`}
+                                      </TableCell>
+                                      <TableCell>{plan.months}</TableCell>
+                                      <TableCell>{plan.interest}</TableCell>
+                                      <TableCell>{plan.processingFee}</TableCell>
+                                    </TableRow>
+                                  ))}
+                                </TableBody>
+                              </Table>
+                            </AccordionDetails>
+                          </Accordion>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <Snackbar
+            open={success}
+            autoHideDuration={4000}
+            onClose={() => setSuccess(false)}
+          >
+            <Alert severity="success" onClose={() => setSuccess(false)}>
+              {t(
+                "Your application has been submitted successfully. We will contact you soon!"
+              )}
+            </Alert>
+          </Snackbar>
+        </>
+      )}
     </Container>
   );
 };

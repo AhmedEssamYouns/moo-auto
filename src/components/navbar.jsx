@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -20,68 +20,183 @@ import { Link, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import LightModeIcon from "@mui/icons-material/LightMode";
 import NavDrawer from "./drawer";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useSearch } from "../services/hooks/useCards";
-import logo from "../assets/imgs/logo.png";
-const Navbar = ({ darkMode, toggleDarkMode }) => {
+
+const Navbar = ({ darkMode }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const { language, setLanguage, t } = useLanguage();
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const isTablet = useMediaQuery("(max-width: 1500px)");
   const navigate = useNavigate();
+
+  const { data: searchResults, isLoading } = useSearch(searchText);
+  const hasResults = searchResults?.items?.length > 0;
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && searchText.trim() && hasResults) {
       setSearchOpen(false);
       setIsSearchFocused(false);
-      navigate("/cars-list", { state: { cars: searchResults.items, searchText } });
+      navigate("/cars-list", {
+        state: { cars: searchResults.items, searchText },
+      });
     }
   };
-  const { data: searchResults, error ,isLoading} = useSearch(searchText);
-  const hasResults = searchResults?.items?.length > 0;
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
       <AppBar
-        position="sticky"
+        position="fixed"
         sx={{
-          backgroundColor: darkMode ? "#121212" : "white",
-          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          backgroundColor: scrolled
+            ? darkMode
+              ? "rgba(18, 18, 18, 0.6)"
+              : "rgba(255, 255, 255, 0.6)"
+            : "transparent",
+          boxShadow: "none",
+          backdropFilter: scrolled ? "blur(1px)" : "none",
+          transition: "all 0.3s ease",
           padding: "0 16px",
+          backgroundImage: "none",
         }}
       >
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          {isMobile && !searchOpen && (
-            <IconButton
-              sx={{ color: darkMode ? "white" : "black", mr: 2 }}
-              onClick={() => setDrawerOpen(true)}
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+            {isMobile && !searchOpen && (
+              <IconButton
+                sx={{ color: darkMode ? "white" : "black", mr: 1 }}
+                onClick={() => setDrawerOpen(true)}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
 
-          {!searchOpen && (
-            <Box
-              component={Link}
-              to="/"
-              sx={{ width: 140, mt: 1, height: "90%" }}
-            >
-              <img
-                src={logo}
-                alt="Al Muslmi Logo"
-                style={{ width: "100%", height: "90%", borderRadius: 45 }}
+            {!searchOpen && (
+              <Box
+                component={Link}
+                to="/"
+                sx={{
+                  width: 180,
+                  textDecoration: "none",
+                  color: "white",
+                  fontFamily: "Michroma",
+                  fontWeight: "bold",
+                  fontSize: "1.6rem",
+                  transition: "color 0.3s",
+                  "&:hover": {
+                    color: "white",
+                  },
+                }}
+              >
+                Moo Auto
+              </Box>
+            )}
+
+            {!isMobile && (
+              <Box sx={{ display: "flex", gap: 3 }}>
+                {[
+                  { text: t("carsForSale"), path: "/cars-for-sale" },
+                  { text: t("newArrivals"), path: "/new-arrivals" },
+                  { text: t("requestCar"), path: "/request-car" },
+                  // { text: t("financing"), path: "/financing" },
+                ].map((item) => (
+                  <Typography
+                    key={item.text}
+                    component={Link}
+                    to={item.path}
+                    variant="body1"
+                    sx={{
+                      color: darkMode ? "white" : "black",
+                      textDecoration: "none",
+                      "&:hover": { textDecoration: "underline" },
+                      fontFamily: "Michroma",
+                      fontSize: "0.9rem",
+                    }}
+                  >
+                    {item.text}
+                  </Typography>
+                ))}
+              </Box>
+            )}
+          </Box>
+
+          <Box
+            sx={{
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            {!isMobile && (
+              <InputBase
+                value={searchText}
+                onKeyDown={handleKeyDown}
+                onFocus={() => setIsSearchFocused(true)}
+                onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                onChange={(e) => setSearchText(e.target.value)}
+                placeholder={t("searchPlaceholder")}
+                sx={{
+                  backgroundColor: darkMode
+                    ? "rgba(255,255,255,0.1)"
+                    : "rgba(0,0,0,0.05)",
+                  backdropFilter: "blur(40px)",
+                  WebkitBackdropFilter: "blur(30px)",
+                  borderRadius: 4,
+                  px: 2,
+                  width: isTablet ? 250 : 350,
+                  color: darkMode ? "white" : "black",
+                  py: 1,
+                  fontSize: "1rem",
+                }}
               />
-            </Box>
-          )}
+            )}
 
-          <Box sx={{ position: "relative", flexGrow: isMobile ? 1 : 0 }}>
-            {isMobile ? (
+            {!searchOpen && (
+              <Select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                sx={{
+                  mx: 1,
+                  bgcolor: darkMode ? "#333" : "#f0f0f0",
+                  color: darkMode ? "white" : "black",
+                  borderRadius: 1,
+                  fontSize: "0.85rem",
+                  minWidth: 90,
+                  height: 32,
+                  "& .MuiSelect-select": { padding: "4px 8px" },
+                  "& .MuiSelect-icon": { fontSize: "1rem" },
+                }}
+              >
+                <MenuItem value="en">{t("english")}</MenuItem>
+                <MenuItem value="ar">{t("arabic")}</MenuItem>
+              </Select>
+            )}
+
+            {isMobile && !searchOpen && (
+              <IconButton
+                sx={{ color: darkMode ? "white" : "black" }}
+                onClick={() => setSearchOpen(true)}
+              >
+                <SearchIcon />
+              </IconButton>
+            )}
+
+            {isMobile && (
               <Slide
                 direction="left"
                 in={searchOpen}
@@ -93,13 +208,17 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                     display: "flex",
                     alignItems: "center",
                     width: "100%",
-                    bgcolor: darkMode ? "#333" : "#f0f0f0",
+                    backgroundColor: darkMode
+                      ? "rgba(255,255,255,0.05)"
+                      : "rgba(0,0,0,0.05)",
+                    backdropFilter: "blur(20px)",
+                    WebkitBackdropFilter: "blur(20px)",
+                    borderRadius: 4,
                     px: 2,
-                    borderRadius: 2,
                   }}
                 >
                   <InputBase
-                  onKeyDown={handleKeyDown}
+                    onKeyDown={handleKeyDown}
                     value={searchText}
                     onFocus={() => setIsSearchFocused(true)}
                     onBlur={() =>
@@ -108,7 +227,11 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                     onChange={(e) => setSearchText(e.target.value)}
                     placeholder={t("searchPlaceholder")}
                     fullWidth
-                    sx={{ color: darkMode ? "white" : "black" }}
+                    sx={{
+                      color: darkMode ? "white" : "black",
+                      py: 1,
+                      fontSize: "1rem",
+                    }}
                   />
                   <IconButton
                     onClick={() => setSearchOpen(false)}
@@ -118,22 +241,6 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                   </IconButton>
                 </Box>
               </Slide>
-            ) : (
-              <InputBase
-                value={searchText}
-                onKeyDown={handleKeyDown}
-                onFocus={() => setIsSearchFocused(true)}
-                onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
-                onChange={(e) => setSearchText(e.target.value)}
-                placeholder={t("searchPlaceholder")}
-                sx={{
-                  bgcolor: darkMode ? "#333" : "#f0f0f0",
-                  px: 2,
-                  borderRadius: 2,
-                  width: isTablet ? 250 : 550,
-                  color: darkMode ? "white" : "black",
-                }}
-              />
             )}
 
             {isSearchFocused && searchText && !isLoading && (
@@ -141,8 +248,8 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
                 sx={{
                   position: "absolute",
                   top: "100%",
-                  left: 0,
-                  width: "100%",
+                  right: 110,
+                  width: isMobile ? "100vw" : 350,
                   maxHeight: 300,
                   overflowY: "auto",
                   zIndex: 10,
@@ -215,78 +322,12 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
               </Paper>
             )}
           </Box>
-
-          {!isMobile && (
-            <Box sx={{ display: "flex", gap: 3 }}>
-              {[
-                { text: t("carsForSale"), path: "/cars-for-sale" },
-                { text: t("newArrivals"), path: "/new-arrivals" },
-                { text: t("requestCar"), path: "/request-car" },
-                { text: t("financing"), path: "/financing" },
-                { text: t("aboutUs"), path: "/about-us" },
-              ].map((item) => (
-                <Typography
-                  key={item.text}
-                  component={Link}
-                  to={item.path}
-                  variant="body1"
-                  sx={{
-                    color: darkMode ? "white" : "black",
-                    textDecoration: "none",
-                    "&:hover": { textDecoration: "underline" },
-                  }}
-                >
-                  {item.text}
-                </Typography>
-              ))}
-            </Box>
-          )}
-
-          {!searchOpen && !isMobile && (
-            <IconButton
-              sx={{ color: darkMode ? "white" : "black" }}
-              onClick={toggleDarkMode}
-            >
-              {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
-            </IconButton>
-          )}
-
-          {isMobile && !searchOpen && (
-            <IconButton
-              sx={{ color: darkMode ? "white" : "black" }}
-              onClick={() => setSearchOpen(true)}
-            >
-              <SearchIcon />
-            </IconButton>
-          )}
-
-          {!searchOpen && (
-            <Select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              sx={{
-                mx: 1,
-                bgcolor: darkMode ? "#333" : "#f0f0f0",
-                color: darkMode ? "white" : "black",
-                borderRadius: 1,
-                fontSize: "0.85rem",
-                minWidth: 90,
-                height: 32,
-                "& .MuiSelect-select": { padding: "4px 8px" },
-                "& .MuiSelect-icon": { fontSize: "1rem" },
-              }}
-            >
-              <MenuItem value="en">{t("english")}</MenuItem>
-              <MenuItem value="ar">{t("arabic")}</MenuItem>
-            </Select>
-          )}
         </Toolbar>
       </AppBar>
 
       <NavDrawer
         open={drawerOpen}
         darkMode={darkMode}
-        toggleDarkMode={toggleDarkMode}
         onClose={() => setDrawerOpen(false)}
       />
     </>

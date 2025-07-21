@@ -11,8 +11,22 @@ import {
   MenuItem,
   Grid,
 } from "@mui/material";
+import { motion } from "framer-motion";
 import { useLanguage } from "../contexts/LanguageContext";
 import { addRequest } from "../services/apis/carsServices";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i = 1) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.15,
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  }),
+};
 
 const RequestCarScreen = () => {
   const { t } = useLanguage();
@@ -67,81 +81,186 @@ const RequestCarScreen = () => {
   };
 
   return (
-    <Container maxWidth="md">
-      <Box
-        sx={{
-          backgroundColor: theme.palette.mode === "dark" ? "#333" : "#fff",
-          color: theme.palette.mode === "dark" ? "#fff" : "#000",
-          p: 4,
-          mt: 5,
-          borderRadius: 2,
-          boxShadow: 2,
-        }}
-      >
-        <Typography variant="h5" fontWeight="bold" mb={3} textAlign="center">
-          {t("requestCar")}
-        </Typography>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        py: 10,
+        background: "linear-gradient(to bottom, #000000, #120000ff)",
+        backdropFilter: "blur(10px)",
+      }}
+    >
+      <Container maxWidth="md">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={fadeUp}
+          custom={0}
+        >
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: "bold",
+              mb: 4,
+              textAlign: "center",
+              fontFamily: "Michroma",
+              color: "#B30000",
+            }}
+          >
+            {t("requestCar")}
+          </Typography>
+        </motion.div>
 
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            {/* Personal Info - Full Width */}
-            <Grid item xs={12}>
-              <TextField fullWidth label={t("yourName")} name="name" value={formData.name} onChange={handleChange} required />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField fullWidth label={t("email")} name="email" type="email" value={formData.email} onChange={handleChange} required />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField fullWidth label={t("phoneNumber")} name="phoneNumber" type="tel" value={formData.phoneNumber} onChange={handleChange} required />
-            </Grid>
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={fadeUp}
+          custom={1}
+        >
+          <Box
+            sx={{
+              p: 4,
+              borderRadius: 4,
+              backgroundColor: "rgba(255,255,255,0.05)",
+              boxShadow: "0 4px 30px rgba(0,0,0,0.3)",
+              backdropFilter: "blur(15px)",
+              WebkitBackdropFilter: "blur(15px)",
+              border: "1px solid rgba(255,255,255,0.2)",
+            }}
+          >
+            <form onSubmit={handleSubmit}>
+              <Grid container spacing={2}>
+                {[
+                  { label: t("yourName"), name: "name", type: "text" },
+                  { label: t("email"), name: "email", type: "email" },
+                  { label: t("phoneNumber"), name: "phoneNumber", type: "tel" },
+                  { label: t("modelYear"), name: "modelYear", type: "number" },
+                  { label: t("color"), name: "color", type: "text" },
+                  { label: t("brand"), name: "brand", type: "text" },
+                  { label: t("model"), name: "model", type: "text" },
+                  { label: t("price"), name: "price", type: "number" },
+                ].map((field, idx) => (
+                  <Grid
+                    item
+                    xs={12}
+                    sm={idx > 2 ? 6 : 12}
+                    key={field.name}
+                    component={motion.div}
+                    variants={fadeUp}
+                    custom={idx + 2}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                  >
+                    <TextField
+                      fullWidth
+                      required
+                      label={field.label}
+                      name={field.name}
+                      type={field.type}
+                      value={formData[field.name]}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                ))}
 
-            {/* Car Details - Two Columns */}
-            <Grid item xs={12} sm={6}>
-              <TextField fullWidth label={t("modelYear")} name="modelYear" type="number" value={formData.modelYear} onChange={handleChange} required />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField fullWidth label={t("color")} name="color" value={formData.color} onChange={handleChange} required />
-            </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  component={motion.div}
+                  variants={fadeUp}
+                  custom={10}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                >
+                  <TextField
+                    select
+                    fullWidth
+                    label={t("Transmission")}
+                    name="transmission"
+                    value={formData.transmission}
+                    onChange={handleChange}
+                    required
+                  >
+                    <MenuItem value="1">{t("manual")}</MenuItem>
+                    <MenuItem value="2">{t("automatic")}</MenuItem>
+                  </TextField>
+                </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <TextField fullWidth label={t("brand")} name="brand" value={formData.brand} onChange={handleChange} required />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField fullWidth label={t("model")} name="model" value={formData.model} onChange={handleChange} required />
-            </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  component={motion.div}
+                  variants={fadeUp}
+                  custom={11}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                >
+                  <TextField
+                    fullWidth
+                    label={t("additionalInfo")}
+                    name="additionalInfo"
+                    value={formData.additionalInfo}
+                    onChange={handleChange}
+                    multiline
+                    rows={3}
+                  />
+                </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <TextField select fullWidth label={t("Transmission")} name="transmission" value={formData.transmission} onChange={handleChange} required>
-                <MenuItem value="1">{t("manual")}</MenuItem>
-                <MenuItem value="2">{t("automatic")}</MenuItem>
-              </TextField>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField fullWidth label={t("price")} name="price" type="number" value={formData.price} onChange={handleChange} required />
-            </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  component={motion.div}
+                  variants={fadeUp}
+                  custom={12}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                >
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{
+                      py: 1.5,
+                      fontWeight: "bold",
+                      fontSize: "1rem",
+                      background: "linear-gradient(135deg, #8B0000, #B22222)",
+                      color: "#fff",
+                      borderRadius: 2,
+                      boxShadow: "0 4px 20px rgba(179, 0, 0, 0.4)",
+                      "&:hover": {
+                        background: "linear-gradient(135deg, #B22222, #8B0000)",
+                      },
+                    }}
+                  >
+                    {t("submit")}
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </Box>
+        </motion.div>
 
-            {/* Additional Info - Full Width */}
-            <Grid item xs={12}>
-              <TextField fullWidth label={t("additionalInfo")} name="additionalInfo" value={formData.additionalInfo} onChange={handleChange} multiline rows={3} />
-            </Grid>
+        <Snackbar
+          open={success}
+          autoHideDuration={4000}
+          onClose={() => setSuccess(false)}
+        >
+          <Alert severity="success">{t("thankYouMessage")}</Alert>
+        </Snackbar>
 
-            <Grid item xs={12}>
-              <Button type="submit" variant="contained" color="primary" fullWidth>
-                {t("submit")}
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </Box>
-
-      <Snackbar open={success} autoHideDuration={4000} onClose={() => setSuccess(false)}>
-        <Alert severity="success">{t("thankYouMessage")}</Alert>
-      </Snackbar>
-
-      <Snackbar open={!!error} autoHideDuration={4000} onClose={() => setError("")}>
-        <Alert severity="error">{error}</Alert>
-      </Snackbar>
-    </Container>
+        <Snackbar
+          open={!!error}
+          autoHideDuration={4000}
+          onClose={() => setError("")}
+        >
+          <Alert severity="error">{error}</Alert>
+        </Snackbar>
+      </Container>
+    </Box>
   );
 };
 

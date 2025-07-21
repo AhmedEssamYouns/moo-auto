@@ -11,30 +11,28 @@ import {
   Snackbar,
   useMediaQuery,
 } from "@mui/material";
-import IosShareIcon from "@mui/icons-material/Reply";
-import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
+import EmojiTransportationIcon from "@mui/icons-material/EmojiTransportation";
+import SettingsIcon from "@mui/icons-material/Settings";
+import ChevronLeft from "@mui/icons-material/ChevronLeft";
+import ChevronRight from "@mui/icons-material/ChevronRight";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
-import SpeedIcon from "@mui/icons-material/Speed";
 import { baseUrl } from "../utils/baseUrl";
 import SwipeableViews from "react-swipeable-views";
-import ArrowBackIos from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIos from "@mui/icons-material/ArrowForwardIos";
 
 const ProductCard = ({ car }) => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
-  const navigate = useNavigate();
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState(0);
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const shareUrl = `${baseUrl}/cars/Shared/${car.id}`;
 
   const handleShare = async (event) => {
     event.stopPropagation();
-
     if (navigator.share && isMobile) {
       try {
         await navigator.share({
@@ -53,7 +51,9 @@ const ProductCard = ({ car }) => {
 
   const handlePrev = (e) => {
     e.stopPropagation();
-    setActiveIndex((prev) => (prev - 1 + car.images.length) % car.images.length);
+    setActiveIndex(
+      (prev) => (prev - 1 + car.images.length) % car.images.length
+    );
   };
 
   const handleNext = (e) => {
@@ -65,19 +65,25 @@ const ProductCard = ({ car }) => {
     <Card
       onClick={() => navigate(`/product/${car.id}`)}
       sx={{
-        borderRadius: 3,
-        boxShadow: 3,
-        transition: "0.3s",
+        borderRadius: 6,
         overflow: "hidden",
-        "&:hover": { boxShadow: 6 },
-        bgcolor: isDarkMode ? "#1E1E1E" : "white",
+        background: isDarkMode
+          ? "linear-gradient(145deg, #1e1e1e, #2a2a2a)"
+          : "linear-gradient(145deg, #ffffff, #f0f0f0)",
+        border: "none",
+        transition: "all 0.4s ease",
+        boxShadow: isDarkMode
+          ? "0 10px 30px rgba(0,0,0,0.6)"
+          : "0 10px 30px rgba(0,0,0,0.1)",
+        "&:hover": {
+          transform: "translateY(-6px)",
+        },
       }}
     >
-      {/* Swipeable Image Carousel */}
-      <Box sx={{ position: "relative", height: 200, overflow: "hidden" }}>
+      <Box sx={{ position: "relative", height: 240 }}>
         <SwipeableViews
           index={activeIndex}
-          onChangeIndex={(i) => setActiveIndex(i)}
+          onChangeIndex={setActiveIndex}
           enableMouseEvents
           style={{ height: "100%" }}
         >
@@ -89,109 +95,112 @@ const ProductCard = ({ car }) => {
               alt={`${car.name}-${index}`}
               sx={{
                 width: "100%",
-                height: "200px",
+                height: "240px",
                 objectFit: "cover",
               }}
             />
           ))}
         </SwipeableViews>
 
-        {/* Arrows */}
         {car.images.length > 1 && (
           <>
             <IconButton
               onClick={handlePrev}
               sx={{
                 position: "absolute",
-                top: "50%",
-                left: 10,
-                transform: "translateY(-50%)",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                bottom: 16,
+                left: 16,
+                background: "rgba(0,0,0,0.4)",
                 color: "white",
-                "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" },
+                "&:hover": {
+                  background: "rgba(0,0,0,0.6)",
+                },
               }}
             >
-              <ArrowBackIos fontSize="small" />
+              <ChevronLeft />
             </IconButton>
-
             <IconButton
               onClick={handleNext}
               sx={{
                 position: "absolute",
-                top: "50%",
-                right: 10,
-                transform: "translateY(-50%)",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                bottom: 16,
+                left: 72,
+                background: "rgba(0,0,0,0.4)",
                 color: "white",
-                "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" },
+                "&:hover": {
+                  background: "rgba(0,0,0,0.6)",
+                },
               }}
             >
-              <ArrowForwardIos fontSize="small" />
+              <ChevronRight />
             </IconButton>
           </>
         )}
 
-        {/* Status Label */}
         <Chip
-          label={t(car.status == 1 ? "new" : "used")}
+          label={t(car.status === 1 ? "new" : "used")}
           sx={{
             position: "absolute",
-            top: 10,
-            left: 10,
-            bgcolor: car.status == 1 ? "#4CAF50" : "#FFC107",
-            color: car.status == 1 ? "white" : "black",
+            bottom: 16,
+            right: 16,
+            bgcolor: car.status === 1 ? "#ffff" : "#ffe082",
+            color: "#000",
+            fontWeight: "bold",
           }}
         />
 
-        {/* Share Button */}
         <IconButton
           onClick={handleShare}
           sx={{
             position: "absolute",
-            top: 10,
-            right: 10,
-            bgcolor: isDarkMode ? "#333" : "white",
-            color: isDarkMode ? "white" : "black",
+            top: 16,
+            right: 16,
+            background: "rgba(255,255,255,0.15)",
+            color: "white",
             "&:hover": {
-              bgcolor: "#4CAF50",
-              color: "white",
+              background: "#fff",
+              color: "#000",
             },
           }}
         >
-          <IosShareIcon sx={{ transform: "scaleX(-1)" }} />
+          <ShareRoundedIcon />
         </IconButton>
       </Box>
 
-      {/* Content */}
-      <CardContent>
-        <Typography
-          variant="h6"
-          sx={{ fontWeight: "bold", color: isDarkMode ? "white" : "black" }}
-        >
+      <CardContent
+        sx={{
+          px: 3,
+          py: 2,
+          color: isDarkMode ? "#f5f5f5" : "#111",
+        }}
+      >
+        <Typography variant="h6" sx={{ fontWeight: "600", mb: 1 }}>
           {car.name} - {car.model}
         </Typography>
 
-        <Box sx={{ display: "flex", gap: 0.5, mt: 1, mb: 2 }}>
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
           <Chip
-            icon={<DirectionsCarIcon fontSize="small" />}
-            label={t(`${car?.brandName}`)}
+            icon={<EmojiTransportationIcon fontSize="small" />}
+            label={car.brandName}
             size="small"
             sx={{
-              bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
-              color: isDarkMode ? "white" : "black",
-              px: 0.5,
-              minWidth: "auto",
+              bgcolor: "transparent",
+              border: "1px solid",
+              borderColor: isDarkMode ? "#444" : "#ccc",
+              color: "inherit",
+              px: 1,
             }}
           />
           <Chip
-            icon={<SpeedIcon fontSize="small" />}
-            label={t(`${car.transmission == 2 ? "automatic" : "manual"}`)}
+            icon={<SettingsIcon fontSize="small" />}
+            label={t(car.transmission === 2 ? "automatic" : "manual")}
             size="small"
             sx={{
-              bgcolor: isDarkMode ? "#424242" : "#E0E0E0",
-              color: isDarkMode ? "white" : "black",
-              px: 0.5,
-              minWidth: "auto",
+              bgcolor: "transparent",
+              border: "1px solid",
+              borderColor: isDarkMode ? "#444" : "#ccc",
+              color: "inherit",
+              px: 1,
             }}
           />
         </Box>
@@ -205,7 +214,7 @@ const ProductCard = ({ car }) => {
         >
           <Typography
             variant="h6"
-            sx={{ fontWeight: "bold", color: "#4CAF50" }}
+            sx={{ fontWeight: "bold", color: isDarkMode ? "#ffff" : "#ffff" }}
           >
             {car.price > 0
               ? `EGP ${Number(car.price).toLocaleString()}`
@@ -217,11 +226,15 @@ const ProductCard = ({ car }) => {
               navigate(`/product/${car.id}`);
             }}
             sx={{
-              color: isDarkMode ? "white" : "black",
+              color: isDarkMode ? "#ffff" : "#ffff",
               textTransform: "none",
+              fontWeight: 500,
+              "&:hover": {
+                textDecoration: "underline",
+              },
             }}
           >
-            {t("viewDetails")} →
+            {t("viewDetails")}
           </Button>
         </Box>
       </CardContent>

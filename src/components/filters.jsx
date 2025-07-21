@@ -2,26 +2,21 @@ import React, { useState, useEffect } from "react";
 import {
   Box,
   Paper,
-  IconButton,
-  Icon,
-  useMediaQuery,
-  useTheme,
+  Chip,
   Menu,
   MenuItem,
-  Chip,
+  useMediaQuery,
+  useTheme,
+  Fade,
+  IconButton,
+  Typography,
+  Button,
 } from "@mui/material";
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import CategoryIcon from "@mui/icons-material/Category";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-
-import TuneIcon from "@mui/icons-material/Tune";
 import { useLanguage } from "../contexts/LanguageContext";
 import PriceRangeDialog from "./PriceRangeDialog";
 import BrandSelectionDialog from "./BrandSelectionDialog";
 import MobileDrawerFilters from "./mobileFilter";
-import FilterItem from "./FilterItem";
-import TransmissionIcon from "@mui/icons-material/Transform";
+import TuneIcon from "@mui/icons-material/Tune";
 
 const Filters = ({ onApplyFilters, brandsData, filters }) => {
   const { t } = useLanguage();
@@ -87,86 +82,114 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
     });
   };
 
-  const removePriceFilter = () => {
-    setSelectedPrice([0, 100000]);
-    onApplyFilters({ MinPrice: 0, MaxPrice: null });
-  };
-
-  const removeBrandFilter = () => {
-    setSelectedBrand(null);
-    onApplyFilters({ CarBrand: null });
-  };
-
-  const removeTransmissionFilter = () => {
-    setSelectedTransmission(null);
-    onApplyFilters({ TransmissionType: null });
-  };
-
-  const removeUsedCarFilter = () => {
-    setUsedCars(null);
-    onApplyFilters({ CarState: null });
-  };
-
   return (
     <>
       {!isMobile && (
-        <Paper
-          elevation={4}
-          sx={{
-            mx: "auto",
-            width: "90%",
-            my: 4,
-            maxWidth: 700,
-            p: 2,
-            display: "flex",
-            alignItems: "center",
-            borderRadius: 10,
-            bgcolor: theme.palette.background.paper,
-            boxShadow: theme.shadows[3],
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            gap: 2,
-          }}
-        >
-          <Box
+        <Fade in timeout={900}>
+          <Paper
+            elevation={24}
             sx={{
+              mx: "auto",
+              width: "95%",
+              maxWidth: 900,
+              my: 6,
+              p: 4,
               display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 8,
               flexWrap: "wrap",
               gap: 2,
-              flexGrow: 1,
-              justifyContent: { xs: "center", md: "flex-start" },
+              background: "linear-gradient(135deg, rgba(0,0,0,0.7), rgba(60,0,0,0.5))",
+              backdropFilter: "blur(24px)",
+              boxShadow: "0 0 60px rgba(255,0,0,0.2)",
+              position: "relative",
             }}
           >
-            <FilterItem
-              icon={<DirectionsCarIcon />}
-              text={usedCars ? t("usedCars") : t("newCars")}
-              onClick={() => {
-                setUsedCars((prev) => !prev);
-                handleApplyFilters({ CarState: usedCars ? 1 : 2 });
+            <TuneIcon
+              sx={{
+                position: "absolute",
+                top: 16,
+                right: 16,
+                color: "#ff4444",
+                fontSize: 28,
               }}
             />
 
-            <FilterItem
-              icon={<LocalOfferIcon />}
-              text={t("allBrands")}
-              onClick={() => setOpenDialog(true)}
-            />
-            <FilterItem
-              icon={<AttachMoneyIcon />}
-              text={t("allPrices")}
-              onClick={() => setOpenPriceDialog(true)}
-            />
-            <FilterItem
-              icon={<TransmissionIcon />}
-              text={selectedTransmission === 1 ? t("manual") : t("automatic")}
-              onClick={(e) => setAnchorEl(e.currentTarget)}
-            />
-          </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 2,
+                flexGrow: 1,
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                onClick={() => {
+                  setUsedCars((prev) => !prev);
+                  handleApplyFilters({ CarState: usedCars ? 1 : 2 });
+                }}
+                variant="contained"
+                sx={{
+                  background: "rgba(255,255,255,0.08)",
+                  color: "white",
+                  ":hover": {
+                    backgroundColor: "rgba(255,255,255,0.15)",
+                  },
+                }}
+              >
+                {usedCars ? t("usedCars") : t("newCars")}
+              </Button>
 
-          <Icon sx={{ justifyContent: "center", alignItems: "center" }}>
-            <TuneIcon sx={{ fontSize: 28 }} />
-          </Icon>
-        </Paper>
+              <Button
+                onClick={() => setOpenDialog(true)}
+                variant="contained"
+                sx={{
+                  background: "rgba(255,255,255,0.08)",
+                  color: "white",
+                  ":hover": {
+                    backgroundColor: "rgba(255,255,255,0.15)",
+                  },
+                }}
+              >
+                {t("allBrands")}
+              </Button>
+
+              <Button
+                onClick={() => setOpenPriceDialog(true)}
+                variant="contained"
+                sx={{
+                  background: "rgba(255,255,255,0.08)",
+                  color: "white",
+                  ":hover": {
+                    backgroundColor: "rgba(255,255,255,0.15)",
+                  },
+                }}
+              >
+                {t("allPrices")}
+              </Button>
+
+              <Button
+                onClick={(e) => setAnchorEl(e.currentTarget)}
+                variant="contained"
+                sx={{
+                  background: "rgba(255,255,255,0.08)",
+                  color: "white",
+                  ":hover": {
+                    backgroundColor: "rgba(255,255,255,0.15)",
+                  },
+                }}
+              >
+                {selectedTransmission === 1
+                  ? t("manual")
+                  : selectedTransmission === 2
+                  ? t("automatic")
+                  : t("TransmissionType")}
+              </Button>
+            </Box>
+          </Paper>
+        </Fade>
       )}
 
       {(selectedBrand ||
@@ -174,58 +197,71 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
         selectedPrice[1] < 1000000 ||
         selectedTransmission ||
         usedCars !== null) && (
-        <Paper
-          sx={{
-            mx: "auto",
-            width: isMobile ? "100%" : "70%",
-            my: 2,
-            p: 2,
-            display: "flex",
-            alignItems: "center",
-            borderRadius: 10,
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            gap: 1,
-          }}
-        >
-          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-            {selectedBrand && (
-              <Chip
-                label={`${t("Brand")}: ${
-                  brandsData.find((b) => b.id === selectedBrand)?.name
-                }`}
-                onDelete={() => removeBrandFilter()}
-              />
-            )}
-            {selectedPrice[0] > 0 && (
-              <Chip
-                label={`${t("price")}: ${selectedPrice[0]} - ${
-                  selectedPrice[1]
-                }`}
-                onDelete={() => removePriceFilter()}
-              />
-            )}
-            {selectedTransmission && (
-              <Chip
-                label={`${t("TransmissionType")}: ${
-                  selectedTransmission === 1 ? t("manual") : t("automatic")
-                }`}
-                onDelete={() => removeTransmissionFilter()}
-              />
-            )}
-            {usedCars !== null && (
-              <Chip
-                label={usedCars ? t("usedCars") : t("newCars")}
-                onDelete={() => removeUsedCarFilter()}
-              />
-            )}
-          </Box>
+        <Fade in timeout={1200}>
+          <Paper
+            sx={{
+              mx: "auto",
+              width: isMobile ? "100%" : "80%",
+              my: 2,
+              p: 2,
+              display: "flex",
+              alignItems: "center",
+              borderRadius: 8,
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+              gap: 1,
+              background: "rgba(255, 255, 255, 0.05)",
+              backdropFilter: "blur(12px)",
+              color: "white",
+              boxShadow: "0 0 30px rgba(255,255,255,0.05)",
+            }}
+          >
+            <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+              {selectedBrand && (
+                <Chip
+                  label={`${t("Brand")}: ${
+                    brandsData.find((b) => b.id === selectedBrand)?.name
+                  }`}
+                  onDelete={() => {
+                    setSelectedBrand(null);
+                    handleApplyFilters({ CarBrand: null });
+                  }}
+                />
+              )}
+              {selectedPrice[0] > 0 && (
+                <Chip
+                  label={`${t("price")}: ${selectedPrice[0]} - ${selectedPrice[1]}`}
+                  onDelete={() => {
+                    setSelectedPrice([0, 100000]);
+                    handleApplyFilters({ MinPrice: 0, MaxPrice: null });
+                  }}
+                />
+              )}
+              {selectedTransmission && (
+                <Chip
+                  label={`${t("TransmissionType")}: ${
+                    selectedTransmission === 1 ? t("manual") : t("automatic")
+                  }`}
+                  onDelete={() => {
+                    setSelectedTransmission(null);
+                    handleApplyFilters({ TransmissionType: null });
+                  }}
+                />
+              )}
+              {usedCars !== null && (
+                <Chip
+                  label={usedCars ? t("usedCars") : t("newCars")}
+                  onDelete={() => {
+                    setUsedCars(null);
+                    handleApplyFilters({ CarState: null });
+                  }}
+                />
+              )}
+            </Box>
 
-          <Chip
-            onDelete={handleClearFilters}
-            label={t("ClearAllFilters")}
-          />
-        </Paper>
+            <Chip onDelete={handleClearFilters} label={t("ClearAllFilters")} />
+          </Paper>
+        </Fade>
       )}
 
       {isMobile && (
@@ -247,20 +283,19 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
             <IconButton
               onClick={() => setOpenBottomSheet(true)}
               sx={{
-                bgcolor: theme.palette.primary.main,
+                bgcolor: "#000",
                 color: "white",
                 borderRadius: "50%",
                 boxShadow: 3,
                 padding: 2,
               }}
             >
-              <TuneIcon />
+              +
             </IconButton>
           </Box>
         </>
       )}
 
-      {/* Transmission Menu */}
       <Menu
         anchorEl={anchorEl}
         open={openMenu}
@@ -286,7 +321,6 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
         </MenuItem>
       </Menu>
 
-      {/* Price Range Dialog */}
       <PriceRangeDialog
         open={openPriceDialog}
         onClose={() => setOpenPriceDialog(false)}
@@ -300,7 +334,6 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
         t={t}
       />
 
-      {/* Brand Selection Dialog */}
       <BrandSelectionDialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}

@@ -1,21 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Grid,
   Typography,
   Pagination,
   CircularProgress,
-  Chip,
-  Button,
   useMediaQuery,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import ProductCard from "../components/productItem";
 import Filters from "../components/filters";
-import { useTheme } from "@mui/material/styles";
 import { useBrands, useCars } from "../services/hooks/useCards";
 import { useLanguage } from "../contexts/LanguageContext";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import LayersIcon from "@mui/icons-material/Layers";
+import { motion } from "framer-motion";
 
 const ProductsScreen = () => {
   const theme = useTheme();
@@ -58,119 +57,177 @@ const ProductsScreen = () => {
     }));
   };
 
-  const handleClearFilter = (key) => {
-    setFilters((prev) => ({ ...prev, [key]: null, PageNumber: 1 }));
+  const isMobile = useMediaQuery("(max-width: 1000px)");
+
+  const fadeSlide = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: i * 0.15, duration: 0.5 },
+    }),
   };
 
-  const handleClearAllFilters = () => {
-    setFilters({
-      MinPrice: null,
-      MaxPrice: null,
-      CarCategory: null,
-      TransmissionType: null,
-      Model: null,
-      IsPaginated: true,
-      PageNumber: 1,
-      PageSize: productsPerPage,
-      CarState: null,
-      CarBrand: null,
-    });
-  };
-  const ismobile = useMediaQuery("(max-width: 1000px)");
   return (
-    <Box sx={{ p: 4, minHeight: "100vh" }}>
-      <Typography variant="h4" textAlign="center" mt={2} mb={4}>
-        {t("Our Cars")}
-      </Typography>
-
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          width: ismobile ? "100%" : "50%",
-          alignItems: "center",
-          mb: 3,
-          justifySelf: "center",
-          alignSelf: "center",
-          p: 2,
-          borderRadius: 2,
-          boxShadow: 1,
-          backgroundColor: theme.palette.background.paper,
-        }}
-      >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <DirectionsCarIcon
-            color="primary"
-            fontSize={ismobile ? "small" : "medium"}
-          />
-          <Typography variant={ismobile ? "body2" : "h6"} fontWeight="bold">
-            {t("Total Cars")}:{" "}
-            <span style={{ color: theme.palette.primary.main }}>
-              {data?.totalCount || 0}
-            </span>
+    <Box
+      sx={{
+        pt: 10,
+        minHeight: "100vh",
+        background: "linear-gradient(to bottom, #000000, #120000ff)",
+        color: "#fff",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Box sx={{ width: isMobile ? "100%" : "80%", p: isMobile ? 2 : 4 }}>
+        <motion.div
+          variants={fadeSlide}
+          initial="hidden"
+          animate="visible"
+          custom={1}
+        >
+          <Typography
+            variant="h4"
+            textAlign="center"
+            mt={2}
+            mb={4}
+            fontWeight="bold"
+            sx={{
+              fontFamily: "Michroma",
+              fontSize: 40,
+              color: "#B30000",
+              letterSpacing: 1,
+            }}
+          >
+            {t("Our Cars")}
           </Typography>
-        </Box>
+        </motion.div>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <LayersIcon
-            color="primary"
-            fontSize={ismobile ? "small" : "medium"}
-          />
-          <Typography variant={ismobile ? "body2" : "h6"} fontWeight="bold">
-            {t("Page")}:{" "}
-            <span style={{ color: theme.palette.primary.main }}>
-              {currentPage}
-            </span>{" "}
-            / {data?.totalPages || 1}
-          </Typography>
-        </Box>
-      </Box>
+        <motion.div
+          variants={fadeSlide}
+          initial="hidden"
+          animate="visible"
+          custom={2}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: isMobile ? "column" : "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 3,
+              p: 2,
+              borderRadius: 3,
+              background: "linear-gradient(145deg, #0d0d0d, #1a1a1a)",
+              boxShadow: "0 0 20px rgba(255, 0, 0, 0.2)",
+              gap: 2,
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Typography fontWeight="bold" fontSize={isMobile ? 14 : 18}>
+                {t("Total Cars")}:{" "}
+                <span style={{ color: "#ff3333" }}>
+                  {data?.totalCount || 0}
+                </span>
+              </Typography>
+            </Box>
 
-      {/* Show loading if brands are still fetching */}
-      {brandsLoading ? (
-        <Typography textAlign="center">{t("Loading brands...")}</Typography>
-      ) : brandsError ? (
-        <Typography color="error" textAlign="center">
-          {/* {t("Failed to load brands")} */}
-        </Typography>
-      ) : (
-        <Filters
-          filters={filters}
-          brandsData={brandsData}
-          onApplyFilters={handleApplyFilters}
-        />
-      )}
-
-      {/* Loading & Error Handling */}
-      {isLoading ? (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-          <CircularProgress />
-        </Box>
-      ) : error ? (
-        <Typography textAlign="center">{t("NoCarsFound")}</Typography>
-      ) : (
-        <>
-          {/* Product List */}
-          <Grid container spacing={3} justifyContent={"center"}>
-            {data?.items?.map((car) => (
-              <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={car.id}>
-                <ProductCard car={car} />
-              </Grid>
-            ))}
-          </Grid>
-
-          {/* Pagination */}
-          <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-            <Pagination
-              count={data?.totalPages}
-              page={currentPage}
-              onChange={handlePageChange}
-              color="primary"
-            />
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <LayersIcon sx={{ color: "#B30000" }} />
+              <Typography fontWeight="bold" fontSize={isMobile ? 14 : 18}>
+                {t("Page")}:{" "}
+                <span style={{ color: "#ff3333" }}>{currentPage}</span> /{" "}
+                {data?.totalPages || 1}
+              </Typography>
+            </Box>
           </Box>
-        </>
-      )}
+        </motion.div>
+
+        {brandsLoading ? (
+          <Typography textAlign="center">{t("Loading brands...")}</Typography>
+        ) : brandsError ? (
+          <Typography color="error" textAlign="center" mt={2}>
+            {t("Failed to load brands")}
+          </Typography>
+        ) : (
+          <motion.div
+            variants={fadeSlide}
+            initial="hidden"
+            animate="visible"
+            custom={3}
+          >
+            <Filters
+              filters={filters}
+              brandsData={brandsData}
+              onApplyFilters={handleApplyFilters}
+            />
+          </motion.div>
+        )}
+
+        {isLoading ? (
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+            <CircularProgress sx={{ color: "#B30000" }} />
+          </Box>
+        ) : error ? (
+          <Typography textAlign="center" mt={4}>
+            {t("NoCarsFound")}
+          </Typography>
+        ) : (
+          <>
+            <Grid container spacing={4} justifyContent="center">
+              {data?.items?.map((car, index) => (
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  key={car.id}
+                  sx={{
+                    transition: "transform 0.3s ease-in-out",
+                    "&:hover": { transform: "scale(1.05)" },
+                  }}
+                  component={motion.div}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeSlide}
+                  custom={index % 3}
+                >
+                  <ProductCard car={car} />
+                </Grid>
+              ))}
+            </Grid>
+
+            <motion.div
+              variants={fadeSlide}
+              initial="hidden"
+              animate="visible"
+              custom={5}
+            >
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+                <Pagination
+                  count={data?.totalPages}
+                  page={currentPage}
+                  onChange={handlePageChange}
+                  color="#B30000"
+                  sx={{
+                    "& .MuiPaginationItem-root": {
+                      color: "#fff",
+                    },
+                    "& .Mui-selected": {
+                      backgroundColor: "#B30000",
+                      color: "#fff",
+                    },
+                  }}
+                />
+              </Box>
+            </motion.div>
+          </>
+        )}
+      </Box>
     </Box>
   );
 };
+
 export default ProductsScreen;

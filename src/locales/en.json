@@ -1,8 +1,8 @@
 {
   "appName": "AL Muslmi",
   "searchPlaceholder": "Search...",
-  "carsForSale": "Cars for Sale",
-  "newArrivals": "New Arrivals",
+  "carsForSale": "Cars",
+  "newArrivals": "Featured",
   "offersDiscounts": "Offers & Discounts",
   "requestCar": "Request a Car",
   "sedan": "Sedan",

@@ -57,7 +57,7 @@ const PriceRangeDialog = ({
             valueLabelDisplay="auto"
             valueLabelFormat={(value) => `${value} ${t("currency")}`}
             min={0}
-            max={1000000}
+            max={100000000}
           />
           <Box sx={{ display: "flex", gap: 2 }}>
             <TextField

@@ -60,11 +60,9 @@ const App = () => {
                         />
                       </Suspense>
                     )}
-                    <Container sx={{ mt: 4 }}>
                       <Suspense fallback={LottieFallback}>
                         {isAdmin ? <AdminRoutes /> : <AppRoutes />}
                       </Suspense>
-                    </Container>
                     {!isAdmin && (
                       <Suspense fallback={LottieFallback}>
                         <Footer darkMode={darkMode} />
