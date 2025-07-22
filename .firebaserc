@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "al-muslmi"
+    "default": "instractur-app"
   },
   "targets": {
     "al-muslmi": {
