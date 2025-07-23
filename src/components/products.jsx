@@ -7,9 +7,9 @@ import {
   TextField,
   InputAdornment,
   useTheme,
-  useMediaQuery,
   IconButton,
   Paper,
+  Stack,
 } from "@mui/material";
 import { Search as SearchIcon, Tune as FilterIcon } from "@mui/icons-material";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -62,9 +62,9 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
       }}
     >
       <motion.div
-        initial={{ opacity: 0, x: -50 }}
+        initial={{ opacity: 0, x: -60 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
       >
         <Typography
           variant="h3"
@@ -82,7 +82,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
 
       {withSearch && (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
         >
@@ -93,7 +93,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
                 alignItems: "center",
                 gap: 2,
                 width: "100%",
-                maxWidth: 900,
+                maxWidth: 1200,
                 px: 2,
               }}
             >
@@ -149,51 +149,61 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
                 <Paper
                   elevation={2}
                   sx={{
-                    maxWidth: 900,
+                    maxWidth: 700,
                     mx: "auto",
-                    px: 3,
-                    py: 3,
-                    borderRadius: 3,
+                    px: 4,
+                    py: 4,
+                    borderRadius: 4,
                     mb: 4,
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: 2,
-                    justifyContent: "center",
-                    backgroundColor: isDarkMode ? "#1e1e1e" : "#fdfdfd",
+                    backgroundColor: isDarkMode ? "#1a1a1a" : "#fff",
+                    boxShadow: isDarkMode
+                      ? "0 4px 20px rgba(0,0,0,0.4)"
+                      : "0 4px 20px rgba(0,0,0,0.1)",
                   }}
                 >
-                  <TextField
-                    variant="outlined"
-                    type="number"
-                    placeholder={t("minPrice")}
-                    sx={{
-                      width: 150,
-                      backgroundColor: isDarkMode ? "#333" : "#f0f0f0",
-                      borderRadius: 2,
-                      "& .MuiOutlinedInput-root": {
+                  <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    spacing={3}
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <TextField
+                      variant="filled"
+                      type="number"
+                      placeholder={t("minPrice")}
+                      label={t("minPrice")}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">EGP</InputAdornment>
+                        ),
+                      }}
+                      sx={{
+                        width: 200,
+                        bgcolor: isDarkMode ? "#292929" : "#f3f3f3",
                         borderRadius: 2,
-                        "& fieldset": { border: "none" },
-                      },
-                    }}
-                    value={minPrice}
-                    onChange={(e) => setMinPrice(e.target.value)}
-                  />
-                  <TextField
-                    variant="outlined"
-                    type="number"
-                    placeholder={t("maxPrice")}
-                    sx={{
-                      width: 150,
-                      backgroundColor: isDarkMode ? "#333" : "#f0f0f0",
-                      borderRadius: 2,
-                      "& .MuiOutlinedInput-root": {
+                      }}
+                      value={minPrice}
+                      onChange={(e) => setMinPrice(e.target.value)}
+                    />
+                    <TextField
+                      variant="filled"
+                      type="number"
+                      placeholder={t("maxPrice")}
+                      label={t("maxPrice")}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">EGP</InputAdornment>
+                        ),
+                      }}
+                      sx={{
+                        width: 200,
+                        bgcolor: isDarkMode ? "#292929" : "#f3f3f3",
                         borderRadius: 2,
-                        "& fieldset": { border: "none" },
-                      },
-                    }}
-                    value={maxPrice}
-                    onChange={(e) => setMaxPrice(e.target.value)}
-                  />
+                      }}
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(e.target.value)}
+                    />
+                  </Stack>
                 </Paper>
               </motion.div>
             )}
@@ -201,34 +211,21 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
         </motion.div>
       )}
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          width: "100%",
-        }}
-      >
+      <Box display="flex" justifyContent="center" width="100%">
         <Grid
           container
-          spacing={3}
+          spacing={4}
           justifyContent="center"
-          sx={{
-            width: "100%",
-            maxWidth: 1150,
-          }}
+          sx={{ width: "100%", maxWidth: 1400 }}
         >
           {filteredCars?.length > 0 ? (
             filteredCars.map((car, index) => (
-              <Grid
-                item
-                key={car.id}
-                sx={{ display: "flex", justifyContent: "center" }}
-              >
+              <Grid item key={car.id} sx={{ display: "flex", justifyContent: "center" }}>
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  style={{ width: 320 }}
+                  initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
+                  style={{ width: 420 }}
                 >
                   <ProductCard car={car} />
                 </motion.div>

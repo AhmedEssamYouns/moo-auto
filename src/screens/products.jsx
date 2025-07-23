@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Grid,
@@ -12,9 +12,9 @@ import ProductCard from "../components/productItem";
 import Filters from "../components/filters";
 import { useBrands, useCars } from "../services/hooks/useCards";
 import { useLanguage } from "../contexts/LanguageContext";
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import LayersIcon from "@mui/icons-material/Layers";
 import { motion } from "framer-motion";
+import EmojiTransportationIcon from "@mui/icons-material/EmojiTransportation";
+import MapIcon from "@mui/icons-material/Map";
 
 const ProductsScreen = () => {
   const theme = useTheme();
@@ -104,46 +104,6 @@ const ProductsScreen = () => {
           </Typography>
         </motion.div>
 
-        <motion.div
-          variants={fadeSlide}
-          initial="hidden"
-          animate="visible"
-          custom={2}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: isMobile ? "column" : "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 3,
-              p: 2,
-              borderRadius: 3,
-              background: "linear-gradient(145deg, #0d0d0d, #1a1a1a)",
-              boxShadow: "0 0 20px rgba(255, 0, 0, 0.2)",
-              gap: 2,
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Typography fontWeight="bold" fontSize={isMobile ? 14 : 18}>
-                {t("Total Cars")}:{" "}
-                <span style={{ color: "#ff3333" }}>
-                  {data?.totalCount || 0}
-                </span>
-              </Typography>
-            </Box>
-
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <LayersIcon sx={{ color: "#B30000" }} />
-              <Typography fontWeight="bold" fontSize={isMobile ? 14 : 18}>
-                {t("Page")}:{" "}
-                <span style={{ color: "#ff3333" }}>{currentPage}</span> /{" "}
-                {data?.totalPages || 1}
-              </Typography>
-            </Box>
-          </Box>
-        </motion.div>
-
         {brandsLoading ? (
           <Typography textAlign="center">{t("Loading brands...")}</Typography>
         ) : brandsError ? (
@@ -205,12 +165,52 @@ const ProductsScreen = () => {
               animate="visible"
               custom={5}
             >
-              <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 2,
+                  mt: 6,
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: isMobile ? "column" : "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: 3,
+                    px: 2,
+                    py: 1,
+                    borderRadius: 3,
+                    background: "linear-gradient(145deg, #0d0d0d, #1a1a1a)",
+                    boxShadow: "0 0 20px rgba(255, 0, 0, 0.2)",
+                  }}
+                >
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <EmojiTransportationIcon sx={{ color: "#FF4444" }} />
+                    <Typography fontWeight="bold" fontSize={isMobile ? 14 : 18}>
+                      {t("Total Cars")}:{" "}
+                      <span style={{ color: "#ff3333" }}>
+                        {data?.totalCount || 0}
+                      </span>
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <MapIcon sx={{ color: "#FF4444" }} />
+                    <Typography fontWeight="bold" fontSize={isMobile ? 14 : 18}>
+                      {t("Page")}:{" "}
+                      <span style={{ color: "#ff3333" }}>{currentPage}</span> /{" "}
+                      {data?.totalPages || 1}
+                    </Typography>
+                  </Box>
+                </Box>
+
                 <Pagination
                   count={data?.totalPages}
                   page={currentPage}
                   onChange={handlePageChange}
-                  color="#B30000"
                   sx={{
                     "& .MuiPaginationItem-root": {
                       color: "#fff",

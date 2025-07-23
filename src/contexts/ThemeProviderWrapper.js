@@ -22,7 +22,7 @@ const ThemeProviderWrapper = ({ children }) => {
         palette: {
           mode: darkMode ? "dark" : "light",
           primary: {
-            main: darkMode ? "#1976D2" : "#1976D2",
+            main: darkMode ? "#B30000" : "#B30000",
             contrastText: "#fff",
           },
           secondary: {
@@ -80,7 +80,7 @@ const ThemeProviderWrapper = ({ children }) => {
             styleOverrides: {
               root: {
                 "&:hover": {
-                  color: darkMode ? "#80CBC4" : "#1976D2",
+                  color: "#B30000",
                   cursor: "pointer",
                 },
               },
@@ -90,23 +90,23 @@ const ThemeProviderWrapper = ({ children }) => {
             styleOverrides: {
               root: {
                 "& .MuiInputBase-input": {
-                  color: darkMode ? "#ffffff" : "#000000", // Text color in input
+                  color: darkMode ? "#ffffff" : "#000000",
                 },
                 "& .MuiFormLabel-root": {
-                  color: darkMode ? "#B0BEC5" : "#757575", // Label color
+                  color: darkMode ? "#B0BEC5" : "#757575",
                   "&.Mui-focused": {
-                    color: darkMode ? "#80CBC4" : "#1976D2", // Focused label color
+                    color: darkMode ? "#80CBC4" : "#1976D2",
                   },
                 },
                 "& .MuiOutlinedInput-root": {
                   "& fieldset": {
-                    borderColor: darkMode ? "#B0BEC5" : "#1976D2", // Border color for outlined input
+                    borderColor: darkMode ? "#B0BEC5" : "#1976D2",
                   },
                   "&:hover fieldset": {
-                    borderColor: darkMode ? "#80CBC4" : "#1565C0", // Hover border color
+                    borderColor: darkMode ? "#80CBC4" : "#1565C0",
                   },
                   "&.Mui-focused fieldset": {
-                    borderColor: darkMode ? "#80CBC4" : "#1976D2", // Focused border color
+                    borderColor: darkMode ? "#80CBC4" : "#1976D2",
                   },
                 },
               },

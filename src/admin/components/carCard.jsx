@@ -12,12 +12,13 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const AdminProductCard = ({ car, onEdit, onDelete }) => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-
+  const { t } = useLanguage();
   const user = JSON.parse(localStorage.getItem("user"));
   const isOwner = user?.roles.includes("Owner");
   const isEditor = user?.roles.includes("Editor");
@@ -83,12 +84,18 @@ const AdminProductCard = ({ car, onEdit, onDelete }) => {
 
       {/* Car Details */}
       <CardContent sx={{ flexGrow: 1, px: 2 }}>
-        <Typography variant="h6" sx={{ fontWeight: "bold", color: isDarkMode ? "white" : "black" }}>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: "bold", color: isDarkMode ? "white" : "black" }}
+        >
           {car.name} - {car.model}
         </Typography>
 
-        <Typography variant="h6" sx={{ fontWeight: "bold", color: "#4CAF50", mt: 1 }}>
-          EGP {car.price.toLocaleString()}
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: "bold", color: "#4CAF50", mt: 1 }}
+        >
+          {t("EGP")} {car.price.toLocaleString()}
         </Typography>
 
         <Chip
@@ -105,16 +112,31 @@ const AdminProductCard = ({ car, onEdit, onDelete }) => {
       <Box sx={{ display: "flex", flexDirection: "column", p: 2, gap: 1 }}>
         {isOwner && (
           <>
-            <Button variant="contained" color="primary" onClick={() => onEdit(car.id)} startIcon={<EditIcon />}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => onEdit(car.id)}
+              startIcon={<EditIcon />}
+            >
               Edit
             </Button>
-            <Button variant="contained" color="error" onClick={() => onDelete(car.id)} startIcon={<DeleteIcon />}>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => onDelete(car.id)}
+              startIcon={<DeleteIcon />}
+            >
               Delete
             </Button>
           </>
         )}
-        {(isEditor && !isOwner) && (
-          <Button variant="contained" color="primary" onClick={() => onEdit(car.id)} startIcon={<EditIcon />}>
+        {isEditor && !isOwner && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => onEdit(car.id)}
+            startIcon={<EditIcon />}
+          >
             Edit
           </Button>
         )}

@@ -42,7 +42,7 @@ const HomeScreen = () => {
       sx={{
         minHeight: "100vh",
         backgroundImage: `url(${images[currentImage]})`,
-        backgroundSize: "cover",
+        backgroundSize:"cover",
         backgroundPosition: "center",
         width: "100%",
         backgroundRepeat: "no-repeat",

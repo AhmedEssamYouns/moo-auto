@@ -11,7 +11,6 @@ import BestSelling from "../components/products";
 import CarsListScreen from "../screens/searchList";
 import AdminPanel from "../admin/routes/adminRouter";
 // Dummy Pages
-const NewArrivals = () => <h2>New Arrivals</h2>;
 const Offers = () => <h2>Offers & Discounts</h2>;
 
 const AppRoutes = () => {

@@ -162,7 +162,7 @@ const MobileDrawerFilters = ({
             sx={{ mb: 1 }}
           >
             {selectedPrice
-              ? `${selectedPrice[0]} - ${selectedPrice[1]} EGP`
+              ? `${selectedPrice[0]} - ${selectedPrice[1]} ${t('EGP')}`
               : "Select Price Range"}
           </Button>
         </Box>
@@ -206,7 +206,7 @@ const MobileDrawerFilters = ({
             min={0}
             max={100000}
             step={1000}
-            valueLabelFormat={(value) => `${value} EGP`}
+            valueLabelFormat={(value) => `${value} {t('EGP')}`}
           />
           <Box sx={{ mt: 2 }}>
             <Typography mb={2}>Manual Price Input</Typography>

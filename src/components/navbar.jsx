@@ -23,6 +23,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import NavDrawer from "./drawer";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useSearch } from "../services/hooks/useCards";
+import MobileNavbar from "./mobileNav";
 
 const Navbar = ({ darkMode }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -56,6 +57,18 @@ const Navbar = ({ darkMode }) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  if (isMobile)
+    return (
+      <MobileNavbar
+        darkMode={darkMode}
+        onSearch={handleKeyDown}
+        drawerOpen={drawerOpen}
+        searchText={searchText}
+        setSearchText={setSearchText}
+        onDrawerOpen={() => setDrawerOpen(true)}
+      />
+    );
 
   return (
     <>
@@ -166,7 +179,7 @@ const Navbar = ({ darkMode }) => {
               />
             )}
 
-            {!searchOpen && (
+            {!searchOpen && !isMobile && (
               <Select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
@@ -202,12 +215,20 @@ const Navbar = ({ darkMode }) => {
                 in={searchOpen}
                 mountOnEnter
                 unmountOnExit
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  zIndex: 9999,
+                  width: "100%",
+                }}
               >
                 <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    width: "100%",
+                    width: "150%",
                     backgroundColor: darkMode
                       ? "rgba(255,255,255,0.05)"
                       : "rgba(0,0,0,0.05)",
@@ -230,6 +251,7 @@ const Navbar = ({ darkMode }) => {
                     sx={{
                       color: darkMode ? "white" : "black",
                       py: 1,
+                      width: "100%",
                       fontSize: "1rem",
                     }}
                   />
@@ -306,7 +328,7 @@ const Navbar = ({ darkMode }) => {
                           >
                             {t("Model")} {item.model}
                             <br />
-                            EGP {item.price}
+                            {t('EGP')} {item.price}
                           </Typography>
                         </ListItem>
                       </ListItem>

@@ -217,7 +217,7 @@ const ProductCard = ({ car }) => {
             sx={{ fontWeight: "bold", color: isDarkMode ? "#ffff" : "#ffff" }}
           >
             {car.price > 0
-              ? `EGP ${Number(car.price).toLocaleString()}`
+              ? `${t('EGP')} ${Number(car.price).toLocaleString()}`
               : t("Price Not Available")}
           </Typography>
           <Button

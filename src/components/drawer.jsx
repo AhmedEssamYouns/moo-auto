@@ -9,6 +9,8 @@ import {
   IconButton,
   Typography,
   Switch,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import logo from "../assets/imgs/logo.png";
@@ -26,7 +28,7 @@ import { Link } from "react-router-dom";
 const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === "dark";
-  const { t } = useLanguage(); // Get translations
+  const { language, setLanguage, t } = useLanguage();
 
   const navItems = [
     {
@@ -46,18 +48,20 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
   ];
 
   return (
-    <Drawer
+ <Drawer
       anchor="left"
       open={open}
       onClose={onClose}
       PaperProps={{
         sx: {
           width: 250,
-          backgroundColor: isDarkMode ? "#424242" : "white",
+          backgroundColor: isDarkMode ? "black" : "white",
           color: isDarkMode ? "white" : "black",
           borderTopRightRadius: 20,
           borderBottomRightRadius: 20,
+          backgroundImage:"none"
         },
+        
       }}
     >
       {/* Drawer Header */}
@@ -102,22 +106,29 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
           </ListItem>
         ))}
       </List>
+      <Divider sx={{ mx: 2, mt: 1 }} />
 
-      <Divider sx={{ backgroundColor: isDarkMode ? "gray" : "black", my: 1 }} />
-
-      {/* Dark Mode Toggle */}
-      <ListItem>
-        <IconButton sx={{ color: isDarkMode ? "white" : "black", mr: 2 }}>
-          {isDarkMode ? <DarkModeIcon /> : <LightModeIcon />}
-        </IconButton>
-        <ListItemText
-          primary={
-            theme.palette.mode === "dark" ? t("lightMode") : t("darkMode")
-          }
-          sx={{ color: isDarkMode ? "white" : "black" }}
-        />
-        <Switch checked={darkMode} onChange={toggleDarkMode} />
-      </ListItem>
+      <Box sx={{ px: 3, mt: 2, mb: 2 }}>
+        <Typography variant="body2" sx={{ mb: 0.5 }}>
+          {t("language")}
+        </Typography>
+        <Select
+          fullWidth
+          size="small"
+          value={language}
+          onChange={(e) => setLanguage(e.target.value)}
+          sx={{
+            bgcolor: isDarkMode ? "#333" : "#f5f5f5",
+            color: isDarkMode ? "#fff" : "#000",
+            fontSize: "0.9rem",
+            borderRadius: 1,
+            "& .MuiSelect-icon": { color: isDarkMode ? "#fff" : "#000" },
+          }}
+        >
+          <MenuItem value="en">{t("english")}</MenuItem>
+          <MenuItem value="ar">{t("arabic")}</MenuItem>
+        </Select>
+      </Box>
     </Drawer>
   );
 };

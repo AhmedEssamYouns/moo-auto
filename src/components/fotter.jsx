@@ -10,16 +10,13 @@ import {
 } from "@mui/material";
 import {
   Facebook,
-  WhatsApp,
   PhoneInTalk,
   Instagram,
+  Email,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { FaTiktok } from "react-icons/fa";
-import { useLanguage } from "../contexts/LanguageContext";
 
 const Footer = ({ darkMode }) => {
-  const { t } = useLanguage();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -42,7 +39,7 @@ const Footer = ({ darkMode }) => {
                   component={Link}
                   to="/"
                   sx={{
-                    color: "#ff3333",
+                    color: "#B30000",
                     textDecoration: "none",
                     fontFamily: "Michroma",
                     fontWeight: "bold",
@@ -54,7 +51,7 @@ const Footer = ({ darkMode }) => {
                   Moo Auto
                 </Typography>
                 <Typography sx={{ mt: 1, lineHeight: 1.8, opacity: 0.7 }}>
-                  {t("Your ultimate destination for luxury and performance cars.")}
+                  The ultimate car experience.
                 </Typography>
               </Box>
             </Slide>
@@ -64,17 +61,17 @@ const Footer = ({ darkMode }) => {
             <Slide in direction="up" timeout={1000}>
               <Box>
                 <Typography variant="h6" gutterBottom>
-                  {t("Quick Links")}
+                  Quick Links
                 </Typography>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 1.2 }}>
                   <Link to="/cars-for-sale" style={{ color: "#ccc", textDecoration: "none" }}>
-                    {t("Cars for Sale")}
+                    Cars for Sale
                   </Link>
                   <Link to="/new-arrivals" style={{ color: "#ccc", textDecoration: "none" }}>
-                    {t("New Arrivals")}
+                    New Arrivals
                   </Link>
                   <Link to="/request-car" style={{ color: "#ccc", textDecoration: "none" }}>
-                    {t("Request a Car")}
+                    Request a Car
                   </Link>
                 </Box>
               </Box>
@@ -85,38 +82,36 @@ const Footer = ({ darkMode }) => {
             <Slide in direction="right" timeout={1200}>
               <Box>
                 <Typography variant="h6" gutterBottom>
-                  {t("Contact Us")}
+                  Contact Us
                 </Typography>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 1.2 }}>
                   <a
-                    href="tel:+201203333274"
+                    href="tel:01221558000"
                     style={{ color: "#ccc", textDecoration: "none", display: "flex", alignItems: "center" }}
                   >
-                    <PhoneInTalk sx={{ mr: 1 }} /> +20 120 333 3274
+                    <PhoneInTalk sx={{ mr: 1 }} /> 012 21558000
                   </a>
                   <a
-                    href="https://www.instagram.com/almosallamy.automotive/"
+                    href="mailto:mooauto9@gmail.com"
+                    style={{ color: "#ccc", textDecoration: "none", display: "flex", alignItems: "center" }}
+                  >
+                    <Email sx={{ mr: 1 }} /> mooauto9@gmail.com
+                  </a>
+                  <a
+                    href="https://www.instagram.com/mooautoeg/?hl=ar"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ color: "#ccc", textDecoration: "none", display: "flex", alignItems: "center" }}
                   >
-                    <Instagram sx={{ mr: 1 }} /> {t("Instagram")}
+                    <Instagram sx={{ mr: 1 }} /> Instagram
                   </a>
                   <a
-                    href="https://www.facebook.com/Free4auto"
+                    href="https://www.facebook.com/people/Moo-Auto/61566437047574/?_rdr"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ color: "#ccc", textDecoration: "none", display: "flex", alignItems: "center" }}
                   >
-                    <Facebook sx={{ mr: 1 }} /> {t("Facebook")}
-                  </a>
-                  <a
-                    href="https://www.tiktok.com/@almosallamyautomotive"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: "#ccc", textDecoration: "none", display: "flex", alignItems: "center" }}
-                  >
-                    <FaTiktok style={{ marginRight: 8 }} /> {t("TikTok")}
+                    <Facebook sx={{ mr: 1 }} /> Facebook
                   </a>
                 </Box>
               </Box>
