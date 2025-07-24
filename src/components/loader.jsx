@@ -10,6 +10,7 @@ const LottieComponent = () => {
       display="flex"
       justifyContent="center"
       alignItems="center"
+      bgcolor={'white'}
       height="100%"
       width={isMobile ? '100%' : '40%'}
     >

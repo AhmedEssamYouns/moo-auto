@@ -9,14 +9,12 @@ import {
   useTheme,
   Fade,
   IconButton,
-  Typography,
   Button,
 } from "@mui/material";
 import { useLanguage } from "../contexts/LanguageContext";
 import PriceRangeDialog from "./PriceRangeDialog";
 import BrandSelectionDialog from "./BrandSelectionDialog";
 import MobileDrawerFilters from "./mobileFilter";
-import TuneIcon from "@mui/icons-material/Tune";
 
 const Filters = ({ onApplyFilters, brandsData, filters }) => {
   const { t } = useLanguage();
@@ -87,35 +85,23 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
       {!isMobile && (
         <Fade in timeout={900}>
           <Paper
-            elevation={24}
+            elevation={8}
             sx={{
               mx: "auto",
               width: "95%",
               maxWidth: 900,
-              my: 6,
-              p: 4,
+              my: 4,
+              p: 3,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               borderRadius: 8,
               flexWrap: "wrap",
               gap: 2,
-              background: "linear-gradient(135deg, rgba(0,0,0,0.7), rgba(60,0,0,0.5))",
-              backdropFilter: "blur(24px)",
-              boxShadow: "0 0 60px rgba(255,0,0,0.2)",
-              position: "relative",
+              background: "#f9f9f9",
+              border: "1px solid #ddd",
             }}
           >
-            <TuneIcon
-              sx={{
-                position: "absolute",
-                top: 16,
-                right: 16,
-                color: "#ff4444",
-                fontSize: 28,
-              }}
-            />
-
             <Box
               sx={{
                 display: "flex",
@@ -132,10 +118,11 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
                 }}
                 variant="contained"
                 sx={{
-                  background: "rgba(255,255,255,0.08)",
-                  color: "white",
+                  backgroundColor: "#ffffff",
+                  border: "1px solid #ccc",
+                  color: "#333",
                   ":hover": {
-                    backgroundColor: "rgba(255,255,255,0.15)",
+                    backgroundColor: "#f0f0f0",
                   },
                 }}
               >
@@ -146,10 +133,11 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
                 onClick={() => setOpenDialog(true)}
                 variant="contained"
                 sx={{
-                  background: "rgba(255,255,255,0.08)",
-                  color: "white",
+                  backgroundColor: "#ffffff",
+                  border: "1px solid #ccc",
+                  color: "#333",
                   ":hover": {
-                    backgroundColor: "rgba(255,255,255,0.15)",
+                    backgroundColor: "#f0f0f0",
                   },
                 }}
               >
@@ -160,10 +148,11 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
                 onClick={() => setOpenPriceDialog(true)}
                 variant="contained"
                 sx={{
-                  background: "rgba(255,255,255,0.08)",
-                  color: "white",
+                  backgroundColor: "#ffffff",
+                  border: "1px solid #ccc",
+                  color: "#333",
                   ":hover": {
-                    backgroundColor: "rgba(255,255,255,0.15)",
+                    backgroundColor: "#f0f0f0",
                   },
                 }}
               >
@@ -174,10 +163,11 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
                 onClick={(e) => setAnchorEl(e.currentTarget)}
                 variant="contained"
                 sx={{
-                  background: "rgba(255,255,255,0.08)",
-                  color: "white",
+                  backgroundColor: "#ffffff",
+                  border: "1px solid #ccc",
+                  color: "#333",
                   ":hover": {
-                    backgroundColor: "rgba(255,255,255,0.15)",
+                    backgroundColor: "#f0f0f0",
                   },
                 }}
               >
@@ -210,10 +200,7 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
               flexWrap: "wrap",
               justifyContent: "space-between",
               gap: 1,
-              background: "rgba(255, 255, 255, 0.05)",
-              backdropFilter: "blur(12px)",
-              color: "white",
-              boxShadow: "0 0 30px rgba(255,255,255,0.05)",
+              border: "1px solid #ddd",
             }}
           >
             <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
@@ -283,11 +270,12 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
             <IconButton
               onClick={() => setOpenBottomSheet(true)}
               sx={{
-                bgcolor: "#000",
-                color: "white",
+                backgroundColor: "#fff",
+                color: "#000",
                 borderRadius: "50%",
                 boxShadow: 3,
                 padding: 2,
+                border: "1px solid #ccc",
               }}
             >
               +

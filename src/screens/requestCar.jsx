@@ -5,7 +5,6 @@ import {
   Button,
   Typography,
   Container,
-  useTheme,
   Snackbar,
   Alert,
   MenuItem,
@@ -30,7 +29,6 @@ const fadeUp = {
 
 const RequestCarScreen = () => {
   const { t } = useLanguage();
-  const theme = useTheme();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -85,8 +83,7 @@ const RequestCarScreen = () => {
       sx={{
         minHeight: "100vh",
         py: 10,
-        background: "linear-gradient(to bottom, #000000, #120000ff)",
-        backdropFilter: "blur(10px)",
+        background: "linear-gradient(to bottom, #ffffff, #f3f3f3)",
       }}
     >
       <Container maxWidth="md">
@@ -103,7 +100,7 @@ const RequestCarScreen = () => {
               mb: 4,
               textAlign: "center",
               fontFamily: "Michroma",
-              color: "#B30000",
+              color: "#000",
             }}
           >
             {t("requestCar")}
@@ -120,11 +117,9 @@ const RequestCarScreen = () => {
             sx={{
               p: 4,
               borderRadius: 4,
-              backgroundColor: "rgba(255,255,255,0.05)",
-              boxShadow: "0 4px 30px rgba(0,0,0,0.3)",
-              backdropFilter: "blur(15px)",
-              WebkitBackdropFilter: "blur(15px)",
-              border: "1px solid rgba(255,255,255,0.2)",
+              backgroundColor: "#fff",
+              boxShadow: "0 4px 30px rgba(0,0,0,0.05)",
+              border: "1px solid #ddd",
             }}
           >
             <form onSubmit={handleSubmit}>
@@ -227,12 +222,12 @@ const RequestCarScreen = () => {
                       py: 1.5,
                       fontWeight: "bold",
                       fontSize: "1rem",
-                      background: "linear-gradient(135deg, #8B0000, #B22222)",
+                      background: "linear-gradient(135deg, #B30000, #E53935)",
                       color: "#fff",
                       borderRadius: 2,
-                      boxShadow: "0 4px 20px rgba(179, 0, 0, 0.4)",
+                      boxShadow: "0 4px 20px rgba(179, 0, 0, 0.2)",
                       "&:hover": {
-                        background: "linear-gradient(135deg, #B22222, #8B0000)",
+                        background: "linear-gradient(135deg, #E53935, #B30000)",
                       },
                     }}
                   >

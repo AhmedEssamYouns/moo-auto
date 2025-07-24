@@ -92,8 +92,7 @@ const InstallmentServicesScreen = () => {
       sx={{
         minHeight: "100vh",
         py: 10,
-        background: "linear-gradient(to bottom, #000000, #120000ff)",
-        backdropFilter: "blur(10px)",
+        background: "linear-gradient(to bottom, #ffffff, #f5f5f5)",
       }}
     >
       <Container maxWidth="lg">
@@ -101,30 +100,20 @@ const InstallmentServicesScreen = () => {
           <MobileInstallmentList />
         ) : (
           <>
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-              custom={0}
-            >
+            <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={0}>
               <Typography
                 variant="h4"
                 fontWeight="bold"
                 mb={4}
                 fontFamily="Michroma, sans-serif"
                 textAlign="center"
-                color="#B30000"
+                color="#d32f2f"
               >
                 {t("Installment Services")}
               </Typography>
             </motion.div>
 
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-              custom={1}
-            >
+            <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={1}>
               <TextField
                 fullWidth
                 label={t("Search Providers")}
@@ -133,27 +122,22 @@ const InstallmentServicesScreen = () => {
                 onChange={handleSearchChange}
                 sx={{
                   mb: 4,
-                  input: { color: "#fff" },
-                  label: { color: "#fff" },
+                  input: { color: "#333" },
+                  label: { color: "#555" },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
-                      borderColor: "#ffffff44",
+                      borderColor: "#ccc",
                     },
                     "&:hover fieldset": {
-                      borderColor: "#ffffff88",
+                      borderColor: "#999",
                     },
                   },
                 }}
               />
             </motion.div>
 
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-              custom={2}
-            >
-              <Typography variant="h6" fontWeight="bold" mb={1} color="#fff">
+            <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={2}>
+              <Typography variant="h6" fontWeight="bold" mb={1} color="#333">
                 {t("Filter by Months")}
               </Typography>
               <Slider
@@ -171,13 +155,8 @@ const InstallmentServicesScreen = () => {
               />
             </motion.div>
 
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-              custom={3}
-            >
-              <Typography variant="h6" fontWeight="bold" mb={1} color="#fff">
+            <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={3}>
+              <Typography variant="h6" fontWeight="bold" mb={1} color="#333">
                 {t("Filter by Interest (%)")}
               </Typography>
               <Slider
@@ -192,36 +171,31 @@ const InstallmentServicesScreen = () => {
               />
             </motion.div>
 
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-              custom={4}
-            >
+            <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={4}>
               <TableContainer
                 component={Paper}
                 sx={{
                   borderRadius: 4,
-                  backgroundColor: "rgba(255,255,255,0.05)",
-                  boxShadow: "0 4px 30px rgba(0,0,0,0.3)",
-                  border: "1px solid rgba(255,255,255,0.2)",
+                  backgroundColor: "#ffffff",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+                  border: "1px solid #eee",
                 }}
               >
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: "bold", color: "#fff" }}>{t("Provider")}</TableCell>
-                      <TableCell sx={{ fontWeight: "bold", color: "#fff" }}>{t("Installment Plan")}</TableCell>
-                      <TableCell sx={{ fontWeight: "bold", color: "#fff" }}>{t("Months")}</TableCell>
-                      <TableCell sx={{ fontWeight: "bold", color: "#fff" }}>{t("Interest (%)")}</TableCell>
-                      <TableCell sx={{ fontWeight: "bold", color: "#fff" }}>{t("Processing Fee (%)")}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold", color: "#333" }}>{t("Provider")}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold", color: "#333" }}>{t("Installment Plan")}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold", color: "#333" }}>{t("Months")}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold", color: "#333" }}>{t("Interest (%)")}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold", color: "#333" }}>{t("Processing Fee (%)")}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {filteredProviders.length === 0 ? (
                       <TableRow>
                         <TableCell colSpan={5} align="center">
-                          <Typography variant="body1" color="#fff">
+                          <Typography variant="body1" color="#666">
                             {t("No providers found")}
                           </Typography>
                         </TableCell>
@@ -243,7 +217,7 @@ const InstallmentServicesScreen = () => {
                                   />
                                 </Grid>
                                 <Grid item>
-                                  <Typography fontWeight="medium" color="#fff">
+                                  <Typography fontWeight="medium" color="#333">
                                     {provider.name}
                                   </Typography>
                                 </Grid>
@@ -254,12 +228,12 @@ const InstallmentServicesScreen = () => {
                                 sx={{
                                   mt: 2,
                                   borderRadius: 2,
-                                  backgroundColor: "#1a1a1a",
-                                  color: "#fff",
-                                  boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+                                  backgroundColor: "#f9f9f9",
+                                  color: "#333",
+                                  boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
                                 }}
                               >
-                                <AccordionSummary expandIcon={<ArrowDropDownIcon sx={{ color: "#fff" }} />}>
+                                <AccordionSummary expandIcon={<ArrowDropDownIcon sx={{ color: "#333" }} />}>
                                   <Typography fontWeight="medium">{t("View Installment Plans")}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>

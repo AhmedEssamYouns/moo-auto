@@ -25,7 +25,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { useSearch } from "../services/hooks/useCards";
 import MobileNavbar from "./mobileNav";
 
-const Navbar = ({ darkMode }) => {
+const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -61,7 +61,6 @@ const Navbar = ({ darkMode }) => {
   if (isMobile)
     return (
       <MobileNavbar
-        darkMode={darkMode}
         onSearch={handleKeyDown}
         drawerOpen={drawerOpen}
         searchText={searchText}
@@ -75,11 +74,7 @@ const Navbar = ({ darkMode }) => {
       <AppBar
         position="fixed"
         sx={{
-          backgroundColor: scrolled
-            ? darkMode
-              ? "rgba(18, 18, 18, 0.6)"
-              : "rgba(255, 255, 255, 0.6)"
-            : "transparent",
+          backgroundColor: scrolled ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.95)",
           boxShadow: "none",
           backdropFilter: scrolled ? "blur(1px)" : "none",
           transition: "all 0.3s ease",
@@ -91,7 +86,7 @@ const Navbar = ({ darkMode }) => {
           <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
             {isMobile && !searchOpen && (
               <IconButton
-                sx={{ color: darkMode ? "white" : "black", mr: 1 }}
+                sx={{ color: "black", mr: 1 }}
                 onClick={() => setDrawerOpen(true)}
               >
                 <MenuIcon />
@@ -105,13 +100,13 @@ const Navbar = ({ darkMode }) => {
                 sx={{
                   width: 180,
                   textDecoration: "none",
-                  color: "white",
+                  color: "black",
                   fontFamily: "Michroma",
                   fontWeight: "bold",
                   fontSize: "1.6rem",
                   transition: "color 0.3s",
                   "&:hover": {
-                    color: "white",
+                    color: "black",
                   },
                 }}
               >
@@ -133,7 +128,7 @@ const Navbar = ({ darkMode }) => {
                     to={item.path}
                     variant="body1"
                     sx={{
-                      color: darkMode ? "white" : "black",
+                      color: "black",
                       textDecoration: "none",
                       "&:hover": { textDecoration: "underline" },
                       fontFamily: "Michroma",
@@ -164,15 +159,11 @@ const Navbar = ({ darkMode }) => {
                 onChange={(e) => setSearchText(e.target.value)}
                 placeholder={t("searchPlaceholder")}
                 sx={{
-                  backgroundColor: darkMode
-                    ? "rgba(255,255,255,0.1)"
-                    : "rgba(0,0,0,0.05)",
-                  backdropFilter: "blur(40px)",
-                  WebkitBackdropFilter: "blur(30px)",
+                  backgroundColor: "rgba(0,0,0,0.05)",
                   borderRadius: 4,
                   px: 2,
                   width: isTablet ? 250 : 350,
-                  color: darkMode ? "white" : "black",
+                  color: "black",
                   py: 1,
                   fontSize: "1rem",
                 }}
@@ -185,8 +176,8 @@ const Navbar = ({ darkMode }) => {
                 onChange={(e) => setLanguage(e.target.value)}
                 sx={{
                   mx: 1,
-                  bgcolor: darkMode ? "#333" : "#f0f0f0",
-                  color: darkMode ? "white" : "black",
+                  bgcolor: "#f0f0f0",
+                  color: "black",
                   borderRadius: 1,
                   fontSize: "0.85rem",
                   minWidth: 90,
@@ -201,10 +192,7 @@ const Navbar = ({ darkMode }) => {
             )}
 
             {isMobile && !searchOpen && (
-              <IconButton
-                sx={{ color: darkMode ? "white" : "black" }}
-                onClick={() => setSearchOpen(true)}
-              >
+              <IconButton sx={{ color: "black" }} onClick={() => setSearchOpen(true)}>
                 <SearchIcon />
               </IconButton>
             )}
@@ -229,9 +217,7 @@ const Navbar = ({ darkMode }) => {
                     display: "flex",
                     alignItems: "center",
                     width: "150%",
-                    backgroundColor: darkMode
-                      ? "rgba(255,255,255,0.05)"
-                      : "rgba(0,0,0,0.05)",
+                    backgroundColor: "rgba(0,0,0,0.05)",
                     backdropFilter: "blur(20px)",
                     WebkitBackdropFilter: "blur(20px)",
                     borderRadius: 4,
@@ -249,7 +235,7 @@ const Navbar = ({ darkMode }) => {
                     placeholder={t("searchPlaceholder")}
                     fullWidth
                     sx={{
-                      color: darkMode ? "white" : "black",
+                      color: "black",
                       py: 1,
                       width: "100%",
                       fontSize: "1rem",
@@ -257,7 +243,7 @@ const Navbar = ({ darkMode }) => {
                   />
                   <IconButton
                     onClick={() => setSearchOpen(false)}
-                    sx={{ color: darkMode ? "white" : "black" }}
+                    sx={{ color: "black" }}
                   >
                     <CloseIcon />
                   </IconButton>
@@ -275,7 +261,7 @@ const Navbar = ({ darkMode }) => {
                   maxHeight: 300,
                   overflowY: "auto",
                   zIndex: 10,
-                  bgcolor: darkMode ? "#333" : "white",
+                  bgcolor: "white",
                   boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
                   borderRadius: "0 0 8px 8px",
                   display: hasResults ? "block" : "flex",
@@ -293,7 +279,7 @@ const Navbar = ({ darkMode }) => {
                         component={Link}
                         to={`/product/${item.id}`}
                         sx={{
-                          "&:hover": { bgcolor: darkMode ? "#444" : "#f0f0f0" },
+                          "&:hover": { bgcolor: "#f0f0f0" },
                         }}
                       >
                         <ListItem
@@ -318,26 +304,24 @@ const Navbar = ({ darkMode }) => {
                           <ListItemText
                             primary={item.name}
                             secondary={item.brandName}
-                            sx={{ color: darkMode ? "white" : "black" }}
+                            sx={{ color: "black" }}
                           />
                           <Typography
                             sx={{
-                              color: darkMode ? "white" : "black",
+                              color: "black",
                               fontSize: isMobile ? 12 : 16,
                             }}
                           >
                             {t("Model")} {item.model}
                             <br />
-                            {t('EGP')} {item.price}
+                            {t("EGP")} {item.price}
                           </Typography>
                         </ListItem>
                       </ListItem>
                     ))}
                   </List>
                 ) : (
-                  <Typography
-                    sx={{ color: darkMode ? "white" : "black", fontSize: 16 }}
-                  >
+                  <Typography sx={{ color: "black", fontSize: 16 }}>
                     {t("NoCarsFound")}
                   </Typography>
                 )}
@@ -349,7 +333,6 @@ const Navbar = ({ darkMode }) => {
 
       <NavDrawer
         open={drawerOpen}
-        darkMode={darkMode}
         onClose={() => setDrawerOpen(false)}
       />
     </>

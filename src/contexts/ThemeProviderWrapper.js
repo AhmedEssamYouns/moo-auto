@@ -1,52 +1,41 @@
-import React, { useState, useMemo, useEffect } from "react";
-import { ThemeProvider, createTheme, CssBaseline, TextField } from "@mui/material";
+import React, { useMemo } from "react";
+import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import { useLanguage } from "./LanguageContext";
-const isAdmin = window.location.hostname.startsWith("dashboard.");
 
 const ThemeProviderWrapper = ({ children }) => {
-  const storedMode = localStorage.getItem("darkMode");
-  const [darkMode, setDarkMode] = useState(
-    isAdmin ? false : storedMode ? storedMode === "true" : true
-  );
   const { language } = useLanguage();
-
-  useEffect(() => {
-    if (!isAdmin) {
-      localStorage.setItem("darkMode", darkMode);
-    }
-  }, [darkMode, isAdmin]);
 
   const theme = useMemo(
     () =>
       createTheme({
         palette: {
-          mode: darkMode ? "dark" : "light",
+          mode: "light",
           primary: {
-            main: darkMode ? "#B30000" : "#B30000",
+            main: "#B30000",
             contrastText: "#fff",
           },
           secondary: {
-            main: darkMode ? "#03DAC6" : "#FF4081",
+            main: "#FF4081",
           },
           error: {
-            main: darkMode ? "#CF6679" : "#D32F2F",
+            main: "#D32F2F",
           },
           warning: {
-            main: darkMode ? "#FBC02D" : "#FFA000",
+            main: "#FFA000",
           },
           info: {
-            main: darkMode ? "#03A9F4" : "#0288D1",
+            main: "#0288D1",
           },
           success: {
-            main: darkMode ? "#4CAF50" : "#2E7D32",
+            main: "#2E7D32",
           },
           background: {
-            default: darkMode ? "#121212" : "#f9f9f9",
-            paper: darkMode ? "#1e1e1e" : "#ffffff",
+            default: "#f9f9f9",
+            paper: "#ffffff",
           },
           text: {
-            primary: darkMode ? "#ffffff" : "#000000",
-            secondary: darkMode ? "#B0BEC5" : "#757575",
+            primary: "#000000",
+            secondary: "#757575",
           },
         },
         typography: {
@@ -66,11 +55,11 @@ const ThemeProviderWrapper = ({ children }) => {
           MuiButton: {
             styleOverrides: {
               outlined: {
-                borderColor: darkMode ? "#80CBC4" : "#1976D2",
-                color: darkMode ? "white" : "#1976D2",
+                borderColor: "#1976D2",
+                color: "#1976D2",
                 "&:hover": {
-                  borderColor: darkMode ? "#B2DFDB" : "#1565C0",
-                  backgroundColor: darkMode ? "#80CBC4" : "#1976D2",
+                  borderColor: "#1565C0",
+                  backgroundColor: "#1976D2",
                   color: "#ffffff",
                 },
               },
@@ -90,23 +79,23 @@ const ThemeProviderWrapper = ({ children }) => {
             styleOverrides: {
               root: {
                 "& .MuiInputBase-input": {
-                  color: darkMode ? "#ffffff" : "#000000",
+                  color: "#000000", // input text
                 },
                 "& .MuiFormLabel-root": {
-                  color: darkMode ? "#B0BEC5" : "#757575",
+                  color: "#757575", // label
                   "&.Mui-focused": {
-                    color: darkMode ? "#80CBC4" : "#1976D2",
+                    color: "#1976D2", // label when focused
                   },
                 },
                 "& .MuiOutlinedInput-root": {
                   "& fieldset": {
-                    borderColor: darkMode ? "#B0BEC5" : "#1976D2",
+                    borderColor: "#1976D2",
                   },
                   "&:hover fieldset": {
-                    borderColor: darkMode ? "#80CBC4" : "#1565C0",
+                    borderColor: "#1565C0",
                   },
                   "&.Mui-focused fieldset": {
-                    borderColor: darkMode ? "#80CBC4" : "#1976D2",
+                    borderColor: "#1976D2",
                   },
                 },
               },
@@ -114,13 +103,13 @@ const ThemeProviderWrapper = ({ children }) => {
           },
         },
       }),
-    [darkMode, language]
+    [language]
   );
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {children(darkMode, setDarkMode)}
+      {children()}
     </ThemeProvider>
   );
 };

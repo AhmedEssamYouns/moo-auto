@@ -48,20 +48,20 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
   ];
 
   return (
- <Drawer
+    <Drawer
       anchor="left"
       open={open}
       onClose={onClose}
       PaperProps={{
         sx: {
           width: 250,
+          zIndex: 9999,
           backgroundColor: isDarkMode ? "black" : "white",
           color: isDarkMode ? "white" : "black",
           borderTopRightRadius: 20,
           borderBottomRightRadius: 20,
-          backgroundImage:"none"
+          backgroundImage: "none",
         },
-        
       }}
     >
       {/* Drawer Header */}
@@ -79,8 +79,15 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
       >
         <img
           src={logo}
-          alt="Al Muslmi Logo"
-          style={{ width: "100%", height: "100%", borderRadius: 45 }}
+          
+          alt="Moo Auto Logo"
+          style={{
+            resize:"contain",
+            width: "100%",
+            height: "60%",
+            borderRadius: 45,
+            marginTop: 100,
+          }}
         />
       </Box>
       <Divider sx={{ backgroundColor: "gray" }} />

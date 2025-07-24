@@ -6,10 +6,10 @@ import {
   CircularProgress,
   TextField,
   InputAdornment,
-  useTheme,
   IconButton,
   Paper,
   Stack,
+  Pagination,
 } from "@mui/material";
 import { Search as SearchIcon, Tune as FilterIcon } from "@mui/icons-material";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -17,15 +17,16 @@ import ProductCard from "./productItem";
 import { useLatestCars } from "../services/hooks/useCards";
 import { motion, AnimatePresence } from "framer-motion";
 
+const ITEMS_PER_PAGE = 6;
+
 const BestSelling = ({ isChild = false, withSearch = true }) => {
-  const theme = useTheme();
-  const isDarkMode = theme.palette.mode === "dark";
   const { t } = useLanguage();
   const { data: cars, isLoading } = useLatestCars();
   const [searchTerm, setSearchTerm] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [showFilters, setShowFilters] = useState(false);
+  const [page, setPage] = useState(1);
 
   if (isLoading) {
     return (
@@ -34,6 +35,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
         display="flex"
         justifyContent="center"
         alignItems="center"
+        sx={{ background: "#fff" }}
       >
         <CircularProgress color="primary" size={50} thickness={4} />
       </Box>
@@ -51,29 +53,35 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
     return matchesSearch && matchesPrice;
   });
 
+  const totalPages = Math.ceil(filteredCars?.length / ITEMS_PER_PAGE);
+  const paginatedCars = filteredCars?.slice(
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE
+  );
+
   return (
     <Box
       sx={{
         pt: 10,
-        pb: 6,
+        pb: 8,
         px: 2,
         minHeight: "100vh",
-        background: "linear-gradient(to bottom, #000000, #120000ff)",
+        background: "linear-gradient(to bottom, #ffffff, #f2f2f2)",
       }}
     >
       <motion.div
-        initial={{ opacity: 0, x: -60 }}
-        animate={{ opacity: 1, x: 0 }}
+        initial={{ opacity: 0, y: -60 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
       >
         <Typography
           variant="h3"
           sx={{
             fontWeight: "bold",
-            mb: 4,
+            mb: 5,
             textAlign: "center",
             fontFamily: "Michroma",
-            color: "#B30000",
+            color: "#000",
           }}
         >
           {t("NewArrivals")}
@@ -100,12 +108,12 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
               <TextField
                 variant="outlined"
                 placeholder={t("search")}
+                color="black"
                 fullWidth
                 sx={{
                   borderRadius: 2,
-                  backgroundColor: isDarkMode
-                    ? "rgba(255,255,255,0.08)"
-                    : "#f5f5f5",
+                  color: "#D32F2F",
+                  backgroundColor: "#f1f1f1",
                   "& .MuiOutlinedInput-root": {
                     borderRadius: 2,
                     "& fieldset": { border: "none" },
@@ -114,7 +122,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon color="primary" />
+                      <SearchIcon sx={{ color: "#D32F2F" }} />
                     </InputAdornment>
                   ),
                 }}
@@ -127,13 +135,13 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
                   borderRadius: 2,
                   width: 48,
                   height: 48,
-                  backgroundColor: isDarkMode ? "#2d2d2d" : "#e0e0e0",
+                  backgroundColor: "#eeeeee",
                   "&:hover": {
-                    backgroundColor: isDarkMode ? "#3a3a3a" : "#d5d5d5",
+                    backgroundColor: "#dddddd",
                   },
                 }}
               >
-                <FilterIcon />
+                <FilterIcon sx={{ color: "#D32F2F" }} />
               </IconButton>
             </Box>
           </Box>
@@ -147,7 +155,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
                 transition={{ duration: 0.4 }}
               >
                 <Paper
-                  elevation={2}
+                  elevation={3}
                   sx={{
                     maxWidth: 700,
                     mx: "auto",
@@ -155,10 +163,8 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
                     py: 4,
                     borderRadius: 4,
                     mb: 4,
-                    backgroundColor: isDarkMode ? "#1a1a1a" : "#fff",
-                    boxShadow: isDarkMode
-                      ? "0 4px 20px rgba(0,0,0,0.4)"
-                      : "0 4px 20px rgba(0,0,0,0.1)",
+                    backgroundColor: "#fafafa",
+                    boxShadow: "0 6px 30px rgba(0,0,0,0.1)",
                   }}
                 >
                   <Stack
@@ -179,7 +185,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
                       }}
                       sx={{
                         width: 200,
-                        bgcolor: isDarkMode ? "#292929" : "#f3f3f3",
+                        backgroundColor: "#f3f3f3",
                         borderRadius: 2,
                       }}
                       value={minPrice}
@@ -197,7 +203,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
                       }}
                       sx={{
                         width: 200,
-                        bgcolor: isDarkMode ? "#292929" : "#f3f3f3",
+                        backgroundColor: "#f3f3f3",
                         borderRadius: 2,
                       }}
                       value={maxPrice}
@@ -218,13 +224,13 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
           justifyContent="center"
           sx={{ width: "100%", maxWidth: 1400 }}
         >
-          {filteredCars?.length > 0 ? (
-            filteredCars.map((car, index) => (
+          {paginatedCars?.length > 0 ? (
+            paginatedCars.map((car, index) => (
               <Grid item key={car.id} sx={{ display: "flex", justifyContent: "center" }}>
                 <motion.div
-                  initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                  initial={{ opacity: 0, y: 50, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
                   style={{ width: 420 }}
                 >
                   <ProductCard car={car} />
@@ -235,13 +241,26 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
             <Typography
               variant="h6"
               mt={10}
-              sx={{ textAlign: "center", width: "100%", color: "#fff" }}
+              sx={{ textAlign: "center", width: "100%", color: "#444" }}
             >
               {t("noNewCarsFound")}
             </Typography>
           )}
         </Grid>
       </Box>
+
+      {totalPages > 1 && (
+        <Box mt={6} display="flex" justifyContent="center">
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={(e, value) => setPage(value)}
+            color="primary"
+            shape="rounded"
+            size="large"
+          />
+        </Box>
+      )}
     </Box>
   );
 };

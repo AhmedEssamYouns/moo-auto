@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Grid,
   Typography,
-  Pagination,
   CircularProgress,
   useMediaQuery,
+  Button,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ProductCard from "../components/productItem";
@@ -13,51 +13,104 @@ import Filters from "../components/filters";
 import { useBrands, useCars } from "../services/hooks/useCards";
 import { useLanguage } from "../contexts/LanguageContext";
 import { motion } from "framer-motion";
-import EmojiTransportationIcon from "@mui/icons-material/EmojiTransportation";
-import MapIcon from "@mui/icons-material/Map";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ProductsScreen = () => {
-  const theme = useTheme();
-  const isDarkMode = theme.palette.mode === "dark";
   const { t } = useLanguage();
-
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width: 1000px)");
+  const productsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 6;
+  const [showAll, setShowAll] = useState(false);
+
+  const queryType = new URLSearchParams(location.search).get("type");
+
   const [filters, setFilters] = useState({
     MinPrice: null,
     MaxPrice: null,
-    CarCategory: null,
+    CarCategory: queryType || null,
     TransmissionType: null,
     Model: null,
     IsPaginated: true,
-    PageNumber: currentPage,
+    PageNumber: 1,
     PageSize: productsPerPage,
     CarState: null,
     CarBrand: null,
   });
 
-  const { data, isLoading, error } = useCars(filters);
+  const finalFilters = {
+    ...filters,
+  };
+
+  const { data, isLoading, error, isFetching } = useCars(finalFilters);
   const {
     data: brandsData,
     isLoading: brandsLoading,
     error: brandsError,
   } = useBrands();
 
-  const handlePageChange = (_, value) => {
-    setCurrentPage(value);
-    setFilters((prev) => ({ ...prev, PageNumber: value }));
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   const handleApplyFilters = (newFilters) => {
+    setCurrentPage(1);
+    setShowAll(false);
     setFilters((prev) => ({
       ...prev,
       ...newFilters,
+      IsPaginated: true,
       PageNumber: 1,
+      PageSize: productsPerPage,
+    }));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    setFilters((prev) => ({
+      ...prev,
+      PageNumber: newPage,
+    }));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleShowAll = () => {
+    setShowAll(true);
+    setFilters((prev) => ({
+      ...prev,
+      IsPaginated: false,
+      PageNumber: 1,
+      PageSize: null,
     }));
   };
 
-  const isMobile = useMediaQuery("(max-width: 1000px)");
+  const handleShowPaginated = () => {
+    setShowAll(false);
+    setCurrentPage(1);
+    setFilters((prev) => ({
+      ...prev,
+      IsPaginated: true,
+      PageNumber: 1,
+      PageSize: productsPerPage,
+    }));
+  };
+
+  const handleClearFilters = () => {
+    setCurrentPage(1);
+    setShowAll(false);
+    setFilters({
+      MinPrice: null,
+      MaxPrice: null,
+      CarCategory: null,
+      TransmissionType: null,
+      Model: null,
+      IsPaginated: true,
+      PageNumber: 1,
+      PageSize: productsPerPage,
+      CarState: null,
+      CarBrand: null,
+    });
+    navigate("/cars-for-sale", { replace: true }); // Clear the ?type query
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const fadeSlide = {
     hidden: { opacity: 0, y: 30 },
@@ -73,8 +126,8 @@ const ProductsScreen = () => {
       sx={{
         pt: 10,
         minHeight: "100vh",
-        background: "linear-gradient(to bottom, #000000, #120000ff)",
-        color: "#fff",
+        background: "#fff",
+        color: "#000",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -96,13 +149,35 @@ const ProductsScreen = () => {
             sx={{
               fontFamily: "Michroma",
               fontSize: 40,
-              color: "#B30000",
+              color: "black",
               letterSpacing: 1,
             }}
           >
             {t("Our Cars")}
           </Typography>
         </motion.div>
+
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+          {showAll && (
+            
+          <Button
+            onClick={handleClearFilters}
+            variant="outlined"
+            sx={{
+              color: "#B30000",
+              borderColor: "#B30000",
+              fontWeight: "bold",
+              "&:hover": {
+                backgroundColor: "#B30000",
+                color: "#fff",
+              },
+            }}
+          >
+            {t("Clear Filters")}
+          </Button>
+          )}
+          
+        </Box>
 
         {brandsLoading ? (
           <Typography textAlign="center">{t("Loading brands...")}</Typography>
@@ -115,7 +190,7 @@ const ProductsScreen = () => {
             variants={fadeSlide}
             initial="hidden"
             animate="visible"
-            custom={3}
+            custom={2}
           >
             <Filters
               filters={filters}
@@ -125,17 +200,13 @@ const ProductsScreen = () => {
           </motion.div>
         )}
 
-        {isLoading ? (
-          <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-            <CircularProgress sx={{ color: "#B30000" }} />
-          </Box>
-        ) : error ? (
+        {error ? (
           <Typography textAlign="center" mt={4}>
             {t("NoCarsFound")}
           </Typography>
         ) : (
           <>
-            <Grid container spacing={4} justifyContent="center">
+            <Grid container spacing={4} justifyContent="center" mt={4}>
               {data?.items?.map((car, index) => (
                 <Grid
                   item
@@ -143,86 +214,52 @@ const ProductsScreen = () => {
                   sm={6}
                   md={4}
                   key={car.id}
-                  sx={{
-                    transition: "transform 0.3s ease-in-out",
-                    "&:hover": { transform: "scale(1.05)" },
-                  }}
                   component={motion.div}
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
                   variants={fadeSlide}
                   custom={index % 3}
+                  sx={{
+                    transition: "transform 0.3s ease-in-out",
+                    "&:hover": { transform: "scale(1.05)" },
+                  }}
                 >
                   <ProductCard car={car} />
                 </Grid>
               ))}
             </Grid>
 
-            <motion.div
-              variants={fadeSlide}
-              initial="hidden"
-              animate="visible"
-              custom={5}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: 2,
-                  mt: 6,
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: isMobile ? "column" : "row",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: 3,
-                    px: 2,
-                    py: 1,
-                    borderRadius: 3,
-                    background: "linear-gradient(145deg, #0d0d0d, #1a1a1a)",
-                    boxShadow: "0 0 20px rgba(255, 0, 0, 0.2)",
-                  }}
-                >
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <EmojiTransportationIcon sx={{ color: "#FF4444" }} />
-                    <Typography fontWeight="bold" fontSize={isMobile ? 14 : 18}>
-                      {t("Total Cars")}:{" "}
-                      <span style={{ color: "#ff3333" }}>
-                        {data?.totalCount || 0}
-                      </span>
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <MapIcon sx={{ color: "#FF4444" }} />
-                    <Typography fontWeight="bold" fontSize={isMobile ? 14 : 18}>
-                      {t("Page")}:{" "}
-                      <span style={{ color: "#ff3333" }}>{currentPage}</span> /{" "}
-                      {data?.totalPages || 1}
-                    </Typography>
-                  </Box>
-                </Box>
-
-                <Pagination
-                  count={data?.totalPages}
-                  page={currentPage}
-                  onChange={handlePageChange}
-                  sx={{
-                    "& .MuiPaginationItem-root": {
-                      color: "#fff",
-                    },
-                    "& .Mui-selected": {
-                      backgroundColor: "#B30000",
-                      color: "#fff",
-                    },
-                  }}
-                />
+            {(isLoading || isFetching) && (
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+                <CircularProgress sx={{ color: "#B30000" }} />
               </Box>
-            </motion.div>
+            )}
+
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 6, gap: 2, flexWrap: "wrap" }}>
+              {!showAll && data?.totalPages > 1 && (
+                Array.from({ length: data.totalPages }).map((_, idx) => (
+                  <Button
+                    key={idx + 1}
+                    onClick={() => handlePageChange(idx + 1)}
+                    variant={currentPage === idx + 1 ? "contained" : "outlined"}
+                    sx={{
+                      color: currentPage === idx + 1 ? "#fff" : "#B30000",
+                      backgroundColor: currentPage === idx + 1 ? "#B30000" : "#fff",
+                      borderColor: "#B30000",
+                      "&:hover": {
+                        backgroundColor: "#B30000",
+                        color: "#fff",
+                      },
+                    }}
+                  >
+                    {idx + 1}
+                  </Button>
+                ))
+              )}
+
+          
+            </Box>
           </>
         )}
       </Box>

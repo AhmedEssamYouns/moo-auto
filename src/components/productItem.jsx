@@ -1,13 +1,9 @@
 import React from "react";
 import {
   Box,
-  Card,
-  CardContent,
   Typography,
-  Chip,
   IconButton,
-  Button,
-  useTheme,
+  Chip,
   Snackbar,
   useMediaQuery,
 } from "@mui/material";
@@ -19,7 +15,7 @@ import ChevronRight from "@mui/icons-material/ChevronRight";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../utils/baseUrl";
-import SwipeableViews from "react-swipeable-views";
+import { useTheme } from "@mui/material/styles";
 
 const ProductCard = ({ car }) => {
   const theme = useTheme();
@@ -51,143 +47,135 @@ const ProductCard = ({ car }) => {
 
   const handlePrev = (e) => {
     e.stopPropagation();
-    setActiveIndex(
-      (prev) => (prev - 1 + car.images.length) % car.images.length
+    setActiveIndex((prev) =>
+      prev === 0 ? car.images.length - 1 : prev - 1
     );
   };
 
   const handleNext = (e) => {
     e.stopPropagation();
-    setActiveIndex((prev) => (prev + 1) % car.images.length);
+    setActiveIndex((prev) =>
+      prev === car.images.length - 1 ? 0 : prev + 1
+    );
   };
 
   return (
-    <Card
+    <Box
       onClick={() => navigate(`/product/${car.id}`)}
       sx={{
+        position: "relative",
         borderRadius: 6,
         overflow: "hidden",
-        background: isDarkMode
-          ? "linear-gradient(145deg, #1e1e1e, #2a2a2a)"
-          : "linear-gradient(145deg, #ffffff, #f0f0f0)",
-        border: "none",
-        transition: "all 0.4s ease",
-        boxShadow: isDarkMode
-          ? "0 10px 30px rgba(0,0,0,0.6)"
-          : "0 10px 30px rgba(0,0,0,0.1)",
-        "&:hover": {
-          transform: "translateY(-6px)",
-        },
+        height: 360,
+        boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
+        cursor: "pointer",
       }}
     >
-      <Box sx={{ position: "relative", height: 240 }}>
-        <SwipeableViews
-          index={activeIndex}
-          onChangeIndex={setActiveIndex}
-          enableMouseEvents
-          style={{ height: "100%" }}
-        >
-          {car.images.map((img, index) => (
-            <Box
-              key={index}
-              component="img"
-              src={img}
-              alt={`${car.name}-${index}`}
-              sx={{
-                width: "100%",
-                height: "240px",
-                objectFit: "cover",
-              }}
-            />
-          ))}
-        </SwipeableViews>
-
-        {car.images.length > 1 && (
-          <>
-            <IconButton
-              onClick={handlePrev}
-              sx={{
-                position: "absolute",
-                bottom: 16,
-                left: 16,
-                background: "rgba(0,0,0,0.4)",
-                color: "white",
-                "&:hover": {
-                  background: "rgba(0,0,0,0.6)",
-                },
-              }}
-            >
-              <ChevronLeft />
-            </IconButton>
-            <IconButton
-              onClick={handleNext}
-              sx={{
-                position: "absolute",
-                bottom: 16,
-                left: 72,
-                background: "rgba(0,0,0,0.4)",
-                color: "white",
-                "&:hover": {
-                  background: "rgba(0,0,0,0.6)",
-                },
-              }}
-            >
-              <ChevronRight />
-            </IconButton>
-          </>
-        )}
-
-        <Chip
-          label={t(car.status === 1 ? "new" : "used")}
-          sx={{
-            position: "absolute",
-            bottom: 16,
-            right: 16,
-            bgcolor: car.status === 1 ? "#ffff" : "#ffe082",
-            color: "#000",
-            fontWeight: "bold",
-          }}
-        />
-
-        <IconButton
-          onClick={handleShare}
-          sx={{
-            position: "absolute",
-            top: 16,
-            right: 16,
-            background: "rgba(255,255,255,0.15)",
-            color: "white",
-            "&:hover": {
-              background: "#fff",
-              color: "#000",
-            },
-          }}
-        >
-          <ShareRoundedIcon />
-        </IconButton>
-      </Box>
-
-      <CardContent
+      <Box
+        component="img"
+        src={car.images[activeIndex]}
+        alt={`${car.name}-${activeIndex}`}
         sx={{
-          px: 3,
-          py: 2,
-          color: isDarkMode ? "#f5f5f5" : "#111",
+          width: "100%",
+          height: "360px",
+          objectFit: "cover",
+          filter: "brightness(0.8)",
+        }}
+      />
+
+      {car.images.length > 1 && (
+        <>
+          <IconButton
+            onClick={handlePrev}
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: 8,
+              transform: "translateY(-50%)",
+              background: "rgba(0,0,0,0.4)",
+              color: "white",
+              "&:hover": {
+                background: "rgba(0,0,0,0.6)",
+              },
+            }}
+          >
+            <ChevronLeft />
+          </IconButton>
+          <IconButton
+            onClick={handleNext}
+            sx={{
+              position: "absolute",
+              top: "50%",
+              right: 8,
+              transform: "translateY(-50%)",
+              background: "rgba(0,0,0,0.4)",
+              color: "white",
+              "&:hover": {
+                background: "rgba(0,0,0,0.6)",
+              },
+            }}
+          >
+            <ChevronRight />
+          </IconButton>
+        </>
+      )}
+
+      <Chip
+        label={t(car.status === 1 ? "new" : "used")}
+        sx={{
+          position: "absolute",
+          top: 16,
+          left: 16,
+          bgcolor: car.status === 1 ? "#fff" : "#ffe082",
+          color: "#000",
+          fontWeight: "bold",
+        }}
+      />
+
+      <IconButton
+        onClick={handleShare}
+        sx={{
+          position: "absolute",
+          top: 16,
+          right: 16,
+          background: "rgba(255,255,255,0.15)",
+          color: "white",
+          "&:hover": {
+            background: "#fff",
+            color: "#000",
+          },
         }}
       >
-        <Typography variant="h6" sx={{ fontWeight: "600", mb: 1 }}>
+        <ShareRoundedIcon />
+      </IconButton>
+
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          bgcolor: "rgba(0,0,0,0.6)",
+          color: "#fff",
+          px: 3,
+          py: 2,
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+        }}
+      >
+        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
           {car.name} - {car.model}
         </Typography>
 
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mb: 2 }}>
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
           <Chip
             icon={<EmojiTransportationIcon fontSize="small" />}
             label={car.brandName}
             size="small"
             sx={{
-              bgcolor: "transparent",
-              border: "1px solid",
-              borderColor: isDarkMode ? "#444" : "#ccc",
-              color: "inherit",
+              bgcolor: "rgba(255,255,255,0.2)",
+              color: "#fff",
               px: 1,
             }}
           />
@@ -196,48 +184,19 @@ const ProductCard = ({ car }) => {
             label={t(car.transmission === 2 ? "automatic" : "manual")}
             size="small"
             sx={{
-              bgcolor: "transparent",
-              border: "1px solid",
-              borderColor: isDarkMode ? "#444" : "#ccc",
-              color: "inherit",
+              bgcolor: "rgba(255,255,255,0.2)",
+              color: "#fff",
               px: 1,
             }}
           />
         </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Typography
-            variant="h6"
-            sx={{ fontWeight: "bold", color: isDarkMode ? "#ffff" : "#ffff" }}
-          >
-            {car.price > 0
-              ? `${t('EGP')} ${Number(car.price).toLocaleString()}`
-              : t("Price Not Available")}
-          </Typography>
-          <Button
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/product/${car.id}`);
-            }}
-            sx={{
-              color: isDarkMode ? "#ffff" : "#ffff",
-              textTransform: "none",
-              fontWeight: 500,
-              "&:hover": {
-                textDecoration: "underline",
-              },
-            }}
-          >
-            {t("viewDetails")}
-          </Button>
-        </Box>
-      </CardContent>
+        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+          {car.price > 0
+            ? `${t("EGP")} ${Number(car.price).toLocaleString()}`
+            : t("Price Not Available")}
+        </Typography>
+      </Box>
 
       <Snackbar
         open={snackbarOpen}
@@ -246,7 +205,7 @@ const ProductCard = ({ car }) => {
         message={t("linkCopied")}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       />
-    </Card>
+    </Box>
   );
 };
 

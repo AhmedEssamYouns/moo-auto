@@ -32,6 +32,7 @@ const App = () => {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
+        backgroundColor: "white",
         width: "100%",
       }}
     >
