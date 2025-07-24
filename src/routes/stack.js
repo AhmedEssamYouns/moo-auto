@@ -19,12 +19,12 @@ const AppRoutes = () => {
       <Route path="/" element={<HomeScreen />} />
       <Route path="/cars-for-sale" element={<ProductsScreen />} />
       <Route path="/new-arrivals" element={<BestSelling />} />
-      <Route path="/offers" element={<Offers />} />
+      {/* <Route path="/offers" element={<Offers />} /> */}
       <Route path="/product/:id" element={<ProductScreen />} />
       <Route path="/request-car" element={<RequestCarScreen />} />
       <Route path="/cars-list" element={<CarsListScreen />} />
       <Route path="/financing" element={<InstallmentServicesScreen />} />
-      <Route path="/about-us" element={<AboutUsScreen />} />
+      {/* <Route path="/about-us" element={<AboutUsScreen />} /> */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

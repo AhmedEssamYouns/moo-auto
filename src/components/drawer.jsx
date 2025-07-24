@@ -44,7 +44,7 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
     // },
     { text: t("requestCar"), icon: <CarRentalIcon />, path: "/request-car" },
     { text: t("financing"), icon: <AccountBalanceIcon />, path: "/financing" },
-    { text: t("aboutUs"), icon: <InfoOutlinedIcon />, path: "/about-us" },
+    // { text: t("aboutUs"), icon: <InfoOutlinedIcon />, path: "/about-us" },
   ];
 
   return (
