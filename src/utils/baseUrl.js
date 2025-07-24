@@ -1,1 +1,1 @@
-export const baseUrl = "https://auto.almosallamy-automotive.com";
+export const baseUrl = process.env.API_BASE_URL;
