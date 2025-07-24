@@ -157,26 +157,51 @@ const ProductsScreen = () => {
           </Typography>
         </motion.div>
 
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
-          {showAll && (
-            
-          <Button
-            onClick={handleClearFilters}
-            variant="outlined"
-            sx={{
-              color: "#B30000",
-              borderColor: "#B30000",
-              fontWeight: "bold",
-              "&:hover": {
-                backgroundColor: "#B30000",
-                color: "#fff",
-              },
-            }}
-          >
-            {t("Clear Filters")}
-          </Button>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 2,
+            flexWrap: "wrap",
+            gap: 2,
+          }}
+        >
+          {queryType && (
+            <Button
+              onClick={handleClearFilters}
+              variant="outlined"
+              sx={{
+                color: "#B30000",
+                borderColor: "#B30000",
+                fontWeight: "bold",
+                "&:hover": {
+                  backgroundColor: "#B30000",
+                  color: "#fff",
+                },
+              }}
+            >
+              {t("Show all cars")}
+            </Button>
           )}
-          
+
+          {showAll && (
+            <Button
+              onClick={handleClearFilters}
+              variant="outlined"
+              sx={{
+                color: "#B30000",
+                borderColor: "#B30000",
+                fontWeight: "bold",
+                "&:hover": {
+                  backgroundColor: "#B30000",
+                  color: "#fff",
+                },
+              }}
+            >
+              {t("Clear Filters")}
+            </Button>
+          )}
         </Box>
 
         {brandsLoading ? (
@@ -236,8 +261,17 @@ const ProductsScreen = () => {
               </Box>
             )}
 
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 6, gap: 2, flexWrap: "wrap" }}>
-              {!showAll && data?.totalPages > 1 && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                mt: 6,
+                gap: 2,
+                flexWrap: "wrap",
+              }}
+            >
+              {!showAll &&
+                data?.totalPages > 1 &&
                 Array.from({ length: data.totalPages }).map((_, idx) => (
                   <Button
                     key={idx + 1}
@@ -245,7 +279,8 @@ const ProductsScreen = () => {
                     variant={currentPage === idx + 1 ? "contained" : "outlined"}
                     sx={{
                       color: currentPage === idx + 1 ? "#fff" : "#B30000",
-                      backgroundColor: currentPage === idx + 1 ? "#B30000" : "#fff",
+                      backgroundColor:
+                        currentPage === idx + 1 ? "#B30000" : "#fff",
                       borderColor: "#B30000",
                       "&:hover": {
                         backgroundColor: "#B30000",
@@ -255,10 +290,7 @@ const ProductsScreen = () => {
                   >
                     {idx + 1}
                   </Button>
-                ))
-              )}
-
-          
+                ))}
             </Box>
           </>
         )}

@@ -24,6 +24,18 @@ import Van from "../assets/svgs/cars/van.svg";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 
+const CarEnum = {
+  sedan: 1,
+  suv: 2,
+  hatchback: 3,
+  coupe: 4,
+  convertible: 5,
+  truck: 6,
+  electric: 7,
+  sports: 8,
+};
+
+
 const carTypes = [
   { key: "suv", icon: Suv },
   { key: "sedan", icon: Sedan },
@@ -52,7 +64,7 @@ export default function CarTypeSection() {
           {t("browse_by_type")}
         </Typography>
         <Button
-         onClick={() => navigate("/cars-for-sale")}
+          onClick={() => navigate("/cars-for-sale")}
           endIcon={<ArrowOutwardIcon />}
           sx={{ textTransform: "none", color: "#333" }}
         >
@@ -75,7 +87,7 @@ export default function CarTypeSection() {
             <div
               key={key}
               style={{
-                width: "calc(50% - 6px)", // 2 per row on mobile
+                width: "calc(50% - 6px)",
                 display: "flex",
                 alignItems: "center",
                 gap: "8px",
@@ -86,7 +98,9 @@ export default function CarTypeSection() {
                 boxSizing: "border-box",
                 transition: "background 0.3s",
               }}
-              onClick={() => navigate(`/cars-for-sale?type=${key}`)}
+              onClick={() =>
+                navigate(`/cars-for-sale?type=${CarEnum[key]}`)
+              }
               onMouseEnter={(e) =>
                 (e.currentTarget.style.backgroundColor = "#f5f5f5")
               }
@@ -106,7 +120,7 @@ export default function CarTypeSection() {
                   textTransform: "capitalize",
                 }}
               >
-                {key}
+                {t(key)}
               </span>
             </div>
           ))}
@@ -118,12 +132,12 @@ export default function CarTypeSection() {
             spacing={2}
             flexWrap="wrap"
             justifyContent="center"
-            px={1} // padding to avoid items sticking to the screen edge
+            px={1}
             mb={6}
           >
-            {carTypes.map(({ key, icon }, idx) => (
+            {carTypes.map(({ key, icon }) => (
               <Box
-                key={idx}
+                key={key}
                 px={3}
                 py={2}
                 border="1px solid #e0e0e0"
@@ -131,12 +145,14 @@ export default function CarTypeSection() {
                 display="flex"
                 alignItems="center"
                 gap={1}
-                onClick={() => navigate(`/cars-for-sale?type=${key}`)}
+                onClick={() =>
+                  navigate(`/cars-for-sale?type=${CarEnum[key]}`)
+                }
                 sx={{
                   cursor: "pointer",
-                  width: { xs: "48%", sm: "auto" }, // 2 per row on mobile
+                  width: { xs: "48%", sm: "auto" },
                   minWidth: { sm: 100 },
-                  mb: 2, // vertical spacing between rows
+                  mb: 2,
                   transition: "all 0.3s",
                   ":hover": { backgroundColor: "#f5f5f5" },
                 }}
@@ -172,7 +188,7 @@ export default function CarTypeSection() {
               <Box
                 component="img"
                 borderRadius={20}
-                src="https://autodesignmagazine.com/wp-content/uploads/2024/05/IG7ZVY_New_Ferrari_V12_ext_02_red_media-1920x0_G6WF13.jpg"
+                src="https://www.edmunds.com/assets/m/cs/blt34061a0118f3c775/66930450d0c0ef0c7ec5473a/2024_ferrari_purosangue_action_3_1600.jpg"
                 alt="right-car"
                 sx={{
                   position: "absolute",
@@ -220,16 +236,16 @@ export default function CarTypeSection() {
               <CheckCircleIcon fontSize="small" sx={{ color: "#4caf50" }} />
               {t("cta_point_2")}
             </Typography>
-            <Typography display="flex" alignItems="center" gap={1}>
+            {/* <Typography display="flex" alignItems="center" gap={1}>
               <CheckCircleIcon fontSize="small" sx={{ color: "#4caf50" }} />
               {t("cta_point_3")}
-            </Typography>
+            </Typography> */}
           </Stack>
 
           <Button
             variant="contained"
             endIcon={<ArrowOutwardIcon />}
-             onClick={() => navigate("/cars-for-sale")}
+            onClick={() => navigate("/cars-for-sale")}
             sx={{
               backgroundColor: "#111",
               ":hover": { backgroundColor: "#333" },
