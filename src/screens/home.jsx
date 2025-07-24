@@ -244,9 +244,7 @@ const HomeScreen = () => {
         </Box>
       </Box>
 
-      <Box mt={8}>
         <HorizontalShowcase />
-      </Box>
 
       <Box mt={6} mb={4}>
         <CarTypeSection />
