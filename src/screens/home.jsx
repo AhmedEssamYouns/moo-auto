@@ -84,16 +84,16 @@ const HomeScreen = () => {
             zIndex: 1,
           }}
         >
-            <Box
-              sx={{
-                position: "absolute",
-                inset: 0,
-                backgroundImage: `url(${images[currentImage]})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-              }}
-            />
+          <Box
+            sx={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage: `url(${images[currentImage]})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          />
 
           {nextImage !== null && (
             <Fade in={true} timeout={500}>
@@ -181,7 +181,7 @@ const HomeScreen = () => {
           onClick={handlePrev}
           sx={{
             position: "absolute",
-            top: "50%",
+            top: isMobile ? "80%" : "50%",
             left: 15,
             transform: "translateY(-50%)",
             backgroundColor: "#fff",
@@ -200,7 +200,7 @@ const HomeScreen = () => {
           onClick={handleNext}
           sx={{
             position: "absolute",
-            top: "50%",
+            top: isMobile ? "80%" : "50%",
             right: 15,
             transform: "translateY(-50%)",
             backgroundColor: "#fff",
@@ -244,7 +244,7 @@ const HomeScreen = () => {
         </Box>
       </Box>
 
-        <HorizontalShowcase />
+      <HorizontalShowcase />
 
       <Box mt={6} mb={4}>
         <CarTypeSection />

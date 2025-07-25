@@ -1,1 +1,1 @@
-export const baseUrl = "http://auto.mooautomotive.com";
+export const baseUrl = "https://auto.mooautomotive.com";
