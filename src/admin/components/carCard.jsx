@@ -114,7 +114,7 @@ const AdminProductCard = ({ car, onEdit, onDelete }) => {
           <>
             <Button
               variant="contained"
-              color="primary"
+              color="green"
               onClick={() => onEdit(car.id)}
               startIcon={<EditIcon />}
             >
@@ -133,7 +133,7 @@ const AdminProductCard = ({ car, onEdit, onDelete }) => {
         {isEditor && !isOwner && (
           <Button
             variant="contained"
-            color="primary"
+            color="green"
             onClick={() => onEdit(car.id)}
             startIcon={<EditIcon />}
           >

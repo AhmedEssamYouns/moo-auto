@@ -18,8 +18,11 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import PaymentIcon from "@mui/icons-material/Payment";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import logo from "../../assets/imgs/logo.png";
+//banners icon from mui 
+import { BrandingWatermark } from "@mui/icons-material";
 
 const sidebarItems = [
+  { text: "Manage Banners", path: "/admin/BannerManager", icon: <BrandingWatermark /> },
   { text: "Modify Cars", path: "/admin/cars", icon: <DirectionsCarIcon /> },
   { text: "Modify Brands", path: "/admin/brands", icon: <BrandingWatermarkIcon /> },
   { text: "Modify Admins", path: "/admin/users", icon: <AdminPanelSettingsIcon /> },

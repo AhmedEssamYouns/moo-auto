@@ -13,6 +13,21 @@ export const getCars = async (filters) => {
   return response.data;
 };
 
+export const getBanners = async () => {
+  try {
+    const response = await apiService.get("api/banner", {
+      params: {
+        pageNumber: 1,
+        pageSize: 1000,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch banners:", error);
+    throw error;
+  }
+};
+
 export const getLatestCars = async () => {
   const response = await apiService.get("/api/cars/Latest", { isAuth: false });
 

@@ -114,3 +114,30 @@ export const deleteProviderapi = async (id) => {
   });
   return response.data;
 };
+
+export const addBanner = async (formData) => {
+  const response = await apiService.post("/api/banner", formData, {
+    isAuth: true,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+export const editBanner = async (formData) => {
+  const response = await apiService.put("/api/banner", formData, {
+    isAuth: true,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+export const deleteBanner = async (id) => {
+  const response = await apiService.delete(`/api/banner/${id}`, {
+    isAuth: true,
+  });
+  return response.data;
+};

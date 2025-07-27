@@ -14,8 +14,9 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import HorizontalShowcase from "../components/hstackProducts";
 import CarTypeSection from "../components/carType";
+import { getBanners } from "../services/apis/carsServices";
 
-const images = [
+const fallbackImages = [
   require("../assets/imgs/download-free-car-images.jpeg"),
   require("../assets/imgs/pexels-pixabay-326259.jpg"),
   require("../assets/imgs/pexels-saimon-11556663.jpg"),
@@ -27,6 +28,7 @@ const HomeScreen = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const navigate = useNavigate();
 
+  const [banners, setBanners] = useState([]);
   const [currentImage, setCurrentImage] = useState(0);
   const [nextImage, setNextImage] = useState(null);
 
@@ -35,8 +37,24 @@ const HomeScreen = () => {
   }, []);
 
   useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const res = await getBanners();
+        if (res?.length > 0) {
+          setBanners(res);
+        } else {
+          setBanners(fallbackImages);
+        }
+      } catch (err) {
+        setBanners(fallbackImages);
+      }
+    };
+    fetchBanners();
+  }, []);
+
+  useEffect(() => {
     const interval = setInterval(() => {
-      const newIndex = (currentImage + 1) % images.length;
+      const newIndex = (currentImage + 1) % banners.length;
       setNextImage(newIndex);
       setTimeout(() => {
         setCurrentImage(newIndex);
@@ -44,7 +62,7 @@ const HomeScreen = () => {
       }, 500);
     }, 4000);
     return () => clearInterval(interval);
-  }, [currentImage]);
+  }, [currentImage, banners]);
 
   const handleManualChange = (index) => {
     if (index === currentImage) return;
@@ -56,15 +74,21 @@ const HomeScreen = () => {
   };
 
   const handlePrev = () => {
-    handleManualChange((currentImage - 1 + images.length) % images.length);
+    handleManualChange((currentImage - 1 + banners.length) % banners.length);
   };
 
   const handleNext = () => {
-    handleManualChange((currentImage + 1) % images.length);
+    handleManualChange((currentImage + 1) % banners.length);
   };
 
   const handleClick = () => {
     navigate("/cars-for-sale");
+  };
+
+  const getImageUrl = (img) => {
+    if (typeof img === "string") return img;
+    if (img instanceof Blob) return URL.createObjectURL(img);
+    return "";
   };
 
   return (
@@ -77,18 +101,12 @@ const HomeScreen = () => {
           overflow: "hidden",
         }}
       >
-        <Box
-          sx={{
-            position: "absolute",
-            inset: 0,
-            zIndex: 1,
-          }}
-        >
+        <Box sx={{ position: "absolute", inset: 0, zIndex: 1 }}>
           <Box
             sx={{
               position: "absolute",
               inset: 0,
-              backgroundImage: `url(${images[currentImage]})`,
+              backgroundImage: `url(${getImageUrl(banners[currentImage])})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
@@ -101,7 +119,7 @@ const HomeScreen = () => {
                 sx={{
                   position: "absolute",
                   inset: 0,
-                  backgroundImage: `url(${images[nextImage]})`,
+                  backgroundImage: `url(${getImageUrl(banners[nextImage])})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
@@ -227,7 +245,7 @@ const HomeScreen = () => {
             zIndex: 3,
           }}
         >
-          {images.map((_, index) => (
+          {banners.map((_, index) => (
             <Box
               key={index}
               onClick={() => handleManualChange(index)}

@@ -24,9 +24,7 @@ const LargeCarCard = ({ car }) => {
   };
 
   const handlePrev = () => {
-    setActiveIndex((prev) =>
-      prev === 0 ? car.images.length - 1 : prev - 1
-    );
+    setActiveIndex((prev) => (prev === 0 ? car.images.length - 1 : prev - 1));
   };
 
   return (
@@ -49,8 +47,8 @@ const LargeCarCard = ({ car }) => {
         index={activeIndex}
         onChangeIndex={setActiveIndex}
         enableMouseEvents
-        style={{ height:isMobile ? "40vh" : "72vh", width: "100%" }}
-        containerStyle={{ touchAction: "pan-y",pointerEvents:"none" }}
+        style={{ height: isMobile ? "40vh" : "72vh", width: "100%" }}
+        containerStyle={{ touchAction: "pan-y", pointerEvents: "none" }}
       >
         {car.images.map((img, index) => (
           <Box
@@ -71,46 +69,50 @@ const LargeCarCard = ({ car }) => {
       </SwipeableViews>
 
       {/* Arrows */}
-      <IconButton
-        onClick={(e) => {
-          e.stopPropagation();
-          handlePrev();
-        }}
-        sx={{
-          position: "absolute",
-          left: 10,
-          top: "50%",
-          transform: "translateY(-50%)",
-          background: "rgba(0,0,0,0.4)",
-          color: "#fff",
-          zIndex: 5,
-          "&:hover": {
-            background: "rgba(0,0,0,0.6)",
-          },
-        }}
-      >
-        <ArrowBackIos />
-      </IconButton>
-      <IconButton
-        onClick={(e) => {
-          e.stopPropagation();
-          handleNext();
-        }}
-        sx={{
-          position: "absolute",
-          right: 10,
-          top: "50%",
-          transform: "translateY(-50%)",
-          background: "rgba(0,0,0,0.4)",
-          color: "#fff",
-          zIndex: 5,
-          "&:hover": {
-            background: "rgba(0,0,0,0.6)",
-          },
-        }}
-      >
-        <ArrowForwardIos />
-      </IconButton>
+      {!isMobile && (
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            handlePrev();
+          }}
+          sx={{
+            position: "absolute",
+            left: 10,
+            top: "50%",
+            transform: "translateY(-50%)",
+            background: "rgba(0,0,0,0.4)",
+            color: "#fff",
+            zIndex: 5,
+            "&:hover": {
+              background: "rgba(0,0,0,0.6)",
+            },
+          }}
+        >
+          <ArrowBackIos />
+        </IconButton>
+      )}
+      {!isMobile && (
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            handleNext();
+          }}
+          sx={{
+            position: "absolute",
+            right: 10,
+            top: "50%",
+            transform: "translateY(-50%)",
+            background: "rgba(0,0,0,0.4)",
+            color: "#fff",
+            zIndex: 5,
+            "&:hover": {
+              background: "rgba(0,0,0,0.6)",
+            },
+          }}
+        >
+          <ArrowForwardIos />
+        </IconButton>
+      )}
 
       {/* Top and bottom shadow overlay */}
       <Box
@@ -119,7 +121,8 @@ const LargeCarCard = ({ car }) => {
           top: 0,
           width: "100%",
           height: "30%",
-          background: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent)",
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent)",
           zIndex: 2,
         }}
       />
@@ -160,8 +163,7 @@ const LargeCarCard = ({ car }) => {
             fontWeight: 300,
           }}
         >
-          {car.brandName} •{" "}
-          {t(car.transmission === 2 ? "automatic" : "manual")}
+          {car.brandName} • {t(car.transmission === 2 ? "automatic" : "manual")}
         </Typography>
         <Typography
           variant="h6"
