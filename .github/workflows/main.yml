@@ -18,7 +18,7 @@ jobs:
 
       - name: Log in to private Docker registry
         run: |
-          echo "mypassword" | docker login registry.mooautomotive.com -u "myusername" --password-stdin
+          echo "Admin123" | docker login registry.sevencsolutions.com -u "jimmy" --password-stdin
 
       - name: Build the Docker image
         run: |
@@ -26,7 +26,7 @@ jobs:
             echo "❌ Dockerfile not found!"
             exit 1
           fi
-          docker build -t registry.mooautomotive.com/moo-react:latest -f ./Dockerfile .
+          docker build -t registry.sevencsolutions.com/moo-react:latest -f ./Dockerfile .
 
       - name: Push the Docker image
-        run: docker push registry.mooautomotive.com/moo-react:latest
+        run: docker push registry.sevencsolutions.com/moo-react:latest
