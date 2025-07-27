@@ -21,6 +21,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { addBanner, editBanner, deleteBanner } from "../services/adminServices";
+import { getBanners } from "../../services/apis/carsServices";
 
 const BannerManager = () => {
   const [banners, setBanners] = useState([]);
@@ -35,14 +36,17 @@ const BannerManager = () => {
   });
   const [openDialog, setOpenDialog] = useState(false);
 
+  const fetchBanners = async () => {
+    try {
+      const response = await getBanners();
+      setBanners(response.items || []);
+    } catch (error) {
+      console.error("Failed to fetch banners:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchMockedBanners = async () => {
-      setBanners([
-        { id: 1, imageUrl: "/images/banner1.jpg", isActive: true },
-        { id: 2, imageUrl: "/images/banner2.jpg", isActive: false },
-      ]);
-    };
-    fetchMockedBanners();
+    fetchBanners();
   }, []);
 
   const showSnackbar = (message, severity = "success") => {
@@ -79,6 +83,7 @@ const BannerManager = () => {
       setImage(null);
       setPreviewUrl(null);
       setIsActive(true);
+      fetchBanners();
     } catch (error) {
       showSnackbar("Something went wrong", "error");
     }
@@ -96,7 +101,7 @@ const BannerManager = () => {
     try {
       await deleteBanner(id);
       showSnackbar("Banner deleted");
-      setBanners((prev) => prev.filter((b) => b.id !== id));
+      fetchBanners();
     } catch {
       showSnackbar("Failed to delete banner", "error");
     }
@@ -112,12 +117,7 @@ const BannerManager = () => {
 
   return (
     <Box p={3}>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={3}
-      >
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h4" fontWeight="bold">
           Banner Management
         </Typography>
@@ -165,10 +165,7 @@ const BannerManager = () => {
                 <IconButton color="primary" onClick={() => handleEdit(banner)}>
                   <EditIcon />
                 </IconButton>
-                <IconButton
-                  color="error"
-                  onClick={() => handleDelete(banner.id)}
-                >
+                <IconButton color="error" onClick={() => handleDelete(banner.id)}>
                   <DeleteIcon />
                 </IconButton>
               </Box>
@@ -177,12 +174,7 @@ const BannerManager = () => {
         ))}
       </Grid>
 
-      <Dialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-        fullWidth
-        maxWidth="sm"
-      >
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="sm">
         <DialogTitle>{editingId ? "Edit Banner" : "Add Banner"}</DialogTitle>
         <DialogContent dividers>
           <Grid container spacing={2}>

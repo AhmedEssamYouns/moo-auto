@@ -7,11 +7,11 @@ import {
   Stack,
   Avatar,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
-// SVGs
 import Convertible from "../assets/svgs/cars/convertable.svg";
 import Coupe from "../assets/svgs/cars/coupe.svg";
 import Electric from "../assets/svgs/cars/electric.svg";
@@ -35,7 +35,6 @@ const CarEnum = {
   sports: 8,
 };
 
-
 const carTypes = [
   { key: "suv", icon: Suv },
   { key: "sedan", icon: Sedan },
@@ -51,9 +50,16 @@ export default function CarTypeSection() {
   const { t } = useLanguage();
   const ismobile = useMediaQuery("(max-width: 1200px)");
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
 
   return (
-    <Box px={{ xs: 2, md: 10 }} py={6} bgcolor="#fff" color="#111">
+    <Box
+      px={{ xs: 2, md: 10 }}
+      py={6}
+      bgcolor={isDark ? "background.default" : "#fff"}
+      color={isDark ? "text.primary" : "#111"}
+    >
       <Box
         display="flex"
         justifyContent="space-between"
@@ -66,16 +72,16 @@ export default function CarTypeSection() {
         <Button
           onClick={() => navigate("/cars-for-sale")}
           endIcon={<ArrowOutwardIcon />}
-          sx={{ textTransform: "none", color: "#333" }}
+          sx={{ textTransform: "none", color: isDark ? "#ddd" : "#333" }}
         >
           {t("view_all")}
         </Button>
       </Box>
+
       {ismobile ? (
         <div
           style={{
             display: "flex",
-            paddingBottom: "12px",
             flexWrap: "wrap",
             marginBottom: "22px",
             justifyContent: "space-between",
@@ -92,17 +98,17 @@ export default function CarTypeSection() {
                 alignItems: "center",
                 gap: "8px",
                 padding: "12px 16px",
-                border: "1px solid #e0e0e0",
+                border: `1px solid ${isDark ? "#444" : "#e0e0e0"}`,
                 borderRadius: "12px",
                 cursor: "pointer",
                 boxSizing: "border-box",
                 transition: "background 0.3s",
               }}
-              onClick={() =>
-                navigate(`/cars-for-sale?type=${CarEnum[key]}`)
-              }
+              onClick={() => navigate(`/cars-for-sale?type=${CarEnum[key]}`)}
               onMouseEnter={(e) =>
-                (e.currentTarget.style.backgroundColor = "#f5f5f5")
+                (e.currentTarget.style.backgroundColor = isDark
+                  ? "#333"
+                  : "#f5f5f5")
               }
               onMouseLeave={(e) =>
                 (e.currentTarget.style.backgroundColor = "transparent")
@@ -111,7 +117,13 @@ export default function CarTypeSection() {
               <img
                 src={icon}
                 alt={key}
-                style={{ width: 24, height: 24, objectFit: "contain" }}
+                style={{
+                  width: 24,
+                  height: 24,
+                  objectFit: "contain",
+                  backgroundColor: isDark ? "#fff" : "#f5f5f5",
+                  borderRadius: "50%",
+                }}
               />
               <span
                 style={{
@@ -126,46 +138,55 @@ export default function CarTypeSection() {
           ))}
         </div>
       ) : (
-        <>
-          <Stack
-            direction="row"
-            spacing={2}
-            flexWrap="wrap"
-            justifyContent="center"
-            px={1}
-            mb={6}
-          >
-            {carTypes.map(({ key, icon }) => (
-              <Box
-                key={key}
-                px={3}
-                py={2}
-                border="1px solid #e0e0e0"
-                borderRadius="12px"
-                display="flex"
-                alignItems="center"
-                gap={1}
-                onClick={() =>
-                  navigate(`/cars-for-sale?type=${CarEnum[key]}`)
-                }
+        <Stack
+          direction="row"
+          spacing={2}
+          flexWrap="wrap"
+          justifyContent="center"
+          px={1}
+          mb={6}
+        >
+          {carTypes.map(({ key, icon }) => (
+            <Box
+              key={key}
+              px={3}
+              py={2}
+              border={`1px solid ${isDark ? "#444" : "#e0e0e0"}`}
+              borderRadius="12px"
+              display="flex"
+              alignItems="center"
+              gap={1}
+              onClick={() => navigate(`/cars-for-sale?type=${CarEnum[key]}`)}
+              sx={{
+                cursor: "pointer",
+                width: { xs: "48%", sm: "auto" },
+                minWidth: { sm: 100 },
+                mb: 2,
+                transition: "all 0.3s",
+                ":hover": {
+                  backgroundColor: isDark ? "#333" : "#f5f5f5",
+                },
+              }}
+            >
+              <Avatar
+                src={icon}
+                alt={key}
                 sx={{
-                  cursor: "pointer",
-                  width: { xs: "48%", sm: "auto" },
-                  minWidth: { sm: 100 },
-                  mb: 2,
-                  transition: "all 0.3s",
-                  ":hover": { backgroundColor: "#f5f5f5" },
+                  width: isDark ? 54 : 24,
+                  height: isDark ? 54 : 24,
+                  backgroundColor: isDark ? "#fff" : "#f5f5f5",
+                  p: isDark?1:0,
+                  borderRadius: isDark ? "50%" : undefined,
                 }}
-              >
-                <Avatar src={icon} alt={key} sx={{ width: 24, height: 24 }} />
-                <Typography variant="body2" fontWeight={500}>
-                  {t(key)}
-                </Typography>
-              </Box>
-            ))}
-          </Stack>
-        </>
+              />
+              <Typography variant="body2" fontWeight={500}>
+                {t(key)}
+              </Typography>
+            </Box>
+          ))}
+        </Stack>
       )}
+
       <Grid container spacing={4} alignItems="center">
         {!ismobile && (
           <Grid item xs={12} md={6}>
@@ -187,7 +208,6 @@ export default function CarTypeSection() {
               />
               <Box
                 component="img"
-                borderRadius={20}
                 src="https://www.edmunds.com/assets/m/cs/blt34061a0118f3c775/66930450d0c0ef0c7ec5473a/2024_ferrari_purosangue_action_3_1600.jpg"
                 alt="right-car"
                 sx={{
@@ -223,7 +243,10 @@ export default function CarTypeSection() {
           <Typography variant="h5" fontWeight="bold" mb={2}>
             {t("cta_title")}
           </Typography>
-          <Typography variant="body2" sx={{ color: "#555", mb: 2 }}>
+          <Typography
+            variant="body2"
+            sx={{ color: isDark ? "#bbb" : "#555", mb: 2 }}
+          >
             {t("cta_description")}
           </Typography>
 
@@ -236,10 +259,6 @@ export default function CarTypeSection() {
               <CheckCircleIcon fontSize="small" sx={{ color: "#4caf50" }} />
               {t("cta_point_2")}
             </Typography>
-            {/* <Typography display="flex" alignItems="center" gap={1}>
-              <CheckCircleIcon fontSize="small" sx={{ color: "#4caf50" }} />
-              {t("cta_point_3")}
-            </Typography> */}
           </Stack>
 
           <Button
@@ -247,8 +266,11 @@ export default function CarTypeSection() {
             endIcon={<ArrowOutwardIcon />}
             onClick={() => navigate("/cars-for-sale")}
             sx={{
-              backgroundColor: "#111",
-              ":hover": { backgroundColor: "#333" },
+              backgroundColor: isDark ? "#eee" : "#111",
+              color: isDark ? "#111" : "#fff",
+              ":hover": {
+                backgroundColor: isDark ? "#ccc" : "#333",
+              },
             }}
           >
             {t("get_started")}
@@ -267,7 +289,10 @@ export default function CarTypeSection() {
             <Typography variant="h6" fontWeight="bold">
               {item.value}
             </Typography>
-            <Typography variant="body2" sx={{ color: "#666" }}>
+            <Typography
+              variant="body2"
+              sx={{ color: isDark ? "#aaa" : "#666" }}
+            >
               {item.label}
             </Typography>
           </Grid>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from "react";
 import { BrowserRouter } from "react-router-dom";
-import { Box, Container } from "@mui/material";
+import { Box } from "@mui/material";
 import ThemeProviderWrapper from "./contexts/ThemeProviderWrapper";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ScrollToTop from "./utils/scrollToTop";
@@ -9,7 +9,7 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 import LottieComponent from "./components/loader";
 import { HelmetProvider } from "react-helmet-async";
 
-// Lazy load components
+// Lazy-loaded components
 const Footer = lazy(() => import("./components/fotter"));
 const Navbar = lazy(() => import("./components/navbar"));
 const AppRoutes = lazy(() => import("./routes/stack"));
@@ -19,11 +19,21 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const [showLottie, setShowLottie] = useState(true);
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem("darkMode");
+    return saved ? JSON.parse(saved) : false;
+  });
+
   const isAdmin = window.location.hostname.startsWith("dashboard.");
 
   useEffect(() => {
-    setTimeout(() => setShowLottie(false), 10); // Reduced for better UX
+    setTimeout(() => setShowLottie(false), 1000);
   }, []);
+
+
+  useEffect(() => {
+    localStorage.setItem("darkMode", JSON.stringify(darkMode));
+  }, [darkMode]);
 
   const LottieFallback = (
     <Box
@@ -32,11 +42,11 @@ const App = () => {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
-        backgroundColor: "white",
+        backgroundColor: darkMode ? "#121212" : "#ffffff",
         width: "100%",
       }}
     >
-      <LottieComponent />
+      <LottieComponent darkMode={darkMode} />
     </Box>
   );
 
@@ -44,35 +54,37 @@ const App = () => {
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <LanguageProvider>
-          <ThemeProviderWrapper>
-            {(darkMode, setDarkMode) => (
-              <BrowserRouter>
-                {showLottie && !isAdmin ? (
-                  LottieFallback
-                ) : (
-                  <>
-                    <ScrollToTop />
-                    <ScrollToTopButton darkMode={darkMode} />
-                    {!isAdmin && (
-                      <Suspense fallback={LottieFallback}>
-                        <Navbar
-                          darkMode={darkMode}
-                          toggleDarkMode={() => setDarkMode((prev) => !prev)}
-                        />
-                      </Suspense>
+          <ThemeProviderWrapper darkMode={darkMode}>
+            <BrowserRouter>
+              {showLottie && !isAdmin ? (
+                LottieFallback
+              ) : (
+                <>
+                  <ScrollToTop />
+                  <ScrollToTopButton darkMode={darkMode} />
+                  {!isAdmin && (
+                    <Suspense fallback={LottieFallback}>
+                      <Navbar
+                        darkMode={darkMode}
+                        toggleDarkMode={() => setDarkMode((prev) => !prev)}
+                      />
+                    </Suspense>
+                  )}
+                  <Suspense fallback={LottieFallback}>
+                    {isAdmin ? (
+                      <AdminRoutes />
+                    ) : (
+                      <AppRoutes darkMode={darkMode} />
                     )}
-                      <Suspense fallback={LottieFallback}>
-                        {isAdmin ? <AdminRoutes /> : <AppRoutes />}
-                      </Suspense>
-                    {!isAdmin && (
-                      <Suspense fallback={LottieFallback}>
-                        <Footer darkMode={darkMode} />
-                      </Suspense>
-                    )}
-                  </>
-                )}
-              </BrowserRouter>
-            )}
+                  </Suspense>
+                  {!isAdmin && (
+                    <Suspense fallback={LottieFallback}>
+                      <Footer darkMode={darkMode} />
+                    </Suspense>
+                  )}
+                </>
+              )}
+            </BrowserRouter>
           </ThemeProviderWrapper>
         </LanguageProvider>
       </QueryClientProvider>

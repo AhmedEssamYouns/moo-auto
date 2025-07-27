@@ -13,7 +13,8 @@ import ProductCard from "./productItem";
 import { motion } from "framer-motion";
 import LargeCarCard from "./smartCard";
 
-const HorizontalShowcase = () => {
+const HorizontalShowcase = ({ darkMode }) => {
+  console.log("isdarkModefromweb", darkMode);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const { t } = useLanguage();
@@ -64,7 +65,7 @@ const HorizontalShowcase = () => {
         pt: 10,
         pb: 6,
         minHeight: "75vh",
-        backgroundColor: "#ffffff",
+        backgroundColor: darkMode ? "#121212" : "#ffffff",
       }}
     >
       {cars?.length > 0 ? (
@@ -91,7 +92,7 @@ const HorizontalShowcase = () => {
                 }}
               >
                 <motion.div>
-                  <LargeCarCard car={car} />
+                  <LargeCarCard car={car} darkMode={darkMode} />
                 </motion.div>
               </Box>
             ))}
@@ -121,7 +122,11 @@ const HorizontalShowcase = () => {
         <Typography
           variant="h6"
           mt={10}
-          sx={{ textAlign: "center", width: "100%", color: "#333" }}
+          sx={{
+            textAlign: "center",
+            width: "100%",
+            color: darkMode ? "#ccc" : "#333",
+          }}
         >
           {t("noCarsAvailable") || "No Cars Available"}
         </Typography>

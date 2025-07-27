@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   TextField,
@@ -9,6 +9,7 @@ import {
   Alert,
   MenuItem,
   Grid,
+  useTheme,
 } from "@mui/material";
 import { motion } from "framer-motion";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -27,7 +28,7 @@ const fadeUp = {
   }),
 };
 
-const RequestCarScreen = () => {
+const RequestCarScreen = ({darkMode}) => {
   const { t } = useLanguage();
 
   const [formData, setFormData] = useState({
@@ -83,7 +84,9 @@ const RequestCarScreen = () => {
       sx={{
         minHeight: "100vh",
         py: 10,
-        background: "linear-gradient(to bottom, #ffffff, #f3f3f3)",
+        background: darkMode
+          ? "linear-gradient(to bottom, #1a1a1a, #121212)"
+          : "linear-gradient(to bottom, #ffffff, #f3f3f3)",
       }}
     >
       <Container maxWidth="md">
@@ -100,7 +103,7 @@ const RequestCarScreen = () => {
               mb: 4,
               textAlign: "center",
               fontFamily: "Michroma",
-              color: "#000",
+              color: darkMode ? "#fff" : "#000",
             }}
           >
             {t("requestCar")}
@@ -117,9 +120,9 @@ const RequestCarScreen = () => {
             sx={{
               p: 4,
               borderRadius: 4,
-              backgroundColor: "#fff",
+              backgroundColor: darkMode ? "#1e1e1e" : "#fff",
               boxShadow: "0 4px 30px rgba(0,0,0,0.05)",
-              border: "1px solid #ddd",
+              border: darkMode ? "1px solid #333" : "1px solid #ddd",
             }}
           >
             <form onSubmit={handleSubmit}>
@@ -154,6 +157,15 @@ const RequestCarScreen = () => {
                       type={field.type}
                       value={formData[field.name]}
                       onChange={handleChange}
+                      InputLabelProps={{
+                        style: { color: darkMode ? "#fff" : undefined },
+                      }}
+                      InputProps={{
+                        style: {
+                          color: darkMode ? "#fff" : undefined,
+                          backgroundColor: darkMode ? "#2a2a2a" : undefined,
+                        },
+                      }}
                     />
                   </Grid>
                 ))}
@@ -177,6 +189,15 @@ const RequestCarScreen = () => {
                     value={formData.transmission}
                     onChange={handleChange}
                     required
+                    InputLabelProps={{
+                      style: { color: darkMode ? "#fff" : undefined },
+                    }}
+                    InputProps={{
+                      style: {
+                        color: darkMode ? "#fff" : undefined,
+                        backgroundColor: darkMode ? "#2a2a2a" : undefined,
+                      },
+                    }}
                   >
                     <MenuItem value="1">{t("manual")}</MenuItem>
                     <MenuItem value="2">{t("automatic")}</MenuItem>
@@ -201,6 +222,15 @@ const RequestCarScreen = () => {
                     onChange={handleChange}
                     multiline
                     rows={3}
+                    InputLabelProps={{
+                      style: { color: darkMode ? "#fff" : undefined },
+                    }}
+                    InputProps={{
+                      style: {
+                        color: darkMode ? "#fff" : undefined,
+                        backgroundColor: darkMode ? "#2a2a2a" : undefined,
+                      },
+                    }}
                   />
                 </Grid>
 

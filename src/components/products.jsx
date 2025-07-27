@@ -10,6 +10,7 @@ import {
   Paper,
   Stack,
   Pagination,
+  useTheme,
 } from "@mui/material";
 import { Search as SearchIcon, Tune as FilterIcon } from "@mui/icons-material";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -27,6 +28,8 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
   const [maxPrice, setMaxPrice] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [page, setPage] = useState(1);
+  const theme = useTheme();
+  const darkMode = theme.palette.mode === "dark";
 
   if (isLoading) {
     return (
@@ -35,7 +38,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        sx={{ background: "#fff" }}
+        sx={{ background: darkMode ? "#121212" : "#fff" }}
       >
         <CircularProgress color="primary" size={50} thickness={4} />
       </Box>
@@ -66,7 +69,9 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
         pb: 8,
         px: 2,
         minHeight: "100vh",
-        background: "linear-gradient(to bottom, #ffffff, #f2f2f2)",
+        background: darkMode
+          ? "linear-gradient(to bottom, #121212, #1e1e1e)"
+          : "linear-gradient(to bottom, #ffffff, #f2f2f2)",
       }}
     >
       <motion.div
@@ -81,7 +86,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
             mb: 5,
             textAlign: "center",
             fontFamily: "Michroma",
-            color: "#000",
+            color: darkMode ? "#fff" : "#000",
           }}
         >
           {t("NewArrivals")}
@@ -113,7 +118,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
                 sx={{
                   borderRadius: 2,
                   color: "#D32F2F",
-                  backgroundColor: "#f1f1f1",
+                  backgroundColor: darkMode ? "#2a2a2a" : "#f1f1f1",
                   "& .MuiOutlinedInput-root": {
                     borderRadius: 2,
                     "& fieldset": { border: "none" },
@@ -135,9 +140,9 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
                   borderRadius: 2,
                   width: 48,
                   height: 48,
-                  backgroundColor: "#eeeeee",
+                  backgroundColor: darkMode ? "#3a3a3a" : "#eeeeee",
                   "&:hover": {
-                    backgroundColor: "#dddddd",
+                    backgroundColor: darkMode ? "#4a4a4a" : "#dddddd",
                   },
                 }}
               >
@@ -163,7 +168,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
                     py: 4,
                     borderRadius: 4,
                     mb: 4,
-                    backgroundColor: "#fafafa",
+                    backgroundColor: darkMode ? "#2b2b2b" : "#fafafa",
                     boxShadow: "0 6px 30px rgba(0,0,0,0.1)",
                   }}
                 >
@@ -185,7 +190,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
                       }}
                       sx={{
                         width: 200,
-                        backgroundColor: "#f3f3f3",
+                        backgroundColor: darkMode ? "#3b3b3b" : "#f3f3f3",
                         borderRadius: 2,
                       }}
                       value={minPrice}
@@ -203,7 +208,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
                       }}
                       sx={{
                         width: 200,
-                        backgroundColor: "#f3f3f3",
+                        backgroundColor: darkMode ? "#3b3b3b" : "#f3f3f3",
                         borderRadius: 2,
                       }}
                       value={maxPrice}
@@ -241,7 +246,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
             <Typography
               variant="h6"
               mt={10}
-              sx={{ textAlign: "center", width: "100%", color: "#444" }}
+              sx={{ textAlign: "center", width: "100%", color: darkMode ? "#ccc" : "#444" }}
             >
               {t("noNewCarsFound")}
             </Typography>

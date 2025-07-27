@@ -20,6 +20,7 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
   const { t } = useLanguage();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+  const isDark = theme.palette.mode === "dark";
 
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
   const [openPriceDialog, setOpenPriceDialog] = useState(false);
@@ -98,8 +99,9 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
               borderRadius: 8,
               flexWrap: "wrap",
               gap: 2,
-              background: "#f9f9f9",
-              border: "1px solid #ddd",
+              background: isDark ? "#1e1e1e" : "#f9f9f9",
+              border: "1px solid",
+              borderColor: isDark ? "#444" : "#ddd",
             }}
           >
             <Box
@@ -118,11 +120,12 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
                 }}
                 variant="contained"
                 sx={{
-                  backgroundColor: "#ffffff",
-                  border: "1px solid #ccc",
-                  color: "#333",
+                  backgroundColor: isDark ? "#333" : "#ffffff",
+                  border: "1px solid",
+                  borderColor: isDark ? "#555" : "#ccc",
+                  color: isDark ? "#fff" : "#333",
                   ":hover": {
-                    backgroundColor: "#f0f0f0",
+                    backgroundColor: isDark ? "#444" : "#f0f0f0",
                   },
                 }}
               >
@@ -133,11 +136,12 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
                 onClick={() => setOpenDialog(true)}
                 variant="contained"
                 sx={{
-                  backgroundColor: "#ffffff",
-                  border: "1px solid #ccc",
-                  color: "#333",
+                  backgroundColor: isDark ? "#333" : "#ffffff",
+                  border: "1px solid",
+                  borderColor: isDark ? "#555" : "#ccc",
+                  color: isDark ? "#fff" : "#333",
                   ":hover": {
-                    backgroundColor: "#f0f0f0",
+                    backgroundColor: isDark ? "#444" : "#f0f0f0",
                   },
                 }}
               >
@@ -148,11 +152,12 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
                 onClick={() => setOpenPriceDialog(true)}
                 variant="contained"
                 sx={{
-                  backgroundColor: "#ffffff",
-                  border: "1px solid #ccc",
-                  color: "#333",
+                  backgroundColor: isDark ? "#333" : "#ffffff",
+                  border: "1px solid",
+                  borderColor: isDark ? "#555" : "#ccc",
+                  color: isDark ? "#fff" : "#333",
                   ":hover": {
-                    backgroundColor: "#f0f0f0",
+                    backgroundColor: isDark ? "#444" : "#f0f0f0",
                   },
                 }}
               >
@@ -163,11 +168,12 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
                 onClick={(e) => setAnchorEl(e.currentTarget)}
                 variant="contained"
                 sx={{
-                  backgroundColor: "#ffffff",
-                  border: "1px solid #ccc",
-                  color: "#333",
+                  backgroundColor: isDark ? "#333" : "#ffffff",
+                  border: "1px solid",
+                  borderColor: isDark ? "#555" : "#ccc",
+                  color: isDark ? "#fff" : "#333",
                   ":hover": {
-                    backgroundColor: "#f0f0f0",
+                    backgroundColor: isDark ? "#444" : "#f0f0f0",
                   },
                 }}
               >
@@ -200,7 +206,9 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
               flexWrap: "wrap",
               justifyContent: "space-between",
               gap: 1,
-              border: "1px solid #ddd",
+              border: "1px solid",
+              borderColor: isDark ? "#444" : "#ddd",
+              background: isDark ? "#1e1e1e" : "#fff",
             }}
           >
             <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
@@ -270,12 +278,13 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
             <IconButton
               onClick={() => setOpenBottomSheet(true)}
               sx={{
-                backgroundColor: "#fff",
-                color: "#000",
+                backgroundColor: isDark ? "#333" : "#fff",
+                color: isDark ? "#fff" : "#000",
                 borderRadius: "50%",
                 boxShadow: 3,
                 padding: 2,
-                border: "1px solid #ccc",
+                border: "1px solid",
+                borderColor: isDark ? "#555" : "#ccc",
               }}
             >
               +

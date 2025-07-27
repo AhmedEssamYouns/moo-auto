@@ -40,7 +40,7 @@ const fadeUp = {
   }),
 };
 
-const InstallmentServicesScreen = () => {
+const InstallmentServicesScreen = ({ darkMode }) => {
   const { t, language } = useLanguage();
   const [providers, setProviders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -92,7 +92,9 @@ const InstallmentServicesScreen = () => {
       sx={{
         minHeight: "100vh",
         py: 10,
-        background: "linear-gradient(to bottom, #ffffff, #f5f5f5)",
+        background: darkMode
+          ? "linear-gradient(to bottom, #121212, #1e1e1e)"
+          : "linear-gradient(to bottom, #ffffff, #f5f5f5)",
       }}
     >
       <Container maxWidth="lg">
@@ -107,7 +109,7 @@ const InstallmentServicesScreen = () => {
                 mb={4}
                 fontFamily="Michroma, sans-serif"
                 textAlign="center"
-                color="#d32f2f"
+                color={"#d32f2f"}
               >
                 {t("Installment Services")}
               </Typography>
@@ -122,14 +124,14 @@ const InstallmentServicesScreen = () => {
                 onChange={handleSearchChange}
                 sx={{
                   mb: 4,
-                  input: { color: "#333" },
-                  label: { color: "#555" },
+                  input: { color: darkMode ? "#fff" : "#333" },
+                  label: { color: darkMode ? "#aaa" : "#555" },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
-                      borderColor: "#ccc",
+                      borderColor: darkMode ? "#555" : "#ccc",
                     },
                     "&:hover fieldset": {
-                      borderColor: "#999",
+                      borderColor: darkMode ? "#888" : "#999",
                     },
                   },
                 }}
@@ -137,7 +139,7 @@ const InstallmentServicesScreen = () => {
             </motion.div>
 
             <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={2}>
-              <Typography variant="h6" fontWeight="bold" mb={1} color="#333">
+              <Typography variant="h6" fontWeight="bold" mb={1} color={darkMode ? "#fff" : "#333"}>
                 {t("Filter by Months")}
               </Typography>
               <Slider
@@ -156,7 +158,7 @@ const InstallmentServicesScreen = () => {
             </motion.div>
 
             <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={3}>
-              <Typography variant="h6" fontWeight="bold" mb={1} color="#333">
+              <Typography variant="h6" fontWeight="bold" mb={1} color={darkMode ? "#fff" : "#333"}>
                 {t("Filter by Interest (%)")}
               </Typography>
               <Slider
@@ -176,7 +178,7 @@ const InstallmentServicesScreen = () => {
                 component={Paper}
                 sx={{
                   borderRadius: 4,
-                  backgroundColor: "#ffffff",
+                  backgroundColor: darkMode ? "#1e1e1e" : "#ffffff",
                   boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
                   border: "1px solid #eee",
                 }}
@@ -184,18 +186,18 @@ const InstallmentServicesScreen = () => {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: "bold", color: "#333" }}>{t("Provider")}</TableCell>
-                      <TableCell sx={{ fontWeight: "bold", color: "#333" }}>{t("Installment Plan")}</TableCell>
-                      <TableCell sx={{ fontWeight: "bold", color: "#333" }}>{t("Months")}</TableCell>
-                      <TableCell sx={{ fontWeight: "bold", color: "#333" }}>{t("Interest (%)")}</TableCell>
-                      <TableCell sx={{ fontWeight: "bold", color: "#333" }}>{t("Processing Fee (%)")}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold", color: darkMode ? "#fff" : "#333" }}>{t("Provider")}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold", color: darkMode ? "#fff" : "#333" }}>{t("Installment Plan")}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold", color: darkMode ? "#fff" : "#333" }}>{t("Months")}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold", color: darkMode ? "#fff" : "#333" }}>{t("Interest (%)")}</TableCell>
+                      <TableCell sx={{ fontWeight: "bold", color: darkMode ? "#fff" : "#333" }}>{t("Processing Fee (%)")}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {filteredProviders.length === 0 ? (
                       <TableRow>
                         <TableCell colSpan={5} align="center">
-                          <Typography variant="body1" color="#666">
+                          <Typography variant="body1" color={darkMode ? "#ccc" : "#666"}>
                             {t("No providers found")}
                           </Typography>
                         </TableCell>
@@ -217,7 +219,7 @@ const InstallmentServicesScreen = () => {
                                   />
                                 </Grid>
                                 <Grid item>
-                                  <Typography fontWeight="medium" color="#333">
+                                  <Typography fontWeight="medium" color={darkMode ? "#fff" : "#333"}>
                                     {provider.name}
                                   </Typography>
                                 </Grid>
@@ -228,12 +230,12 @@ const InstallmentServicesScreen = () => {
                                 sx={{
                                   mt: 2,
                                   borderRadius: 2,
-                                  backgroundColor: "#f9f9f9",
-                                  color: "#333",
+                                  backgroundColor: darkMode ? "#2c2c2c" : "#f9f9f9",
+                                  color: darkMode ? "#fff" : "#333",
                                   boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
                                 }}
                               >
-                                <AccordionSummary expandIcon={<ArrowDropDownIcon sx={{ color: "#333" }} />}>
+                                <AccordionSummary expandIcon={<ArrowDropDownIcon sx={{ color: darkMode ? "#fff" : "#333" }} />}>
                                   <Typography fontWeight="medium">{t("View Installment Plans")}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>

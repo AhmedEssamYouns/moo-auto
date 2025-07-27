@@ -5,16 +5,19 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
+import { useTheme } from "@mui/material";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
 
   const styles = {
     footer: {
-      background: "#f8f8f8",
-      color: "#222",
+      background: isDark ? "#111" : "#f8f8f8",
+      color: isDark ? "#eee" : "#222",
       padding: "60px 20px 30px",
-      borderTop: "1px solid #ddd",
+      borderTop: isDark ? "1px solid #333" : "1px solid #ddd",
       fontFamily: "'Segoe UI', sans-serif",
     },
     container: {
@@ -40,7 +43,7 @@ const Footer = () => {
       marginBottom: "8px",
     },
     link: {
-      color: "#555",
+      color: isDark ? "#bbb" : "#555",
       textDecoration: "none",
       fontSize: "15px",
     },
@@ -48,25 +51,15 @@ const Footer = () => {
       textAlign: "center",
       marginTop: "40px",
       fontSize: "14px",
-      color: "#999",
+      color: isDark ? "#777" : "#999",
     },
     iconLink: {
       display: "flex",
       alignItems: "center",
       gap: "8px",
-      color: "#555",
+      color: isDark ? "#bbb" : "#555",
       textDecoration: "none",
       fontSize: "15px",
-    },
-    "@media (maxWidth: 768px)": {
-      container: {
-        flexDirection: "column",
-        alignItems: "center",
-      },
-      column: {
-        alignItems: "center",
-        textAlign: "center",
-      },
     },
   };
 
@@ -77,7 +70,7 @@ const Footer = () => {
           <Link to="/">
             <img src={LOGOpng} alt="Logo" style={styles.logoImg} />
           </Link>
-          <p style={{ color: "#666", fontSize: "14px" }}>
+          <p style={{ color: isDark ? "#ccc" : "#666", fontSize: "14px" }}>
             The ultimate car experience.
           </p>
         </div>

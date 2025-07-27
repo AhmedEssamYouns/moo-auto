@@ -1,15 +1,16 @@
+// ThemeProviderWrapper.jsx or .tsx
 import React, { useMemo } from "react";
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import { useLanguage } from "./LanguageContext";
 
-const ThemeProviderWrapper = ({ children }) => {
+const ThemeProviderWrapper = ({ children, darkMode }) => {
   const { language } = useLanguage();
 
   const theme = useMemo(
     () =>
       createTheme({
         palette: {
-          mode: "light",
+          mode: darkMode ? "dark" : "light",
           primary: {
             main: "#B30000",
             contrastText: "#fff",
@@ -30,12 +31,12 @@ const ThemeProviderWrapper = ({ children }) => {
             main: "#2E7D32",
           },
           background: {
-            default: "#f9f9f9",
-            paper: "#ffffff",
+            default: darkMode ? "#121212" : "#f9f9f9",
+            paper: darkMode ? "#1E1E1E" : "#ffffff",
           },
           text: {
-            primary: "#000000",
-            secondary: "#757575",
+            primary: darkMode ? "#ffffff" : "#000000",
+            secondary: darkMode ? "#B0BEC5" : "#757575",
           },
         },
         typography: {
@@ -51,65 +52,14 @@ const ThemeProviderWrapper = ({ children }) => {
           body1: { fontFamily: "'IBM Plex Sans Arabic', sans-serif" },
           body2: { fontFamily: "'IBM Plex Sans Arabic', sans-serif" },
         },
-        components: {
-          MuiButton: {
-            styleOverrides: {
-              outlined: {
-                borderColor: "#1976D2",
-                color: "#1976D2",
-                "&:hover": {
-                  borderColor: "#1565C0",
-                  backgroundColor: "#1976D2",
-                  color: "#ffffff",
-                },
-              },
-            },
-          },
-          MuiTypography: {
-            styleOverrides: {
-              root: {
-                "&:hover": {
-                  color: "#B30000",
-                  cursor: "pointer",
-                },
-              },
-            },
-          },
-          MuiTextField: {
-            styleOverrides: {
-              root: {
-                "& .MuiInputBase-input": {
-                  color: "#000000", // input text
-                },
-                "& .MuiFormLabel-root": {
-                  color: "#757575", // label
-                  "&.Mui-focused": {
-                    color: "#1976D2", // label when focused
-                  },
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "#1976D2",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#1565C0",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#1976D2",
-                  },
-                },
-              },
-            },
-          },
-        },
       }),
-    [language]
+    [language, darkMode]
   );
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {children()}
+      {children}
     </ThemeProvider>
   );
 };

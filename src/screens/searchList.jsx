@@ -31,6 +31,7 @@ const CarsListScreen = () => {
     <Box
       sx={{
         p: 4,
+        pt:10,
         minHeight: "100vh",
       }}
     >
@@ -62,10 +63,7 @@ const CarsListScreen = () => {
           flexDirection: language === "ar" ? "row-reverse" : "row",
         }}
       >
-        <DirectionsCarIcon
-          color="primary"
-          fontSize={isMobile ? "small" : "medium"}
-        />
+       
         <Typography variant={isMobile ? "body2" : "h6"} fontWeight="bold">
           {t("Total Cars")}{" "}
           <span style={{ color: theme.palette.primary.main }}>

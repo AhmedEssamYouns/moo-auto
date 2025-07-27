@@ -6,8 +6,8 @@ import {
   CircularProgress,
   useMediaQuery,
   Button,
+  useTheme,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import ProductCard from "../components/productItem";
 import Filters from "../components/filters";
 import { useBrands, useCars } from "../services/hooks/useCards";
@@ -20,6 +20,9 @@ const ProductsScreen = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width: 1000px)");
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+
   const productsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
   const [showAll, setShowAll] = useState(false);
@@ -39,9 +42,7 @@ const ProductsScreen = () => {
     CarBrand: null,
   });
 
-  const finalFilters = {
-    ...filters,
-  };
+  const finalFilters = { ...filters };
 
   const { data, isLoading, error, isFetching } = useCars(finalFilters);
   const {
@@ -108,7 +109,7 @@ const ProductsScreen = () => {
       CarState: null,
       CarBrand: null,
     });
-    navigate("/cars-for-sale", { replace: true }); // Clear the ?type query
+    navigate("/cars-for-sale", { replace: true });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -126,8 +127,8 @@ const ProductsScreen = () => {
       sx={{
         pt: 10,
         minHeight: "100vh",
-        background: "#fff",
-        color: "#000",
+        background: isDark ? "#111" : "#fff",
+        color: isDark ? "#eee" : "#000",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -149,7 +150,7 @@ const ProductsScreen = () => {
             sx={{
               fontFamily: "Michroma",
               fontSize: 40,
-              color: "black",
+              color: isDark ? "#fff" : "black",
               letterSpacing: 1,
             }}
           >
