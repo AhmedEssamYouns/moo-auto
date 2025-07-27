@@ -2,4 +2,4 @@
 User-agent: *
 Disallow:
 Allow: /
-Sitemap: https://almosallamy-automotive.com/sitemap.xml
+Sitemap: https://mooautomotive.com/sitemap.xml
