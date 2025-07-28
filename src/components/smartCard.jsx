@@ -32,7 +32,7 @@ const LargeCarCard = ({ car }) => {
       onClick={() => navigate(`/product/${car.id}`)}
       sx={{
         position: "relative",
-        width: isMobile ? "70vw" : "60vw",
+        width: isMobile ? "74vw" : "60vw",
         height: isMobile ? "40vh" : "70vh",
         borderRadius: 6,
         overflow: "hidden",
@@ -59,6 +59,7 @@ const LargeCarCard = ({ car }) => {
             sx={{
               width: "100%",
               height: isMobile ? "40vh" : "70vh",
+              bgcolor:'white',
               objectFit: isMobile ? "fill" : "cover",
               filter: "brightness(0.95)",
               userSelect: "none",

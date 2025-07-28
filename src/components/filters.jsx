@@ -282,6 +282,8 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
                 color: isDark ? "#fff" : "#000",
                 borderRadius: "50%",
                 boxShadow: 3,
+                height:50,
+                width:50,
                 padding: 2,
                 border: "1px solid",
                 borderColor: isDark ? "#555" : "#ccc",

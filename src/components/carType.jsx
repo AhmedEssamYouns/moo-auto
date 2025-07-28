@@ -280,10 +280,10 @@ export default function CarTypeSection() {
 
       <Grid container spacing={2} mt={16}>
         {[
-          { value: "836M", label: t("cars_for_sale") },
-          { value: "738M", label: t("dealer_reviews") },
-          { value: "100M", label: t("visitors_per_day") },
-          { value: "238M", label: t("verified_dealers") },
+          { value: "40", label: t("cars_for_sale") },
+          { value: "800", label: t("dealer_reviews") },
+          { value: "1K", label: t("visitors_per_day") },
+          { value: "50", label: t("verified_dealers") },
         ].map((item, i) => (
           <Grid item xs={6} md={3} key={i}>
             <Typography variant="h6" fontWeight="bold">

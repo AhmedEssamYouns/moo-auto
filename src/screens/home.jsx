@@ -37,11 +37,13 @@ const HomeScreen = ({ darkMode }) => {
   const [nextImage, setNextImage] = useState(null);
 
   const { ref: showcaseRef, inView: showcaseInView } = useInView({
-    triggerOnce: false,
+    triggerOnce: true,
   });
-  const { ref: typeRef, inView: typeInView } = useInView({
-    triggerOnce: false,
-  });
+  const { ref: typeRef, inView: typeInView } = useInView({ triggerOnce: true });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -56,7 +58,6 @@ const HomeScreen = ({ darkMode }) => {
         }
       } catch (err) {
         setBanners(fallbackImages);
-        window.scrollTo(0, 0);
       }
     };
     fetchBanners();
@@ -100,203 +101,200 @@ const HomeScreen = ({ darkMode }) => {
     if (img instanceof Blob) return URL.createObjectURL(img);
     return "";
   };
-
+  useEffect(() => {
+    //scroll to very tob on load screen after load screen too
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
-      <Zoom in>
-        <Box
-          mt={8}
-          sx={{
-            height: isMobile ? "80vh" : "70vh",
-            position: "relative",
-            overflow: "hidden",
-            backgroundColor: darkMode ? "#121212" : "#f9f9f9",
-          }}
-        >
-          <Box sx={{ position: "absolute", inset: 0, zIndex: 1 }}>
-            <Box
-              sx={{
-                position: "absolute",
-                inset: 0,
-                backgroundImage: `url(${getImageUrl(banners[currentImage])})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-              }}
-            />
-            {nextImage !== null && (
-              <Fade in={true} timeout={500}>
-                <Box
-                  sx={{
-                    position: "absolute",
-                    inset: 0,
-                    backgroundImage: `url(${getImageUrl(banners[nextImage])})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                  }}
-                />
-              </Fade>
-            )}
-          </Box>
+      <Box
+        mt={8}
+        sx={{
+          height: isMobile ? "80vh" : "70vh",
+          position: "relative",
+          overflow: "hidden",
+          backgroundColor: darkMode ? "#121212" : "#f9f9f9",
+        }}
+      >
+        <Box sx={{ position: "absolute", inset: 0, zIndex: 1 }}>
+          <Box
+            sx={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage: `url(${getImageUrl(banners[currentImage])})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          />
+          {nextImage !== null && (
+            <Fade in={true} timeout={500}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  inset: 0,
+                  backgroundImage: `url(${getImageUrl(banners[nextImage])})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+              />
+            </Fade>
+          )}
+        </Box>
 
-          <Slide direction="left" in={true} timeout={900}>
-            <Box
+        <Slide direction="left" in timeout={900}>
+          <Box
+            sx={{
+              position: "relative",
+              zIndex: 2,
+              height: "100%",
+              px: isMobile ? 3 : 10,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "flex-start",
+            }}
+          >
+            <Typography
+              variant={isMobile ? "h4" : "h2"}
+              fontFamily="'Michroma', sans-serif"
               sx={{
-                position: "relative",
-                zIndex: 2,
-                height: "100%",
-                px: isMobile ? 3 : 10,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "flex-start",
+                fontWeight: 900,
+                color: "#fff",
+                mb: 2,
+                textShadow: "1px 1px 4px rgba(0,0,0,0.6)",
+                lineHeight: 1.2,
               }}
             >
+              {t("findYourDreamCar") || "Luxury Cars. Redefined."}
+            </Typography>
+
+            <Grow in timeout={1000}>
               <Typography
-                variant={isMobile ? "h4" : "h2"}
-                fontFamily="'Michroma', sans-serif"
+                variant={isMobile ? "body1" : "h5"}
+                fontFamily="'IBM Plex Sans Arabic', sans-serif"
                 sx={{
-                  fontWeight: 900,
                   color: "#fff",
-                  mb: 2,
-                  textShadow: "1px 1px 4px rgba(0,0,0,0.6)",
-                  lineHeight: 1.2,
+                  maxWidth: 700,
+                  mb: 4,
+                  fontWeight: 300,
+                  lineHeight: 1.6,
+                  fontSize: isMobile ? "1rem" : "1.2rem",
                 }}
               >
-                {t("findYourDreamCar") || "Luxury Cars. Redefined."}
+                {t("findCarsNearYou") ||
+                  "Discover high-end, exotic, and luxury vehicles tailored to your lifestyle."}
               </Typography>
+            </Grow>
 
-              <Grow in={true} timeout={1000}>
-                <Typography
-                  variant={isMobile ? "body1" : "h5"}
-                  fontFamily="'IBM Plex Sans Arabic', sans-serif"
-                  sx={{
-                    color: "#fff",
-                    maxWidth: 700,
-                    mb: 4,
-                    fontWeight: 300,
-                    lineHeight: 1.6,
-                    fontSize: isMobile ? "1rem" : "1.2rem",
-                  }}
-                >
-                  {t("findCarsNearYou") ||
-                    "Discover high-end, exotic, and luxury vehicles tailored to your lifestyle."}
-                </Typography>
-              </Grow>
+            <Slide direction="right" in timeout={1100}>
+              <Button
+                variant="contained"
+                onClick={handleClick}
+                sx={{
+                  background: "linear-gradient(to right, #333, #111)",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  px: 5,
+                  py: 1.8,
+                  fontSize: isMobile ? "0.9rem" : "1.1rem",
+                  borderRadius: 10,
+                  boxShadow: "0px 10px 25px rgba(0,0,0,0.25)",
+                  textTransform: "uppercase",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    background: "#111",
+                    transform: "scale(1.05)",
+                  },
+                }}
+              >
+                {t("exploreNow") || "Explore Now"}
+              </Button>
+            </Slide>
+          </Box>
+        </Slide>
 
-              <Slide direction="right" in={true} timeout={1100}>
-                <Button
-                  variant="contained"
-                  onClick={handleClick}
-                  sx={{
-                    background: "linear-gradient(to right, #333, #111)",
-                    color: "#fff",
-                    fontWeight: "bold",
-                    px: 5,
-                    py: 1.8,
-                    fontSize: isMobile ? "0.9rem" : "1.1rem",
-                    borderRadius: 10,
-                    boxShadow: "0px 10px 25px rgba(0,0,0,0.25)",
-                    textTransform: "uppercase",
-                    transition: "all 0.3s ease",
-                    "&:hover": {
-                      background: "#111",
-                      transform: "scale(1.05)",
-                    },
-                  }}
-                >
-                  {t("exploreNow") || "Explore Now"}
-                </Button>
-              </Slide>
-            </Box>
-          </Slide>
+        <Fade in timeout={1000}>
+          <IconButton
+            onClick={handlePrev}
+            sx={{
+              position: "absolute",
+              top: isMobile ? "80%" : "50%",
+              left: 15,
+              transform: "translateY(-50%)",
+              backgroundColor: darkMode ? "gray" : "#fff",
+              color: "#000",
+              zIndex: 3,
+              borderRadius: "12px",
+              "&:hover": {
+                backgroundColor: "#eee",
+              },
+            }}
+          >
+            <ArrowBackIosIcon fontSize="small" />
+          </IconButton>
+        </Fade>
 
-          <Fade in={true} timeout={1000}>
-            <IconButton
-              onClick={handlePrev}
-              sx={{
-                position: "absolute",
-                top: isMobile ? "80%" : "50%",
-                left: 15,
-                transform: "translateY(-50%)",
-                backgroundColor: "#fff",
-                color: "#000",
-                zIndex: 3,
-                borderRadius: "12px",
-                "&:hover": {
-                  backgroundColor: "#eee",
-                },
-              }}
-            >
-              <ArrowBackIosIcon fontSize="small" />
-            </IconButton>
-          </Fade>
+        <Fade in timeout={1000}>
+          <IconButton
+            onClick={handleNext}
+            sx={{
+              position: "absolute",
+              top: isMobile ? "80%" : "50%",
+              right: 15,
+              transform: "translateY(-50%)",
+              backgroundColor: darkMode ? "gray" : "#fff",
+              color: "#000",
+              zIndex: 3,
+              borderRadius: "12px",
+              "&:hover": {
+                backgroundColor: "#eee",
+              },
+            }}
+          >
+            <ArrowForwardIosIcon fontSize="small" />
+          </IconButton>
+        </Fade>
 
-          <Fade in={true} timeout={1000}>
-            <IconButton
-              onClick={handleNext}
-              sx={{
-                position: "absolute",
-                top: isMobile ? "80%" : "50%",
-                right: 15,
-                transform: "translateY(-50%)",
-                backgroundColor: "#fff",
-                color: "#000",
-                zIndex: 3,
-                borderRadius: "12px",
-                "&:hover": {
-                  backgroundColor: "#eee",
-                },
-              }}
-            >
-              <ArrowForwardIosIcon fontSize="small" />
-            </IconButton>
-          </Fade>
+        <Fade in timeout={1000}>
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 20,
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 1.2,
+              zIndex: 3,
+            }}
+          >
+            {banners.map((_, index) => (
+              <Box
+                key={index}
+                onClick={() => handleManualChange(index)}
+                sx={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: "50%",
+                  backgroundColor: currentImage === index ? "#fff" : "#888",
+                  cursor: "pointer",
+                  transition: "all 0.25s ease-in-out",
+                }}
+              />
+            ))}
+          </Box>
+        </Fade>
+      </Box>
 
-          <Fade in={true} timeout={1000}>
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: 20,
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: 1.2,
-                zIndex: 3,
-              }}
-            >
-              {banners.map((_, index) => (
-                <Box
-                  key={index}
-                  onClick={() => handleManualChange(index)}
-                  sx={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: "50%",
-                    backgroundColor: currentImage === index ? "#fff" : "#888",
-                    cursor: "pointer",
-                    transition: "all 0.25s ease-in-out",
-                  }}
-                />
-              ))}
-            </Box>
-          </Fade>
-        </Box>
-      </Zoom>
+      <Box ref={showcaseRef}>
+        <HorizontalShowcase darkMode={darkMode} />
+      </Box>
 
-      <Slide direction="right" in={showcaseInView} timeout={800}>
-        <Box ref={showcaseRef}>
-          <HorizontalShowcase darkMode={darkMode} />
-        </Box>
-      </Slide>
-
-      <Slide direction="left" in={typeInView} timeout={900}>
-        <Box ref={typeRef} mt={6} mb={4}>
-          <CarTypeSection darkMode={darkMode} />
-        </Box>
-      </Slide>
+      <Box ref={typeRef} mt={6} mb={4}>
+        <CarTypeSection darkMode={darkMode} />
+      </Box>
     </>
   );
 };

@@ -64,10 +64,10 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
         },
       }}
     >
-      {/* Drawer Header */}
       <Box
         component={Link}
         to="/"
+        onClick={onClose}
         sx={{
           width: "90%",
           my: 2,
@@ -79,10 +79,9 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
       >
         <img
           src={logo}
-          
           alt="Moo Auto Logo"
           style={{
-            resize:"contain",
+            resize: "contain",
             width: "100%",
             height: "60%",
             borderRadius: 45,
@@ -92,7 +91,6 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
       </Box>
       <Divider sx={{ backgroundColor: "gray" }} />
 
-      {/* Drawer Items */}
       <List>
         {navItems.map((item) => (
           <ListItem
@@ -115,7 +113,17 @@ const NavDrawer = ({ open, onClose, darkMode, toggleDarkMode }) => {
       </List>
       <Divider sx={{ mx: 2, mt: 1 }} />
 
-      <Box sx={{ px: 3, mt: 2, mb: 2 }}>
+      <Box sx={{ px: 3, mt: 2 }}>
+        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+          <DarkModeIcon sx={{ color: isDarkMode ? "white" : "black", mr: 1 }} />
+          <Switch
+            checked={darkMode}
+            onChange={toggleDarkMode}
+            color="default"
+          />
+          <LightModeIcon sx={{ color: isDarkMode ? "white" : "black", ml: 1 }} />
+        </Box>
+
         <Typography variant="body2" sx={{ mb: 0.5 }}>
           {t("language")}
         </Typography>

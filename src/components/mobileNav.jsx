@@ -6,10 +6,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Link } from "react-router-dom";
 import NavDrawer from "./drawer";
 
-const MobileNavbar = ({ darkMode, searchText, setSearchText, onSearch }) => {
+const MobileNavbar = ({ darkMode, searchText, setSearchText, onSearch, toggleDarkMode }) => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
 
   return (
     <>
@@ -26,12 +27,15 @@ const MobileNavbar = ({ darkMode, searchText, setSearchText, onSearch }) => {
           right: 0,
           px: 2,
           py: 1,
-          bgcolor: darkMode ? "black" : "white",
+          bgcolor: isDark ? "#121212" : "#ffffff",
+          color: isDark ? "#ffffff" : "#000000",
+          backdropFilter: "blur(10px)",
+          borderBottom: `1px solid ${isDark ? "#333" : "#ddd"}`,
         }}
       >
         <IconButton
           onClick={() => setDrawerOpen(true)}
-          sx={{ color: darkMode ? "white" : "black" }}
+          sx={{ color: isDark ? "#fff" : "#000" }}
         >
           <MenuIcon />
         </IconButton>
@@ -44,7 +48,7 @@ const MobileNavbar = ({ darkMode, searchText, setSearchText, onSearch }) => {
             fontWeight: "bold",
             fontSize: "1.5rem",
             textDecoration: "none",
-            color: darkMode ? "white" : "black",
+            color: isDark ? "#fff" : "#000",
           }}
         >
           Moo Auto
@@ -52,7 +56,7 @@ const MobileNavbar = ({ darkMode, searchText, setSearchText, onSearch }) => {
 
         <IconButton
           onClick={() => setSearchOpen(true)}
-          sx={{ color: darkMode ? "white" : "black" }}
+          sx={{ color: isDark ? "#fff" : "#000" }}
         >
           <SearchIcon />
         </IconButton>
@@ -68,10 +72,11 @@ const MobileNavbar = ({ darkMode, searchText, setSearchText, onSearch }) => {
             zIndex: 3000,
             display: "flex",
             alignItems: "center",
-            bgcolor: darkMode ? "#121212" : "#f9f9f9",
+            bgcolor: isDark ? "#1e1e1e" : "#f9f9f9",
             px: 2,
             py: 1,
             backdropFilter: "blur(15px)",
+            borderBottom: `1px solid ${isDark ? "#444" : "#ccc"}`,
           }}
         >
           <InputBase
@@ -87,15 +92,14 @@ const MobileNavbar = ({ darkMode, searchText, setSearchText, onSearch }) => {
             placeholder="Search..."
             fullWidth
             sx={{
-              color: darkMode ? "white" : "black",
+              color: isDark ? "#fff" : "#000",
               fontSize: "1rem",
-              zIndex:99999,
               px: 1,
             }}
           />
           <IconButton
             onClick={() => setSearchOpen(false)}
-            sx={{ color: darkMode ? "white" : "black" }}
+            sx={{ color: isDark ? "#fff" : "#000" }}
           >
             <CloseIcon />
           </IconButton>
@@ -104,6 +108,7 @@ const MobileNavbar = ({ darkMode, searchText, setSearchText, onSearch }) => {
 
       <NavDrawer
         open={drawerOpen}
+        toggleDarkMode={toggleDarkMode}
         darkMode={darkMode}
         onClose={() => setDrawerOpen(false)}
       />

@@ -16,6 +16,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../utils/baseUrl";
 import { useTheme } from "@mui/material/styles";
+import SwipeableViews from "react-swipeable-views";
 
 const ProductCard = ({ car }) => {
   const theme = useTheme();
@@ -71,17 +72,27 @@ const ProductCard = ({ car }) => {
         cursor: "pointer",
       }}
     >
-      <Box
-        component="img"
-        src={car.images[activeIndex]}
-        alt={`${car.name}-${activeIndex}`}
-        sx={{
-          width: "100%",
-          height: "360px",
-          objectFit: "cover",
-          filter: "brightness(0.8)",
-        }}
-      />
+      <SwipeableViews
+        index={activeIndex}
+        onChangeIndex={(index) => setActiveIndex(index)}
+        enableMouseEvents
+        style={{ height: "120%" }}
+      >
+        {car.images.map((image, index) => (
+          <Box
+            key={index}
+            component="img"
+            src={image}
+            alt={`${car.name}-${index}`}
+            sx={{
+              width: "100%",
+              height: "360px",
+              objectFit: "cover",
+              filter: "brightness(0.8)",
+            }}
+          />
+        ))}
+      </SwipeableViews>
 
       {car.images.length > 1 && (
         <>

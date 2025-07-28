@@ -67,6 +67,7 @@ const Navbar = ({ darkMode, toggleDarkMode }) => {
         onSearch={handleKeyDown}
         drawerOpen={drawerOpen}
         searchText={searchText}
+        toggleDarkMode={toggleDarkMode}
         setSearchText={setSearchText}
         onDrawerOpen={() => setDrawerOpen(true)}
       />
