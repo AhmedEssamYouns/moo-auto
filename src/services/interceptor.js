@@ -5,6 +5,7 @@ import { Alert } from "@mui/material";
 
 const apiService = axios.create({
   baseURL: baseUrl,
+  timeout: 300000,
 });
 
 // Flag to prevent multiple refresh requests at the same time
