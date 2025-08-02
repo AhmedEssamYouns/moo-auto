@@ -11,6 +11,7 @@ import {
   Stack,
   Pagination,
   useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { Search as SearchIcon, Tune as FilterIcon } from "@mui/icons-material";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -28,6 +29,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
   const [maxPrice, setMaxPrice] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [page, setPage] = useState(1);
+  const ismobile = useMediaQuery("(max-width: 1000px)");
   const theme = useTheme();
   const darkMode = theme.palette.mode === "dark";
 
@@ -227,7 +229,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
           container
           spacing={4}
           justifyContent="center"
-          sx={{ width: "100%", maxWidth: 1400 }}
+          sx={{ width: "100%", maxWidth:1400 }}
         >
           {paginatedCars?.length > 0 ? (
             paginatedCars.map((car, index) => (
@@ -236,7 +238,7 @@ const BestSelling = ({ isChild = false, withSearch = true }) => {
                   initial={{ opacity: 0, y: 50, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  style={{ width: 420 }}
+                  style={{ width:  ismobile ? 300 : 420 }}
                 >
                   <ProductCard car={car} />
                 </motion.div>

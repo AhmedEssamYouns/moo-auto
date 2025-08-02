@@ -18,22 +18,24 @@ const AdminRoutes = lazy(() => import("./admin/routes/adminRouter"));
 const queryClient = new QueryClient();
 
 const App = () => {
+  const isAdmin = window.location.hostname.startsWith("dashboard.");
+
   const [showLottie, setShowLottie] = useState(true);
   const [darkMode, setDarkMode] = useState(() => {
+    if (isAdmin) return false;
     const saved = localStorage.getItem("darkMode");
     return saved ? JSON.parse(saved) : "darkMode";
   });
-
-  const isAdmin = window.location.hostname.startsWith("dashboard.");
 
   useEffect(() => {
     setTimeout(() => setShowLottie(false), 1000);
   }, []);
 
-
   useEffect(() => {
-    localStorage.setItem("darkMode", JSON.stringify(darkMode));
-  }, [darkMode]);
+    if (!isAdmin) {
+      localStorage.setItem("darkMode", JSON.stringify(darkMode));
+    }
+  }, [darkMode, isAdmin]);
 
   const LottieFallback = (
     <Box
