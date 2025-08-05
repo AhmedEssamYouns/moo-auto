@@ -18,13 +18,23 @@ const LargeCarCard = ({ car }) => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = React.useState(0);
+  const [loadedImages, setLoadedImages] = React.useState([0]); // preload first image only
 
   const handleNext = () => {
-    setActiveIndex((prev) => (prev + 1) % car.images.length);
+    const nextIndex = (activeIndex + 1) % car.images.length;
+    setActiveIndex(nextIndex);
+    setLoadedImages((prev) =>
+      prev.includes(nextIndex) ? prev : [...prev, nextIndex]
+    );
   };
 
   const handlePrev = () => {
-    setActiveIndex((prev) => (prev === 0 ? car.images.length - 1 : prev - 1));
+    const prevIndex =
+      activeIndex === 0 ? car.images.length - 1 : activeIndex - 1;
+    setActiveIndex(prevIndex);
+    setLoadedImages((prev) =>
+      prev.includes(prevIndex) ? prev : [...prev, prevIndex]
+    );
   };
 
   return (
@@ -45,7 +55,12 @@ const LargeCarCard = ({ car }) => {
     >
       <SwipeableViews
         index={activeIndex}
-        onChangeIndex={setActiveIndex}
+        onChangeIndex={(index) => {
+          setActiveIndex(index);
+          setLoadedImages((prev) =>
+            prev.includes(index) ? prev : [...prev, index]
+          );
+        }}
         enableMouseEvents
         style={{ height: isMobile ? "40vh" : "72vh", width: "100%" }}
         containerStyle={{ touchAction: "pan-y", pointerEvents: "none" }}
@@ -54,12 +69,13 @@ const LargeCarCard = ({ car }) => {
           <Box
             key={index}
             component="img"
-            src={img}
+            src={loadedImages.includes(index) ? img : car.images[0]}
             alt={`${car.name}-${index}`}
+            loading={index === 0 ? "eager" : "lazy"}
             sx={{
               width: "100%",
               height: isMobile ? "40vh" : "70vh",
-              bgcolor:'white',
+              bgcolor: "white",
               objectFit: isMobile ? "fill" : "cover",
               filter: "brightness(0.95)",
               userSelect: "none",
@@ -69,7 +85,6 @@ const LargeCarCard = ({ car }) => {
         ))}
       </SwipeableViews>
 
-      {/* Arrows */}
       {!isMobile && (
         <IconButton
           onClick={(e) => {
@@ -115,15 +130,13 @@ const LargeCarCard = ({ car }) => {
         </IconButton>
       )}
 
-      {/* Top and bottom shadow overlay */}
       <Box
         sx={{
           position: "absolute",
           top: 0,
           width: "100%",
           height: "30%",
-          background:
-            "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent)",
+          background: "linear-gradient(to bottom, rgba(0,0,0,0.6), transparent)",
           zIndex: 2,
         }}
       />
@@ -138,7 +151,6 @@ const LargeCarCard = ({ car }) => {
         }}
       />
 
-      {/* Floating content */}
       <Box
         sx={{
           position: "absolute",

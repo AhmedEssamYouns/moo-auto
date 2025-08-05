@@ -38,6 +38,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "https://auto.mooautomotive.com",
   "eslintConfig": {
     "extends": [
       "react-app"

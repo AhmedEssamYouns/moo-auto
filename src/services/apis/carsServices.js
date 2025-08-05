@@ -66,13 +66,36 @@ export const editCar = async (id, data) => {
   return response.data;
 };
 export const addCar = async (data) => {
-  const response = await apiService.post(`/api/cars`, data, {
-    isAuth: true,
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  console.log("[addCar] 📤 Sending car data:", data);
 
-  return response.data;
+  try {
+    const response = await apiService.post(`/api/cars`, data, {
+      isAuth: true,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    console.log("[addCar] ✅ Response received:", response.data);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      // Server responded with a status other than 2xx
+      console.error("[addCar] ❌ Server error:", {
+        status: error.response.status,
+        data: error.response.data,
+        headers: error.response.headers,
+      });
+    } else if (error.request) {
+      // Request was made but no response received
+      console.error("[addCar] ❌ No response received:", error.request);
+    } else {
+      // Something happened setting up the request
+      console.error("[addCar] ❌ Error setting up request:", error.message);
+    }
+
+    throw error; // rethrow to handle elsewhere if needed
+  }
 };
+
 
 export const deleteCar = async (id) => {
   const response = await apiService.delete(`/api/cars/${id}`, { isAuth: true });
