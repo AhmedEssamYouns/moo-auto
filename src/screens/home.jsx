@@ -58,6 +58,8 @@ const HomeScreen = ({ darkMode }) => {
         }
       } catch (err) {
         setBanners(fallbackImages);
+          window.scrollTo(0, 0);
+
       }
     };
     fetchBanners();

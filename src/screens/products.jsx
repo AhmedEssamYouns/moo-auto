@@ -23,7 +23,7 @@ const ProductsScreen = () => {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
-  const productsPerPage = 9;
+  const productsPerPage = 6;
   const [currentPage, setCurrentPage] = useState(1);
   const [showAll, setShowAll] = useState(false);
 
