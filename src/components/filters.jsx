@@ -36,7 +36,7 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
   const openMenu = Boolean(anchorEl);
 
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(10000000);
+  const [maxPrice, setMaxPrice] = useState(100000000);
 
   const allBrands = brandsData?.map((brand) => brand.name) || [];
   const filteredBrands = allBrands.filter((brand) =>
@@ -45,7 +45,7 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
 
   useEffect(() => {
     if (filters) {
-      setSelectedPrice([filters.MinPrice ?? 0, filters.MaxPrice ?? 10000000]);
+      setSelectedPrice([filters.MinPrice ?? 0, filters.MaxPrice ?? 100000000]);
       setSelectedBrand(filters.CarBrand || null);
       setSelectedTransmission(filters.TransmissionType || null);
       setUsedCars(
@@ -190,7 +190,7 @@ const Filters = ({ onApplyFilters, brandsData, filters }) => {
 
       {(selectedBrand ||
         selectedPrice[0] > 0 ||
-        selectedPrice[1] < 1000000 ||
+        selectedPrice[1] < 10000000||
         selectedTransmission ||
         usedCars !== null) && (
         <Fade in timeout={1200}>
