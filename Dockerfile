@@ -10,7 +10,7 @@ RUN npm install --legacy-peer-deps
 COPY . .
 
 # Prevent React from generating source maps (hides JSX source)
-ENV CI=true
+ENV CI=false
 ENV GENERATE_SOURCEMAP=false
 
 # Build the React project
