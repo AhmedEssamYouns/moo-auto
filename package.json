@@ -27,7 +27,7 @@
   "scripts": {
     "postbuild": "node flip-css.js",
     "start": "react-scripts start",
-    "build": "cross-env GENERATE_SOURCEMAP=true react-scripts build",
+    "build": "cross-env CI=true GENERATE_SOURCEMAP=false react-scripts build",
     "build:dbg": "cross-env CI=false GENERATE_SOURCEMAP=true react-scripts build",
     "analyze": "cross-env CI=false GENERATE_SOURCEMAP=true react-scripts build && source-map-explorer \"build/static/js/*.js\"",
     "test": "react-scripts test"
