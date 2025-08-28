@@ -17,7 +17,7 @@ import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import PaymentIcon from "@mui/icons-material/Payment";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import logo from "../../assets/imgs/logo.png";
+import logo from "../../assets/imgs/logo.webp";
 //banners icon from mui 
 import { BrandingWatermark } from "@mui/icons-material";
 

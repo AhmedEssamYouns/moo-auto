@@ -7,36 +7,30 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.4.6",
     "@mui/material": "^6.4.6",
-    "@specy/liquid-glass-react": "^1.0.2",
     "@tanstack/react-query": "^5.67.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
-    "@testing-library/user-event": "^13.5.0",
-    "ajv": "^8.17.1",
-    "ajv-keywords": "^5.1.0",
     "axios": "^1.8.2",
+    "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.6",
     "lottie-react": "^2.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.54.2",
-    "react-horizontal-scrolling-menu": "^8.2.0",
-    "react-icons": "^5.5.0",
     "react-intersection-observer": "^9.16.0",
-    "react-lottie": "^1.2.10",
     "react-router-dom": "^7.2.0",
     "react-scripts": "5.0.1",
-    "react-swipeable-views": "^0.14.0",
-    "react-transition-group": "^4.4.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "postbuild": "node flip-css.js",
     "start": "react-scripts start",
-    "build": "CI=false GENERATE_SOURCEMAP=false react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "cross-env GENERATE_SOURCEMAP=true react-scripts build",
+    "build:dbg": "cross-env CI=false GENERATE_SOURCEMAP=true react-scripts build",
+    "analyze": "cross-env CI=false GENERATE_SOURCEMAP=true react-scripts build && source-map-explorer \"build/static/js/*.js\"",
+    "test": "react-scripts test"
   },
   "proxy": "https://auto.mooautomotive.com",
   "eslintConfig": {
@@ -55,5 +49,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/user-event": "^14.6.1",
+    "cross-env": "^10.0.0"
   }
 }

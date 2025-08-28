@@ -12,7 +12,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Sidebar from "./sideBar";
-import logo from "../../assets/imgs/logo.png";
+import logo from "../../assets/imgs/logo.webp";
 
 const AdminLayout = ({ children }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);

@@ -16,7 +16,6 @@ import Convertible from "../assets/svgs/cars/convertable.svg";
 import Coupe from "../assets/svgs/cars/coupe.svg";
 import Electric from "../assets/svgs/cars/electric.svg";
 import Hatchback from "../assets/svgs/cars/hatchback.svg";
-import Hybrid from "../assets/svgs/cars/hyberd.svg";
 import Sedan from "../assets/svgs/cars/sedan.svg";
 import Suv from "../assets/svgs/cars/suv.svg";
 import Truck from "../assets/svgs/cars/truck.svg";

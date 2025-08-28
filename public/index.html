@@ -1,102 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/new.jpeg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/new.jpeg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+
+  <!-- 1) Preconnect early (only once each) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- 2) Combine ALL font families into ONE URL, load non-blocking -->
+  <link
+    rel="preload"
+    as="style"
+    href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&family=Marhey:wght@300..700&family=Permanent+Marker&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+  >
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&family=Marhey:wght@300..700&family=Permanent+Marker&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+    media="print"
+    onload="this.media='all'"
+  >
+  <noscript>
     <link
-      href="https://fonts.googleapis.com/css2?family=Michroma&display=swap"
       rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&family=Marhey:wght@300..700&family=Permanent+Marker&family=Ubuntu:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500;1,700&display=swap"
     />
-    <!-- SEO Meta Tags -->
-    <meta
-      name="description"
-      content="Moo Auto - Luxury & Sports Cars. Explore a premium collection of high-performance vehicles, classic cars, and exotic sports cars. Find your dream car today!"
-    />
-    <meta
-      name="keywords"
-      content="luxury cars, sports cars, exotic cars, supercars, hypercars, muscle cars, electric cars, classic cars, high-performance vehicles, car dealership, car showroom, car financing, Moo Auto, سيارات فاخرة, سيارات رياضية, سيارات كلاسيكية, سيارات كهربائية, سيارات مستعملة, Moo Auto, معرض سيارات"
-    />
-    <meta name="author" content="Moo Auto" />
+  </noscript>
 
-    <!-- Open Graph (OG) Meta Tags for Social Media & Google -->
-    <meta property="og:title" content="Moo Auto | Luxury & Sports Cars" />
-    <meta
-      property="og:description"
-      content="Explore high-performance luxury and sports cars at Moo Auto. Find your dream car today!"
-    />
-    <meta
-      property="og:image"
-      content="https://mooautomotive.com/new.jpeg"
-    />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:url" content="https://mooautomotive.com" />
-    <meta property="og:type" content="website" />
 
-    <!-- Twitter Card for Better Link Previews -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Moo Auto | Luxury & Sports Cars" />
-    <meta
-      name="twitter:description"
-      content="Explore high-performance luxury and sports cars at Moo Auto. Find your dream car today!"
-    />
-    <meta
-      name="twitter:image"
-      content="https://mooautomotive.com/new.jpeg"
-    />
-    <meta name="twitter:site" content="@mooauto" />
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&family=Marhey:wght@300..700&family=Permanent+Marker&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
-      rel="stylesheet"
-    />
+  <!-- SEO Meta Tags -->
+  <meta
+    name="description"
+    content="Moo Auto - Luxury & Sports Cars. Explore a premium collection of high-performance vehicles, classic cars, and exotic sports cars. Find your dream car today!"
+  />
+  <meta
+    name="keywords"
+    content="luxury cars, sports cars, exotic cars, supercars, hypercars, muscle cars, electric cars, classic cars, high-performance vehicles, car dealership, car showroom, car financing, Moo Auto, سيارات فاخرة, سيارات رياضية, سيارات كلاسيكية, سيارات كهربائية, سيارات مستعملة, Moo Auto, معرض سيارات"
+  />
+  <meta name="author" content="Moo Auto" />
 
-    <!-- Apple Touch Icon -->
-    <link
-      rel="apple-touch-icon"
-      href="https://mooautomotive.com/new.jpeg"
-    />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Moo Auto | Luxury & Sports Cars" />
+  <meta property="og:description" content="Explore high-performance luxury and sports cars at Moo Auto. Find your dream car today!" />
+  <meta property="og:image" content="https://mooautomotive.com/new.jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:url" content="https://mooautomotive.com" />
+  <meta property="og:type" content="website" />
 
-    <!-- Web Manifest -->
-    <link
-      rel="manifest"
-      href="https://mooautomotive.com/manifest.json"
-    />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Moo Auto | Luxury & Sports Cars" />
+  <meta name="twitter:description" content="Explore high-performance luxury and sports cars at Moo Auto. Find your dream car today!" />
+  <meta name="twitter:image" content="https://mooautomotive.com/new.jpeg" />
+  <meta name="twitter:site" content="@mooauto" />
 
-    <title>Moo Auto | Luxury & Sports Cars</title>
+  <!-- Apple Touch Icon -->
+  <link rel="apple-touch-icon" href="https://mooautomotive.com/new.jpeg" />
 
-    <!-- Structured Data (Schema Markup) for Google -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "AutomotiveBusiness",
-        "name": "Moo Auto",
-        "url": "https://mooautomotive.com/",
-        "logo": "https://mooautomotive.com/new.jpeg",
-        "description": "Find luxury and exotic cars at Moo Auto.",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "Cairo Egypt",
-          "addressLocality": "Cairo",
-          "addressRegion": "Cairo Governorate",
-          "postalCode": "11668",
-          "addressCountry": "EG"
-        },
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "telephone": "+20 12 03333274",
-          "contactType": "customer service"
-        }
+  <!-- Web Manifest -->
+  <link rel="manifest" href="https://mooautomotive.com/manifest.json" />
+
+  <title>Moo Auto | Luxury & Sports Cars</title>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AutomotiveBusiness",
+      "name": "Moo Auto",
+      "url": "https://mooautomotive.com/",
+      "logo": "https://mooautomotive.com/new.jpeg",
+      "description": "Find luxury and exotic cars at Moo Auto.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Cairo Egypt",
+        "addressLocality": "Cairo",
+        "addressRegion": "Cairo Governorate",
+        "postalCode": "11668",
+        "addressCountry": "EG"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+20 12 03333274",
+        "contactType": "customer service"
       }
-    </script>
-  </head>
+    }
+  </script>
+
+  <!-- Optional: Preload your LCP hero image if image is the LCP -->
+  <!-- <link rel="preload" as="image" href="/path/to/hero.webp" imagesrcset="/path/to/hero@2x.webp 2x" fetchpriority="high"> -->
+</head>
+
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>

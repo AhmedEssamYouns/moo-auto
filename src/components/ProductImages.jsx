@@ -1,19 +1,17 @@
 import React from "react";
 import { Box, IconButton } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
-import SwipeableViews from "react-swipeable-views";
+import SwipeViews from "./SwipeViews";
 
 const ProductImages = ({ product, activeIndex, setActiveIndex, isMobile, isDarkMode }) => {
-  const handleNext = () => {
-    setActiveIndex((prevIndex) => (prevIndex + 1) % product.images.length);
-  };
-
-  const handlePrev = () => {
-    setActiveIndex((prevIndex) => (prevIndex - 1 + product.images.length) % product.images.length);
-  };
+  const handleNext = () => setActiveIndex((i) => (i + 1) % product.images.length);
+  const handlePrev = () => setActiveIndex((i) => (i - 1 + product.images.length) % product.images.length);
 
   const THUMBNAILS_SHOWN = 6;
-  const startIndex = Math.max(0, Math.min(activeIndex - Math.floor(THUMBNAILS_SHOWN / 2), product.images.length - THUMBNAILS_SHOWN));
+  const startIndex = Math.max(
+    0,
+    Math.min(activeIndex - Math.floor(THUMBNAILS_SHOWN / 2), product.images.length - THUMBNAILS_SHOWN)
+  );
   const visibleThumbnails = product.images.slice(startIndex, startIndex + THUMBNAILS_SHOWN);
 
   return (
@@ -36,22 +34,30 @@ const ProductImages = ({ product, activeIndex, setActiveIndex, isMobile, isDarkM
           bgcolor: isDarkMode ? "#121212" : "#ffffff",
         }}
       >
-        <SwipeableViews index={activeIndex} onChangeIndex={setActiveIndex} enableMouseEvents>
+        <SwipeViews
+          index={activeIndex}
+          onChangeIndex={setActiveIndex}
+          enableMouseEvents
+          slideStyle={{ height: 500 }} // keep height stable to avoid CLS
+        >
           {product.images.map((img, index) => (
             <Box
               key={index}
               component="img"
               src={img}
               alt={product.name}
+              loading={index === activeIndex ? "eager" : "lazy"}
+              decoding="async"
               sx={{
                 width: "100%",
                 height: "500px",
                 objectFit: "cover",
+                display: "block",
                 transition: "opacity 0.5s ease-in-out",
               }}
             />
           ))}
-        </SwipeableViews>
+        </SwipeViews>
 
         <IconButton
           onClick={handlePrev}
@@ -86,14 +92,7 @@ const ProductImages = ({ product, activeIndex, setActiveIndex, isMobile, isDarkM
         </IconButton>
       </Box>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          mt: 3,
-          gap: 1,
-        }}
-      >
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 3, gap: 1 }}>
         {product.images.map((_, index) => (
           <Box
             key={index}
@@ -132,8 +131,8 @@ const ProductImages = ({ product, activeIndex, setActiveIndex, isMobile, isDarkM
             <ArrowBackIos fontSize="small" />
           </IconButton>
 
-          {visibleThumbnails.map((img, index) => {
-            const realIndex = startIndex + index;
+          {visibleThumbnails.map((img, idx) => {
+            const realIndex = startIndex + idx;
             return (
               <Box
                 key={realIndex}
@@ -141,6 +140,8 @@ const ProductImages = ({ product, activeIndex, setActiveIndex, isMobile, isDarkM
                 src={img}
                 alt={product.name}
                 onClick={() => setActiveIndex(realIndex)}
+                loading="lazy"
+                decoding="async"
                 sx={{
                   width: 80,
                   height: 60,

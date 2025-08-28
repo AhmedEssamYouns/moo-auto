@@ -15,7 +15,7 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { Delete } from "@mui/icons-material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useCar } from "../../services/hooks/useCards";
 import { editCar } from "../../services/apis/carsServices";
 import { CarCategory } from "../../types/e-nums";
@@ -223,7 +223,7 @@ const CarEditForm = ({ open, onClose, id, brandData, onSubmit }) => {
                 }}
                 onClick={() => handleDeleteImage(index)}
               >
-                <Delete sx={{ color: "white" }} />
+                <DeleteIcon sx={{ color: "white" }} />
               </IconButton>
             </Box>
           ))}

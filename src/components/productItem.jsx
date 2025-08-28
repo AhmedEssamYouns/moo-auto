@@ -16,7 +16,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../utils/baseUrl";
 import { useTheme } from "@mui/material/styles";
-import SwipeableViews from "react-swipeable-views";
+import SwipeViews from "./SwipeViews";
 
 const ProductCard = ({ car }) => {
   const theme = useTheme();
@@ -27,6 +27,8 @@ const ProductCard = ({ car }) => {
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState(0);
   const shareUrl = `${baseUrl}/cars/Shared/${car.id}`;
+  const images = Array.isArray(car?.images) ? car.images : [];
+  const total = images.length;
 
   const handleShare = async (event) => {
     event.stopPropagation();
@@ -70,34 +72,53 @@ const ProductCard = ({ car }) => {
         height: 360,
         boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
         cursor: "pointer",
+        bgcolor: isDarkMode ? "#121212" : "#fff",
       }}
     >
-      <SwipeableViews
-        index={activeIndex}
-        onChangeIndex={(index) => setActiveIndex(index)}
-        enableMouseEvents
-        style={{ height: "120%" }}
-      >
-        {car.images.map((image, index) => (
-          <Box
-            key={index}
-            component="img"
-            src={image}
-            alt={`${car.name}-${index}`}
-            sx={{
-              width: "100%",
-              height: "360px",
-              objectFit: "cover",
-              filter: "brightness(0.8)",
-            }}
-          />
-        ))}
-      </SwipeableViews>
+      {total > 0 ? (
+        <SwipeViews
+          index={activeIndex}
+          onChangeIndex={setActiveIndex}
+          enableMouseEvents
+          slideStyle={{ height: 360 }} // fixes CLS
+        >
+          {images.map((image, index) => (
+            <Box
+              key={index}
+              component="img"
+              src={image}
+              alt={`${car.name}-${index}`}
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              sx={{
+                width: "100%",
+                height: "360px",
+                objectFit: "cover",
+                filter: "brightness(0.8)",
+                display: "block", // prevents inline-image baseline gaps
+              }}
+            />
+          ))}
+        </SwipeViews>
+      ) : (
+        <Box
+          sx={{
+            height: 360,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            opacity: 0.7,
+          }}
+        >
+          <Typography variant="body2">{t("No image available")}</Typography>
+        </Box>
+      )}
 
-      {car.images.length > 1 && (
+      {total > 1 && (
         <>
           <IconButton
             onClick={handlePrev}
+            aria-label="Previous image"
             sx={{
               position: "absolute",
               top: "50%",
@@ -105,15 +126,14 @@ const ProductCard = ({ car }) => {
               transform: "translateY(-50%)",
               background: "rgba(0,0,0,0.4)",
               color: "white",
-              "&:hover": {
-                background: "rgba(0,0,0,0.6)",
-              },
+              "&:hover": { background: "rgba(0,0,0,0.6)" },
             }}
           >
             <ChevronLeft />
           </IconButton>
           <IconButton
             onClick={handleNext}
+            aria-label="Next image"
             sx={{
               position: "absolute",
               top: "50%",
@@ -121,9 +141,7 @@ const ProductCard = ({ car }) => {
               transform: "translateY(-50%)",
               background: "rgba(0,0,0,0.4)",
               color: "white",
-              "&:hover": {
-                background: "rgba(0,0,0,0.6)",
-              },
+              "&:hover": { background: "rgba(0,0,0,0.6)" },
             }}
           >
             <ChevronRight />
@@ -145,16 +163,14 @@ const ProductCard = ({ car }) => {
 
       <IconButton
         onClick={handleShare}
+        aria-label="Share car"
         sx={{
           position: "absolute",
           top: 16,
           right: 16,
           background: "rgba(255,255,255,0.15)",
           color: "white",
-          "&:hover": {
-            background: "#fff",
-            color: "#000",
-          },
+          "&:hover": { background: "#fff", color: "#000" },
         }}
       >
         <ShareRoundedIcon />
@@ -184,21 +200,13 @@ const ProductCard = ({ car }) => {
             icon={<EmojiTransportationIcon fontSize="small" />}
             label={car.brandName}
             size="small"
-            sx={{
-              bgcolor: "rgba(255,255,255,0.2)",
-              color: "#fff",
-              px: 1,
-            }}
+            sx={{ bgcolor: "rgba(255,255,255,0.2)", color: "#fff", px: 1 }}
           />
           <Chip
             icon={<SettingsIcon fontSize="small" />}
             label={t(car.transmission === 2 ? "automatic" : "manual")}
             size="small"
-            sx={{
-              bgcolor: "rgba(255,255,255,0.2)",
-              color: "#fff",
-              px: 1,
-            }}
+            sx={{ bgcolor: "rgba(255,255,255,0.2)", color: "#fff", px: 1 }}
           />
         </Box>
 
@@ -219,5 +227,6 @@ const ProductCard = ({ car }) => {
     </Box>
   );
 };
+
 
 export default ProductCard;

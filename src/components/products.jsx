@@ -13,7 +13,8 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { Search as SearchIcon, Tune as FilterIcon } from "@mui/icons-material";
+import SearchIcon from "@mui/icons-material/Search";
+import FilterIcon from "@mui/icons-material/Tune";
 import { useLanguage } from "../contexts/LanguageContext";
 import ProductCard from "./productItem";
 import { useLatestCars } from "../services/hooks/useCards";

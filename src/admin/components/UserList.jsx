@@ -1,40 +1,36 @@
 import React, { useState } from "react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-  TextField,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-  Box,
-  Typography,
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+  Paper, IconButton, TextField, MenuItem, Select, InputLabel,
+  FormControl, Box, Typography, InputAdornment
 } from "@mui/material";
-import { Edit, Delete, Security, SupervisorAccount, Person, Search } from "@mui/icons-material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SecurityIcon from "@mui/icons-material/Security";
+import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
+import PersonIcon from "@mui/icons-material/Person";
+import SearchIcon from "@mui/icons-material/Search";
 
 const roleIcons = {
-  Admin: <Security color="primary" />,
-  Editor: <SupervisorAccount color="secondary" />,
-  Owner: <Person color="success" />,
+  Admin: <SecurityIcon color="primary" />,
+  Editor: <SupervisorAccountIcon color="secondary" />,
+  Owner: <PersonIcon color="success" />,
 };
 
 const UserList = ({ users, onEdit, onDelete, isOwner }) => {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
 
-  const filteredUsers = users.filter((user) => {
-    return (
-      (user.displayName.toLowerCase().includes(search.toLowerCase()) ||
-        user.email.toLowerCase().includes(search.toLowerCase())) &&
-      (roleFilter ? user.roles.includes(roleFilter) : true)
-    );
-  });
+  const currentUserId = (() => {
+    try { return JSON.parse(localStorage.getItem("user"))?.id; }
+    catch { return undefined; }
+  })();
+
+  const filteredUsers = users.filter((user) =>
+    (user.displayName.toLowerCase().includes(search.toLowerCase()) ||
+     user.email.toLowerCase().includes(search.toLowerCase())) &&
+    (roleFilter ? user.roles.includes(roleFilter) : true)
+  );
 
   return (
     <Box sx={{ p: 2 }}>
@@ -46,7 +42,11 @@ const UserList = ({ users, onEdit, onDelete, isOwner }) => {
           size="small"
           fullWidth
           InputProps={{
-            startAdornment: <Search sx={{ mr: 1 }} />,
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon fontSize="small" />
+              </InputAdornment>
+            ),
           }}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -85,23 +85,20 @@ const UserList = ({ users, onEdit, onDelete, isOwner }) => {
                   <TableCell>
                     {user.roles.map((role) => (
                       <Box key={role} display="flex" alignItems="center" gap={1}>
-                        {roleIcons[role] || <Person />} {role}
+                        {roleIcons[role] || <PersonIcon />} {role}
                       </Box>
                     ))}
                   </TableCell>
                   <TableCell align="right">
-                    <IconButton
-                      color="primary"
-                      onClick={() => onEdit(user)}
-                    >
-                      <Edit />
+                    <IconButton color="primary" onClick={() => onEdit(user)}>
+                      <EditIcon />
                     </IconButton>
                     <IconButton
                       color="error"
                       onClick={() => onDelete(user.id)}
-                      disabled={isOwner && user.id === JSON.parse(localStorage.getItem("user")).id}
+                      disabled={isOwner && user.id === currentUserId}
                     >
-                      <Delete />
+                      <DeleteIcon />
                     </IconButton>
                   </TableCell>
                 </TableRow>

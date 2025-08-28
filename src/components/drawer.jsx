@@ -1,24 +1,20 @@
 import React from "react";
-import {
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-  Box,
-  Divider,
-  IconButton,
-  Typography,
-  Switch,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Switch from "@mui/material/Switch";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import logo from "../assets/imgs/logo.png";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import CarRentalIcon from "@mui/icons-material/CarRental";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { useTheme } from "@mui/material/styles";

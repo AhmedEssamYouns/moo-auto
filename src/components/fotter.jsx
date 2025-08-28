@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import LOGOpng from "../assets/imgs/logo.png";
+import LOGOpng from "../assets/imgs/logo.webp";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -36,6 +36,7 @@ const Footer = () => {
     },
     logoImg: {
       height: "70px",
+      width: "140px"     
     },
     sectionTitle: {
       fontSize: "18px",
@@ -68,7 +69,10 @@ const Footer = () => {
       <div style={styles.container}>
         <div style={styles.column}>
           <Link to="/">
-            <img src={LOGOpng} alt="Logo" style={styles.logoImg} />
+            <img
+            width={140}            // intrinsic width
+            height={70}            // intrinsic height 
+            src={LOGOpng} alt="Logo" style={styles.logoImg} />
           </Link>
           <p style={{ color: isDark ? "#ccc" : "#666", fontSize: "14px" }}>
             The ultimate car experience.
