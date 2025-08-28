@@ -171,7 +171,7 @@ const MobileDrawerFilters = ({
         <Button
           onClick={() => {
             onApplyFilters({
-              TransmissionType: selectedTransmission == "manual" ? 1 : 2,
+              TransmissionType: selectedTransmission === "manual" ? 1 : 2,
             });
             setOpenBottomSheet(false);
           }}
